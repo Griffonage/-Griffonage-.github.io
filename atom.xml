@@ -6,7 +6,7 @@
   <link href="https://ajungle.cn/atom.xml" rel="self"/>
   
   <link href="https://ajungle.cn/"/>
-  <updated>2021-06-05T10:09:23.533Z</updated>
+  <updated>2021-03-03T03:30:49.273Z</updated>
   <id>https://ajungle.cn/</id>
   
   <author>
@@ -15,56 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>区块链_前言001</title>
-    <link href="https://ajungle.cn/2021/06/05/%E5%8C%BA%E5%9D%97%E9%93%BE/%E5%8C%BA%E5%9D%97%E9%93%BE_%E5%89%8D%E8%A8%80001/"/>
-    <id>https://ajungle.cn/2021/06/05/%E5%8C%BA%E5%9D%97%E9%93%BE/%E5%8C%BA%E5%9D%97%E9%93%BE_%E5%89%8D%E8%A8%80001/</id>
-    <published>2021-06-05T09:40:00.000Z</published>
-    <updated>2021-06-05T10:09:23.533Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="区块链" scheme="https://ajungle.cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-    
-    <category term="区块链" scheme="https://ajungle.cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Windows_Windows快捷方式</title>
-    <link href="https://ajungle.cn/2021/03/16/Windows/Windows_%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/"/>
-    <id>https://ajungle.cn/2021/03/16/Windows/Windows_%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</id>
-    <published>2021-03-16T09:55:56.440Z</published>
-    <updated>2021-06-05T09:32:32.060Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="Windows" scheme="https://ajungle.cn/categories/Windows/"/>
-    
-    
-    <category term="Windows快捷方式" scheme="https://ajungle.cn/tags/Windows%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/"/>
-    
-  </entry>
   
   <entry>
     <title>比特币交易平台及虚拟货币学习指南</title>
@@ -455,6 +405,52 @@
     
     
     <category term="日记" scheme="https://ajungle.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Windows_Windows10AMD处理器调节屏幕亮度</title>
+    <link href="https://ajungle.cn/2020/09/19/Windows/Windows_Windows10AMD%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E8%8A%82%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6/"/>
+    <id>https://ajungle.cn/2020/09/19/Windows/Windows_Windows10AMD%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E8%8A%82%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6/</id>
+    <published>2020-09-19T04:08:03.329Z</published>
+    <updated>2020-09-19T04:11:28.698Z</updated>
+    
+    
+    <summary type="html">windows10自动改变屏幕亮度</summary>
+    
+    
+    
+    <category term="Windows" scheme="https://ajungle.cn/categories/Windows/"/>
+    
+    
+    <category term="windows10亮度" scheme="https://ajungle.cn/tags/windows10%E4%BA%AE%E5%BA%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>闲聊_关于生活</title>
+    <link href="https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%85%B3%E4%BA%8E%E7%94%9F%E6%B4%BB/"/>
+    <id>https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%85%B3%E4%BA%8E%E7%94%9F%E6%B4%BB/</id>
+    <published>2020-09-19T03:48:35.769Z</published>
+    <updated>2020-11-01T14:42:06.023Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="闲聊" scheme="https://ajungle.cn/categories/%E9%97%B2%E8%81%8A/"/>
+    
+    
+    <category term="生活" scheme="https://ajungle.cn/tags/%E7%94%9F%E6%B4%BB/"/>
+    
+    <category term="感悟" scheme="https://ajungle.cn/tags/%E6%84%9F%E6%82%9F/"/>
     
   </entry>
   
