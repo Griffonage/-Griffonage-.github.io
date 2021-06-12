@@ -49,17 +49,19 @@ function startHls(){
 
 function showMusicButton(){
 
+	console.log("%c3D 欢迎访问AugJungle"," text-shadow: 0 1px 0 #ccc,0 2px 0 #c9c9c9,0 3px 0 #bbb,0 4px 0 #b9b9b9,0 5px 0 #aaa,0 6px 1px rgba(0,0,0,.1),0 0 5px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.3),0 3px 5px rgba(0,0,0,.2),0 5px 10px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.2),0 20px 20px rgba(0,0,0,.15);font-size:1em")
+
 	let musicIcon;
 
 	let video = document.getElementById('video');
-
 	if(!video.muted){
 
 		musicIcon = "https://file.ajungle.cn/img/buttle_%E5%BC%80%E5%90%AF%E5%A3%B0%E9%9F%B3.png";
-
+		
 	}else{
 
 		musicIcon = "https://file.ajungle.cn/img/buttle_%E5%85%B3%E9%97%AD%E5%A3%B0%E9%9F%B3.png";
+		
 	}
 
 	let musicButton = "<button onclick='muteControl()' id='musicButtonId'  style='float:right;margin-top:8px;margin-right:20px;width: 25px; height: 25px;; border-radius: 15px;cursor: pointer;background: url("+musicIcon+") no-repeat;background-size: contain;'></button>";
@@ -73,18 +75,38 @@ function showMusicButton(){
 function muteControl() {
 	let video = document.getElementById('video');
 	let musicButton = document.getElementById('musicButtonId');
-
+	let aplayerBody = document.getElementsByClassName('aplayer-body')[0];
+	console.log('/**********aplayerBody************/')
+	console.log(aplayerBody)
+	console.log('/*********************************/')
 	if(video.muted){
 
 		video.muted=false;
 		musicButton.style.backgroundImage="url(https://file.ajungle.cn/img/buttle_%E5%BC%80%E5%90%AF%E5%A3%B0%E9%9F%B3.png)";
+
+		if(aplayerBody != null){
+			aplayerBody.classList.add("mnone");
+		}
+
 	}else{
 
 		video.muted=true;
 		musicButton.style.backgroundImage="url(https://file.ajungle.cn/img/buttle_%E5%85%B3%E9%97%AD%E5%A3%B0%E9%9F%B3.png)";
 
+		if(aplayerBody != null){
+			aplayerBody.classList.remove("mnone");
+		}
+		
 	}
 }
+/**
+ * 控制右下角音乐列表的显示
+function changeAplayerBody(){
+  $("body").on("click","video",function(){
+　　　　
+  });
+}
+ */
 
 /**
  * @param {String} leaveWebTitle 离开页面展示的标题
