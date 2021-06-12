@@ -30,11 +30,11 @@ function startHls(){
 	    }else if(randomNum === 1){
 	    	videoSrc = 'https://file.ajungle.cn/img/addc.m3u8';
 	    }else if(randomNum === 2){
-	    	videoSrc = 'https://file.ajungle.cn/video/CanonRock.m3u8';
+	    	videoSrc = 'https://file.ajungle.cn/img/CanonRock.m3u8';
 	    }else if(randomNum === 3){
-	    	videoSrc = 'https://file.ajungle.cn/video/LemonTree.m3u8';
+	    	videoSrc = 'https://file.ajungle.cn/img/LemonTree.m3u8';
 	    }else if(randomNum === 4){
-	    	videoSrc = 'https://file.ajungle.cn/video/Maroon5.m3u8';
+	    	videoSrc = 'https://file.ajungle.cn/img/Maroon5.m3u8';
 	    }
 	    showMusicButton();
 	    
