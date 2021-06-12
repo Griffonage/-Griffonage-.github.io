@@ -6,7 +6,7 @@
   <link href="https://ajungle.cn/atom.xml" rel="self"/>
   
   <link href="https://ajungle.cn/"/>
-  <updated>2021-03-03T03:30:49.273Z</updated>
+  <updated>2021-02-26T09:34:23.366Z</updated>
   <id>https://ajungle.cn/</id>
   
   <author>
@@ -15,52 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>比特币交易平台及虚拟货币学习指南</title>
-    <link href="https://ajungle.cn/2021/03/03/%E5%B7%A5%E4%BD%9C/%E5%B7%A5%E4%BD%9C_moondex%E4%BA%A4%E6%98%93%E6%89%80/"/>
-    <id>https://ajungle.cn/2021/03/03/%E5%B7%A5%E4%BD%9C/%E5%B7%A5%E4%BD%9C_moondex%E4%BA%A4%E6%98%93%E6%89%80/</id>
-    <published>2021-03-03T03:04:28.471Z</published>
-    <updated>2021-03-03T03:30:49.273Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="货币" scheme="https://ajungle.cn/categories/%E8%B4%A7%E5%B8%81/"/>
-    
-    
-    <category term="货币" scheme="https://ajungle.cn/tags/%E8%B4%A7%E5%B8%81/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://ajungle.cn/2021/02/24/%E5%B7%A5%E4%BD%9C/%E5%B7%A5%E4%BD%9C_%E6%B5%B7%E6%88%90%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97/"/>
-    <id>https://ajungle.cn/2021/02/24/%E5%B7%A5%E4%BD%9C/%E5%B7%A5%E4%BD%9C_%E6%B5%B7%E6%88%90%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97/</id>
-    <published>2021-02-24T08:18:09.952Z</published>
-    <updated>2021-02-24T08:39:16.246Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>记一次成都学车经历</title>
@@ -451,6 +405,60 @@
     <category term="生活" scheme="https://ajungle.cn/tags/%E7%94%9F%E6%B4%BB/"/>
     
     <category term="感悟" scheme="https://ajungle.cn/tags/%E6%84%9F%E6%82%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>闲聊_庆祝博客迁移</title>
+    <link href="https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%BA%86%E7%A5%9D%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/"/>
+    <id>https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%BA%86%E7%A5%9D%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</id>
+    <published>2020-09-19T03:48:35.767Z</published>
+    <updated>2020-07-26T14:46:17.528Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="生活" scheme="https://ajungle.cn/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    <category term="闲聊" scheme="https://ajungle.cn/categories/%E7%94%9F%E6%B4%BB/%E9%97%B2%E8%81%8A/"/>
+    
+    
+    <category term="生活" scheme="https://ajungle.cn/tags/%E7%94%9F%E6%B4%BB/"/>
+    
+    <category term="闲聊" scheme="https://ajungle.cn/tags/%E9%97%B2%E8%81%8A/"/>
+    
+    <category term="感情" scheme="https://ajungle.cn/tags/%E6%84%9F%E6%83%85/"/>
+    
+    <category term="时间" scheme="https://ajungle.cn/tags/%E6%97%B6%E9%97%B4/"/>
+    
+    <category term="secret" scheme="https://ajungle.cn/tags/secret/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java_JVM调优实现方式</title>
+    <link href="https://ajungle.cn/2020/09/19/Java/Java_JVM%E8%B0%83%E4%BC%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/"/>
+    <id>https://ajungle.cn/2020/09/19/Java/Java_JVM%E8%B0%83%E4%BC%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</id>
+    <published>2020-09-19T03:46:15.736Z</published>
+    <updated>2020-09-19T03:47:54.168Z</updated>
+    
+    
+    <summary type="html">介绍了JVM及Tomcat调优的方式</summary>
+    
+    
+    
+    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
+    
+    
+    <category term="JVM调优" scheme="https://ajungle.cn/tags/JVM%E8%B0%83%E4%BC%98/"/>
     
   </entry>
   
