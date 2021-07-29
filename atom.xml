@@ -6,7 +6,7 @@
   <link href="https://ajungle.cn/atom.xml" rel="self"/>
   
   <link href="https://ajungle.cn/"/>
-  <updated>2021-02-26T09:34:23.366Z</updated>
+  <updated>2021-07-29T16:01:41.177Z</updated>
   <id>https://ajungle.cn/</id>
   
   <author>
@@ -15,6 +15,71 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于现在和未来</title>
+    <link href="https://ajungle.cn/2021/07/29/%E6%97%A5%E8%AE%B0/%E6%97%A5%E8%AE%B0_%E5%85%B3%E4%BA%8E%E7%8E%B0%E5%9C%A8%E5%92%8C%E6%9C%AA%E6%9D%A5/"/>
+    <id>https://ajungle.cn/2021/07/29/%E6%97%A5%E8%AE%B0/%E6%97%A5%E8%AE%B0_%E5%85%B3%E4%BA%8E%E7%8E%B0%E5%9C%A8%E5%92%8C%E6%9C%AA%E6%9D%A5/</id>
+    <published>2021-07-29T14:41:05.200Z</published>
+    <updated>2021-07-29T16:01:41.177Z</updated>
+    
+    
+    <summary type="html">关于现在和未来</summary>
+    
+    
+    
+    <category term="日志" scheme="https://ajungle.cn/categories/%E6%97%A5%E5%BF%97/"/>
+    
+    
+    <category term="日记" scheme="https://ajungle.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ReentrantLock(可重入锁)</title>
+    <link href="https://ajungle.cn/2021/07/04/Java/Java_ReentrantLock(%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81)/"/>
+    <id>https://ajungle.cn/2021/07/04/Java/Java_ReentrantLock(%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81)/</id>
+    <published>2021-07-04T15:36:24.598Z</published>
+    <updated>2021-07-29T15:20:45.187Z</updated>
+    
+    
+    <summary type="html">ReentrantLock使用注意点</summary>
+    
+    
+    
+    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://ajungle.cn/tags/Java/"/>
+    
+    <category term="锁" scheme="https://ajungle.cn/tags/%E9%94%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java_分类菜单的树形结构实现</title>
+    <link href="https://ajungle.cn/2021/07/04/Java/Java_%E5%88%86%E7%B1%BB%E8%8F%9C%E5%8D%95%E7%9A%84%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/"/>
+    <id>https://ajungle.cn/2021/07/04/Java/Java_%E5%88%86%E7%B1%BB%E8%8F%9C%E5%8D%95%E7%9A%84%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0/</id>
+    <published>2021-07-04T13:47:16.023Z</published>
+    <updated>2021-07-04T13:49:51.488Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://ajungle.cn/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>记一次成都学车经历</title>
@@ -272,9 +337,9 @@
     <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
     
     
-    <category term="Android" scheme="https://ajungle.cn/tags/Android/"/>
-    
     <category term="Java" scheme="https://ajungle.cn/tags/Java/"/>
+    
+    <category term="Android" scheme="https://ajungle.cn/tags/Android/"/>
     
   </entry>
   
@@ -378,87 +443,6 @@
     
     
     <category term="windows10亮度" scheme="https://ajungle.cn/tags/windows10%E4%BA%AE%E5%BA%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>闲聊_关于生活</title>
-    <link href="https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%85%B3%E4%BA%8E%E7%94%9F%E6%B4%BB/"/>
-    <id>https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%85%B3%E4%BA%8E%E7%94%9F%E6%B4%BB/</id>
-    <published>2020-09-19T03:48:35.769Z</published>
-    <updated>2020-11-01T14:42:06.023Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="闲聊" scheme="https://ajungle.cn/categories/%E9%97%B2%E8%81%8A/"/>
-    
-    
-    <category term="生活" scheme="https://ajungle.cn/tags/%E7%94%9F%E6%B4%BB/"/>
-    
-    <category term="感悟" scheme="https://ajungle.cn/tags/%E6%84%9F%E6%82%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>闲聊_庆祝博客迁移</title>
-    <link href="https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%BA%86%E7%A5%9D%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/"/>
-    <id>https://ajungle.cn/2020/09/19/%E9%97%B2%E8%81%8A/%E9%97%B2%E8%81%8A_%E5%BA%86%E7%A5%9D%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</id>
-    <published>2020-09-19T03:48:35.767Z</published>
-    <updated>2020-07-26T14:46:17.528Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="生活" scheme="https://ajungle.cn/categories/%E7%94%9F%E6%B4%BB/"/>
-    
-    <category term="闲聊" scheme="https://ajungle.cn/categories/%E7%94%9F%E6%B4%BB/%E9%97%B2%E8%81%8A/"/>
-    
-    
-    <category term="生活" scheme="https://ajungle.cn/tags/%E7%94%9F%E6%B4%BB/"/>
-    
-    <category term="闲聊" scheme="https://ajungle.cn/tags/%E9%97%B2%E8%81%8A/"/>
-    
-    <category term="感情" scheme="https://ajungle.cn/tags/%E6%84%9F%E6%83%85/"/>
-    
-    <category term="时间" scheme="https://ajungle.cn/tags/%E6%97%B6%E9%97%B4/"/>
-    
-    <category term="secret" scheme="https://ajungle.cn/tags/secret/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java_JVM调优实现方式</title>
-    <link href="https://ajungle.cn/2020/09/19/Java/Java_JVM%E8%B0%83%E4%BC%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/"/>
-    <id>https://ajungle.cn/2020/09/19/Java/Java_JVM%E8%B0%83%E4%BC%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</id>
-    <published>2020-09-19T03:46:15.736Z</published>
-    <updated>2020-09-19T03:47:54.168Z</updated>
-    
-    
-    <summary type="html">介绍了JVM及Tomcat调优的方式</summary>
-    
-    
-    
-    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
-    
-    
-    <category term="JVM调优" scheme="https://ajungle.cn/tags/JVM%E8%B0%83%E4%BC%98/"/>
     
   </entry>
   
