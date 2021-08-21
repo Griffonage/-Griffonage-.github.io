@@ -6,7 +6,7 @@
   <link href="https://ajungle.cn/atom.xml" rel="self"/>
   
   <link href="https://ajungle.cn/"/>
-  <updated>2021-07-29T16:01:41.177Z</updated>
+  <updated>2021-08-09T16:14:59.331Z</updated>
   <id>https://ajungle.cn/</id>
   
   <author>
@@ -17,21 +17,23 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>关于现在和未来</title>
-    <link href="https://ajungle.cn/2021/07/29/%E6%97%A5%E8%AE%B0/%E6%97%A5%E8%AE%B0_%E5%85%B3%E4%BA%8E%E7%8E%B0%E5%9C%A8%E5%92%8C%E6%9C%AA%E6%9D%A5/"/>
-    <id>https://ajungle.cn/2021/07/29/%E6%97%A5%E8%AE%B0/%E6%97%A5%E8%AE%B0_%E5%85%B3%E4%BA%8E%E7%8E%B0%E5%9C%A8%E5%92%8C%E6%9C%AA%E6%9D%A5/</id>
-    <published>2021-07-29T14:41:05.200Z</published>
-    <updated>2021-07-29T16:01:41.177Z</updated>
+    <title>Java_实体类互相转换</title>
+    <link href="https://ajungle.cn/2021/08/09/Java/Java_Clone%E5%88%86%E6%9E%90/"/>
+    <id>https://ajungle.cn/2021/08/09/Java/Java_Clone%E5%88%86%E6%9E%90/</id>
+    <published>2021-08-09T14:16:23.638Z</published>
+    <updated>2021-08-09T16:14:59.331Z</updated>
     
     
-    <summary type="html">关于现在和未来</summary>
+    <summary type="html">介绍了实体类互转的常用方式及使用方</summary>
     
     
     
-    <category term="日志" scheme="https://ajungle.cn/categories/%E6%97%A5%E5%BF%97/"/>
+    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
     
     
-    <category term="日记" scheme="https://ajungle.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    <category term="Java" scheme="https://ajungle.cn/tags/Java/"/>
+    
+    <category term="实体类转换" scheme="https://ajungle.cn/tags/%E5%AE%9E%E4%BD%93%E7%B1%BB%E8%BD%AC%E6%8D%A2/"/>
     
   </entry>
   
