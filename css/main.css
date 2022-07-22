@@ -2768,3 +2768,10 @@ ul.breadcrumb li:last-child {
     margin-bottom: 10px;
   }
 }
+code {
+  color: #f00;
+}
+blockquote {
+  border-left: 4px solid #f00 !important;
+  color: #639 !important;
+}
