@@ -2783,3 +2783,6 @@ body {
 a:hover {
   cursor: url("https://file.ajungle.cn/img/fonts/blueTwo.cur"), auto !important;
 }
+.headband {
+  display: none;
+}
