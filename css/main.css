@@ -2775,13 +2775,20 @@ blockquote {
   border-left: 4px solid #f00 !important;
   color: #639 !important;
 }
-/**普通指针样式**/
 body {
-  cursor: url("https://file.ajungle.cn/img/fonts/blueOne.cur"), auto !important;
+  cursor: url("https://file.ajungle.cn/img/pointer.cur"), auto;
 }
-/**链接指针样式**/
+a {
+  cursor: url("https://file.ajungle.cn/img/link.cur"), auto;
+}
 a:hover {
-  cursor: url("https://file.ajungle.cn/img/fonts/blueTwo.cur"), auto !important;
+  cursor: url("https://file.ajungle.cn/img/link.cur"), auto;
+}
+.hty-icon-button {
+  cursor: url("https://file.ajungle.cn/img/link.cur"), pointer;
+}
+input {
+  cursor: url("https://file.ajungle.cn/img/text.cur"), auto;
 }
 .headband {
   display: none;
