@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>MySQL从MVCC到ReadView</title>
+    <url>/post/23ffdd3c.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
+<blockquote>
+<p>​	下表中<code>步骤3 、步骤5查询出的值分别是多少？ </code>将答案写在纸上，本文将解答你的疑惑，了解问题本质</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">A连接-事务A</th>
+<th align="center">B连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">start transaction;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">commit;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h2 id="先了解事务隔离级别"><a href="#先了解事务隔离级别" class="headerlink" title="先了解事务隔离级别"></a>先了解事务隔离级别</h2><ul>
+<li>Read Uncommitted (读未提交)：事务未提交的数据，对其他事务可见<ul>
+<li>问题：<code>脏读</code>-A事务读到了B事务修改的未提交的数据</li>
+</ul>
+</li>
+<li>Read Committed (读已提交)：事务只能看见已经提交的数据<ul>
+<li>问题：<code>不可重复读</code>-A事务每次查询，都得到最新的已经提交的数据，造成两次查询的结果不一致</li>
+</ul>
+</li>
+<li>Repeatable Read (可重复读)：事务中读取同一行的数据，得到的数据是一致的<ul>
+<li>问题：<code>幻读</code>-A事务如果是范围查询后，B事务又在该范围内插入数据，A事务将会查询到B事务插入的数据</li>
+</ul>
+</li>
+<li>Serializable (可串行化)：强制事务串行化执行，将读取到的每一行加锁，占用资源较大<ul>
+<li>问题：<code>慢</code></li>
+</ul>
+</li>
+</ul>
+<p>注：事务间的隔离性本质上是通过读写锁来实现，不在本文讨论范围内，可以阅读附录推荐了解</p>
+<blockquote>
+<p> InnoDB默认事务隔离级别是<code>REPEATABLE READ (可重复读)</code>,而这种事务的隔离级别会导致<code>幻读</code>， InnoDB采用了<code>MVCC</code>(多版本并发控制)来解决了这个问题。</p>
+</blockquote>
+<h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC(多版本并发控制)"></a>MVCC(多版本并发控制)</h2><p><code>Multi-Version Concurrency Control</code></p>
+<h3 id="表的隐藏字段"><a href="#表的隐藏字段" class="headerlink" title="表的隐藏字段"></a>表的隐藏字段</h3><p><strong>InnoDB</strong>引擎会为数据库中的每一行添加如下隐藏的列</p>
+<ul>
+<li><code>DB_TRX_ID</code>：行最新更新时，全局事务ID的值，单调递增</li>
+<li><code>DB_ROLL_PTR</code>：回滚指针，undo log回滚时，用来找寻回滚版本的指针</li>
+<li><code>DB_ROW_ID</code>：行唯一ID，在表有主键时不出现在任何索引中</li>
+</ul>
+<h3 id="binlog、redolog与undolog"><a href="#binlog、redolog与undolog" class="headerlink" title="binlog、redolog与undolog"></a>binlog、redolog与undolog</h3><p><strong><code>binlog</code><strong>：记录MySQL的数据变动语句，MySQL服务层实现，</strong>根据设置参数刷新进磁盘中</strong>，以二进制文件存储，一般用于<code>主从复制</code>、<code>数据恢复</code></p>
+<p><strong><code>redolog</code><strong>：</strong>Innodb特有</strong>，提高性能</p>
+<ul>
+<li><p>redo log buffer：内存容量，事务提交可以直接存放在内存中，<strong>根据设置参数刷新进磁盘中</strong></p>
+</li>
+<li><p>redo log file：磁盘上的日志文件，MySQL异常重启后，根据此文件将未提交的事务数据进行重做</p>
+</li>
+</ul>
+<p>注：不论是binlog或redolog都有日志丢失的风险，生产注意将sync_binlog、innodb_flush_log_at_trx_commit两个参数的设置，都设置为1可以分别防止日志丢失</p>
+<p><strong><code>undolog</code><strong>：</strong>Innodb实现MVCC的方式</strong>，控制数据的可见性</p>
+<p>来看看更新语句的undolog记录，假设stu_id&#x3D;1时，stu_name的 初始值为aaaaaa</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">开启事务</td>
+<td align="center">start transaction;</td>
+</tr>
+<tr>
+<td align="center">第一步</td>
+<td align="center">update student set stu_name &#x3D; “bbbbbb” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">第二步</td>
+<td align="center">update student set stu_name &#x3D; “cccccc” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">第三步</td>
+<td align="center">update student set stu_name &#x3D; “dddddd” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">提交事务</td>
+<td align="center">commit;</td>
+</tr>
+</tbody></table>
+<p>undo log 如下图所示：</p>
+<p><img src="https://file.ajungle.cn/img/20220718215350.png"></p>
+<p>可以看到，每一个<code>DB_ROLL_PTR</code>的值，都是上一个行版本<code>DB_TRX_ID</code>的值,只要通过最新的一行，就能通过这两个参数找到本次事务所有的数据变动，构成了数值变动的版本链，这个版本链的作用就是:</p>
+<blockquote>
+<p>控制版本链的哪个版本针对哪个事务是可见的</p>
+</blockquote>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>当前事务的<code>ReadView</code>和 undo log 的版本链里面的<code>DB_TRX_ID</code>进行一定规则的比对，从版本链中最新的版本开始比对，直到找到可见的版本为止</p>
+<h4 id="如何比对"><a href="#如何比对" class="headerlink" title="如何比对"></a>如何比对</h4><p>ReadView就是一个Class类，有如下字段：</p>
+<p><strong>m_ids</strong>：ReadView创建时，活跃读写事务ID列表</p>
+<p><strong>m_low_limit_id</strong>：ReadView创建时，活跃事务里面，最小的事务ID</p>
+<p><strong>m_up_limit_id</strong>：ReadView创建时，活跃事务里面，最大的事务ID + 1</p>
+<p><strong>m_creator_trx_id</strong>：ReadView创建者自身事务ID，仅开启事务是没有事务id的，默认为0，第一条语句执行后才会被赋予真正的值</p>
+<h4 id="比对说明"><a href="#比对说明" class="headerlink" title="比对说明"></a>比对说明</h4><ul>
+<li><p><code>DB_TRX_ID = creator_trx_id</code>：可见（当前事务可以看见自己修改的数据）</p>
+</li>
+<li><p><code>DB_TRX_ID &lt; m_low_limit_id</code> 时 : 可见（生成ReadView时，该事务已经提交）</p>
+</li>
+<li><p><code>DB_TRX_ID &gt;= m_up_limit_id</code> 时 :不可见（生成ReadView时，该事务还未创建）</p>
+</li>
+<li><p><code>m_low_limit_id &lt;= DB_TRX_ID &lt; m_up_limit_id</code>时</p>
+</li>
+<li><p>DB_TRX_ID 在 m_ids 列表里面 ：不可见（生成ReadView时，活跃事务还未提交）</p>
+</li>
+<li><p>DB_TRX_ID 不在 m_ids 列表里面 ：可见（生成ReadView时，事务已经提交）</p>
+</li>
+</ul>
+<h4 id="什么时候生成ReadView"><a href="#什么时候生成ReadView" class="headerlink" title="什么时候生成ReadView"></a>什么时候生成ReadView</h4><p>什么时候生成和MySQL的事务隔离级别有关</p>
+<ul>
+<li>Read Committed (读已提交)：开启事务后，每次读请求都会创建一份新的ReadView将旧的替换</li>
+<li>Repeatable Read (可重复读)：开启事务后，仅第一次读请求创建一次，直到事务结束</li>
+</ul>
+<h2 id="回到问题本身"><a href="#回到问题本身" class="headerlink" title="回到问题本身"></a>回到问题本身</h2><p>答案是：因为MySQL有不同的隔离级别，造成ReadView生成规则不一致，造成有有两种不同的结果</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">A连接-事务A</th>
+<th align="center">B连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">start transaction;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">commit;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>REPEATABLE-READ (可重复读)</p>
+<ul>
+<li>序号3值：CCCCCC</li>
+<li>序号5值：AAAAAA</li>
+</ul>
+<p>READ-COMMITTED(读已提交)</p>
+<ul>
+<li>序号3值：CCCCCC</li>
+<li>序号5值：CCCCCC</li>
+</ul>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>MVCC在Read Uncommitted (读未提交)和Serializable (可串行化)下不工作，因为前者总是读取最新的数据行，后者会对所有读取的数据行加锁，也就不存在并发问题</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><p><a id="id1"><a href="https://icyfenix.cn/architect-perspective/general-architecture/transaction/local.html">《凤凰架构》</a></a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html">MySQL官方网站</a></p>
+</li>
+<li><p><a href="https://github.com/mysql/mysql-server/blob/5.7/storage/innobase/include/read0types.h">MySQL源码</a></p>
+</li>
+<li><p><a href="https://blog.jcole.us/innodb/">Jeremy Cole Blog</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/400965090">知乎文章1</a></p>
+</li>
+<li><p>查询MySQL事务隔离级别语句：<code>show variables like &#39;transaction_isolation&#39;;</code></p>
+</li>
+<li><p>改变数据库隔离级别：<code>SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+</search>
