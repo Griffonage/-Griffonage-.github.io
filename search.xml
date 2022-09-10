@@ -223,6 +223,18 @@
       </tags>
   </entry>
   <entry>
+    <title>中秋放个我最喜欢的歌曲视频</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="/myvideo/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>记一次成都学车经历</title>
     <url>/post/ca641055.html</url>
     <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
@@ -383,17 +395,6 @@
       <tags>
         <tag>JDK8</tag>
         <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>知易行难</title>
-    <url>/post/38b4e2f5.html</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
       </tags>
   </entry>
 </search>
