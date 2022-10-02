@@ -2759,11 +2759,12 @@ mark.search-keyword {
   }
 }
 code {
-  color: #f00;
+  color: #42b983;
+  font-size: 1.125em;
 }
 blockquote {
   border-left: 4px solid #f00 !important;
-  color: #639 !important;
+  color: #42b983 !important;
 }
 body {
   cursor: url("https://file.ajungle.cn/img/pointer.cur"), auto;
