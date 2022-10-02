@@ -472,10 +472,6 @@
 <li>不要让他人思考</li>
 <li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
 </ul>
-<h2 id="参考及推荐阅读"><a href="#参考及推荐阅读" class="headerlink" title="参考及推荐阅读"></a>参考及推荐阅读</h2><ul>
-<li>《<em>Effective</em> Java》</li>
-<li><a href="http://sensible.com/dont-make-me-think/">《Don’t Make Me Think》</a></li>
-</ul>
 <h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
 <p>避免过早优化（理解过早和非过早至关重要）</p>
 </blockquote>
