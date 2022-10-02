@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#42b983"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://file.ajungle.cn/img/water.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://file.ajungle.cn/img/water.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#42b983">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ajungle.cn","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/config.min.js"></script>
+
+    <meta name="description" content="谈谈设计原则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计原则">
+<meta property="og:url" content="https://ajungle.cn/post/a151c9f2.html">
+<meta property="og:site_name" content="夜雨灯">
+<meta property="og:description" content="谈谈设计原则">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-22T10:42:05.000Z">
+<meta property="article:modified_time" content="2022-10-02T06:49:26.850Z">
+<meta property="article:author" content="Aug Jungle">
+<meta property="article:tag" content="设计原则">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ajungle.cn/post/a151c9f2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ajungle.cn/post/a151c9f2.html","path":"post/a151c9f2.html","title":"设计原则"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>设计原则 | 夜雨灯</title>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/analytics/baidu-analytics.min.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9430108be0e834b3cf9a85c8cad2d98a"></script>
+
+
+
+<link rel="dns-prefetch" href="my-vercel-waline-bc7y9jsw2-griffonage.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">夜雨灯</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">越贴近真实,真实越荒诞</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KISS"><span class="nav-number">2.</span> <span class="nav-text">KISS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A"><span class="nav-number">2.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YAGNI"><span class="nav-number">3.</span> <span class="nav-text">YAGNI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-1"><span class="nav-number">3.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-1"><span class="nav-number">3.2.</span> <span class="nav-text">怎么做</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KISS%E5%92%8CYAGNI%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-number">3.3.</span> <span class="nav-text">KISS和YAGNI的异同</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DTSTTCPW"><span class="nav-number">4.</span> <span class="nav-text">DTSTTCPW</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-2"><span class="nav-number">4.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-2"><span class="nav-number">4.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Separation-of-Concerns"><span class="nav-number">5.</span> <span class="nav-text">Separation of Concerns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-3"><span class="nav-number">5.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-3"><span class="nav-number">5.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DRY"><span class="nav-number">6.</span> <span class="nav-text">DRY</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-4"><span class="nav-number">6.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-4"><span class="nav-number">6.2.</span> <span class="nav-text">怎么做</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PS"><span class="nav-number">6.3.</span> <span class="nav-text">PS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-For-The-Maintainer"><span class="nav-number">7.</span> <span class="nav-text">Code For The Maintainer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-5"><span class="nav-number">7.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-5"><span class="nav-number">7.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%8F%8A%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">8.</span> <span class="nav-text">参考及推荐阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Avoid-Premature-Optimization"><span class="nav-number">9.</span> <span class="nav-text">Avoid Premature Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-6"><span class="nav-number">9.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-6"><span class="nav-number">9.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minimise-Coupling"><span class="nav-number">10.</span> <span class="nav-text">Minimise Coupling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-7"><span class="nav-number">10.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-7"><span class="nav-number">10.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Law-of-Demeter"><span class="nav-number">11.</span> <span class="nav-text">Law of Demeter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-8"><span class="nav-number">11.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-8"><span class="nav-number">11.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Composition-Over-Inheritance"><span class="nav-number">12.</span> <span class="nav-text">Composition Over Inheritance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-9"><span class="nav-number">12.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-9"><span class="nav-number">12.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Orthogonality"><span class="nav-number">13.</span> <span class="nav-text">Orthogonality</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-10"><span class="nav-number">13.1.</span> <span class="nav-text">为什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Robustness-Principle"><span class="nav-number">14.</span> <span class="nav-text">Robustness Principle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-11"><span class="nav-number">14.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-10"><span class="nav-number">14.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inversion-of-Control"><span class="nav-number">15.</span> <span class="nav-text">Inversion of Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-12"><span class="nav-number">15.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-11"><span class="nav-number">15.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maximise-Cohesion%EF%BC%9F"><span class="nav-number">16.</span> <span class="nav-text">Maximise Cohesion？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Liskov-Substitution-Principle"><span class="nav-number">17.</span> <span class="nav-text">Liskov Substitution Principle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Open-x2F-Closed-Principle"><span class="nav-number">18.</span> <span class="nav-text">Open&#x2F;Closed Principle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-13"><span class="nav-number">18.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-12"><span class="nav-number">18.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Single-Responsibility-Principle"><span class="nav-number">19.</span> <span class="nav-text">Single Responsibility Principle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-14"><span class="nav-number">19.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-13"><span class="nav-number">19.2.</span> <span class="nav-text">怎么做</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hide-Implementation-Details"><span class="nav-number">19.3.</span> <span class="nav-text">Hide Implementation Details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-15"><span class="nav-number">19.4.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-14"><span class="nav-number">19.5.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Curly%E2%80%99s-Law"><span class="nav-number">20.</span> <span class="nav-text">Curly’s Law</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Encapsulate-What-Changes"><span class="nav-number">21.</span> <span class="nav-text">Encapsulate What Changes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-16"><span class="nav-number">21.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-15"><span class="nav-number">21.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interface-Segregation-Principle"><span class="nav-number">22.</span> <span class="nav-text">Interface Segregation Principle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Command-Query-Separation"><span class="nav-number">23.</span> <span class="nav-text">Command Query Separation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-17"><span class="nav-number">23.1.</span> <span class="nav-text">为什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%81%9A-16"><span class="nav-number">23.2.</span> <span class="nav-text">怎么做</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Murphy%E2%80%99s-Law"><span class="nav-number">24.</span> <span class="nav-text">Murphy’s Law</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Brooks%E2%80%99s-Law"><span class="nav-number">25.</span> <span class="nav-text">Brooks’s Law</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linus%E2%80%99s-Law"><span class="nav-number">26.</span> <span class="nav-text">Linus’s Law</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aug Jungle"
+      src="https://file.ajungle.cn/img/avatar.png">
+  <p class="site-author-name" itemprop="name">Aug Jungle</p>
+  <div class="site-description" itemprop="description">记录不了真实,记录不了荒诞</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:runlevel@foxmail.com" title="E-Mail → mailto:runlevel@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://nv.ajungle.cn/" title="https:&#x2F;&#x2F;nv.ajungle.cn" rel="noopener" target="_blank">胖不了导航</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ajungle.cn/post/a151c9f2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://file.ajungle.cn/img/avatar.png">
+      <meta itemprop="name" content="Aug Jungle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜雨灯">
+      <meta itemprop="description" content="记录不了真实,记录不了荒诞">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="设计原则 | 夜雨灯">
+      <meta itemprop="description" content="谈谈设计原则">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计原则
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-09-22 18:42:05" itemprop="dateCreated datePublished" datetime="2022-09-22T18:42:05+08:00">2022-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-02 14:49:26" itemprop="dateModified" datetime="2022-10-02T14:49:26+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/post/a151c9f2.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/post/a151c9f2.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">谈谈设计原则</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
+<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><blockquote>
+<p>Keep It Simple Stupid（保持简单直白）</p>
+</blockquote>
+<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>更少的代码节省更多的时间，减少更多的Bug，以及更容易修改</li>
+<li>简单是复杂的更高水平</li>
+<li>完美并不是没有东西可以被添加进来，而是没有东西可以被带走</li>
+</ul>
+<h3 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>不要使用大部分人难以理解的代码，让其晦涩难懂</li>
+<li>不要过度优化，不是封装的越多越深越好，也不是底层函数或者高级语法用的越多越好</li>
+</ul>
+<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><blockquote>
+<p>you aren’t gonna need it（你不会需要它-不要实现非必要的东西）</p>
+</blockquote>
+<h3 id="为什么-1"><a href="#为什么-1" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>你的时间非常宝贵，任何为将来可能需要的功能做的工作，不但会导致你从当前必须实现的功能分心，而且还浪费了阅读者的时间</li>
+<li>这将导致代码臃肿、软件变得庞大且复杂</li>
+</ul>
+<h3 id="怎么做-1"><a href="#怎么做-1" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>在日常开发中，需要尽可能评估好设计的复杂度，不要过度设计。发现自己设计有不足的地方，，要有<code>持续重构</code>的精神，不断完善自己的设计，不要等到事情累计到不得不重构的时候，那时可能影响范围已经很大，事情往往已经到了积重难返的阶段</li>
+</ul>
+<h3 id="KISS和YAGNI的异同"><a href="#KISS和YAGNI的异同" class="headerlink" title="KISS和YAGNI的异同"></a>KISS和YAGNI的异同</h3><p>KISS和YAGNI都是在阐述<code>简单</code>这个事情，只是看待的角度不同，KISS是从<code>如何做</code>(保持简单)的角度，YAGNI是从<code>要不要做</code>(不要过度设计)的角度</p>
+<h2 id="DTSTTCPW"><a href="#DTSTTCPW" class="headerlink" title="DTSTTCPW"></a>DTSTTCPW</h2><blockquote>
+<p>Do The Simplest Thing That Could Possibly Work（做最简单的事情，如果它可能工作）</p>
+</blockquote>
+<h3 id="为什么-2"><a href="#为什么-2" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>如果我们致力于解决真正的问题，就能最大限度地解决真正的问题</li>
+<li>专业程序员就是能写出白痴程序员都能读懂的代码，白痴程序员就是写出即使专业程序员都无法读懂的代码</li>
+</ul>
+<h3 id="怎么做-2"><a href="#怎么做-2" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>询问自己：完成这件事最简单的方式是什么</li>
+</ul>
+<h2 id="Separation-of-Concerns"><a href="#Separation-of-Concerns" class="headerlink" title="Separation of Concerns"></a>Separation of Concerns</h2><blockquote>
+<p>关注点分离是将计算机程序分离成不同部分的设计原则，这样每个部分都单独处理自己的关注点。例如，业务逻辑与非业务逻辑是不同的关注点，更改业务逻辑不应该影响到非业务逻辑</p>
+</blockquote>
+<h3 id="为什么-3"><a href="#为什么-3" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>简化软件的开发和维护</li>
+<li>当每个关注点分离足够好时，代码的可复用性更高且开发及迭代更加具备独立性</li>
+</ul>
+<h3 id="怎么做-3"><a href="#怎么做-3" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将程序尽可能分离成各自独立的单一模块中</li>
+</ul>
+<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><blockquote>
+<p>Dont’t Repeat Yourself（不要写重复的代码）</p>
+<p>系统中的每一个部分都应该单一、清晰、且具备权威性。项目中每一个重要的功能应该仅在一份源代码中，如果相似的功能出现在两个不同的地方，通过抽象出不同部分将其结合起来往往是有益的</p>
+</blockquote>
+<h3 id="为什么-4"><a href="#为什么-4" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>重复可能导致维护困难、因果颠倒、逻辑互斥</li>
+<li>修改系统中任何一个单一的部分，不会改变到其他没有关联的地方</li>
+<li>逻辑上相关联的部分修改时，可以保持可预测及同步性</li>
+</ul>
+<h3 id="怎么做-4"><a href="#怎么做-4" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将业务规则、长的表达式、if语句、数学公式、元数据等等，放在一个地方</li>
+<li>在代码中使用单一、明确的来源</li>
+<li>当相似功能的代码出现在不同位置3次时，就应该重构这段代码（为什么不是两次，因为过早的重构可能会导致错误的抽象，而3次时，维护的成本已经超过了重构的成本，以及可能潜在的糟糕设计）</li>
+</ul>
+<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><p>我最怕那些copy别人一大段代码的！！！简直噩梦！！！关键我还碰到了！！！苍天呐！！！</p>
+<h2 id="Code-For-The-Maintainer"><a href="#Code-For-The-Maintainer" class="headerlink" title="Code For The Maintainer"></a>Code For The Maintainer</h2><blockquote>
+<p>为维护者而编写</p>
+</blockquote>
+<h3 id="为什么-5"><a href="#为什么-5" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前为止，维护是任何一个项目最昂贵的阶段</li>
+</ul>
+<h3 id="怎么做-5"><a href="#怎么做-5" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>做一个维护者</li>
+<li>编写代码时，要将维护你代码的人，当成知道你居住地址且有暴力倾向的精神病患者</li>
+<li>编写代码和注释时，要关照级别较低的人，让他们也能够愉快的阅读并能从中学习</li>
+<li>不要让他人思考</li>
+<li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
+</ul>
+<h2 id="参考及推荐阅读"><a href="#参考及推荐阅读" class="headerlink" title="参考及推荐阅读"></a>参考及推荐阅读</h2><ul>
+<li>《<em>Effective</em> Java》</li>
+<li><a target="_blank" rel="noopener" href="http://sensible.com/dont-make-me-think/">《Don’t Make Me Think》</a></li>
+</ul>
+<h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
+<p>避免过早优化（理解过早和非过早至关重要）</p>
+</blockquote>
+<h3 id="为什么-6"><a href="#为什么-6" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前还不清楚瓶颈在哪里</li>
+<li>优化后，可能变得更加难以阅读及维护</li>
+</ul>
+<h3 id="怎么做-6"><a href="#怎么做-6" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>让它更加正确、更加快速</li>
+<li>不要在不需要时优化，而是在分析及发现瓶颈后再优化</li>
+</ul>
+<h2 id="Minimise-Coupling"><a href="#Minimise-Coupling" class="headerlink" title="Minimise Coupling"></a>Minimise Coupling</h2><blockquote>
+<p>最小化耦合（耦合是模块&#x2F;组件间项目依赖的程度）</p>
+</blockquote>
+<h3 id="为什么-7"><a href="#为什么-7" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li><p>一个模块的改变经常会对其他模块造成影响</p>
+</li>
+<li><p>由于模块间的相互依赖，使用及组装可能花费更多的时间</p>
+</li>
+<li><p>模块间相互依赖程度高容易导致复用性及可测试降低</p>
+</li>
+</ul>
+<h3 id="怎么做-7"><a href="#怎么做-7" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>消除或者减少不必要的联系</li>
+<li>通过隐藏实现细节来减少耦合</li>
+<li>遵循<code>迪米特法则</code></li>
+</ul>
+<h2 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h2><blockquote>
+<p>迪米特法则（不要和陌生人说话。如果两个类无需直接通信，那么就不应该发生直接的相互调用，而应该通过第三方转发调用）</p>
+</blockquote>
+<h3 id="为什么-8"><a href="#为什么-8" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>直接通常导致增强耦合</li>
+<li>直接通常显示了过多的实现细节</li>
+</ul>
+<h3 id="怎么做-8"><a href="#怎么做-8" class="headerlink" title="怎么做"></a>怎么做</h3><p>一个对象的方法只能通过一下方式调用：</p>
+<ul>
+<li>对象本身</li>
+<li>方法中的一个参数</li>
+<li>方法中被创建的对象</li>
+<li>对象中的直接属性或字段</li>
+</ul>
+<h2 id="Composition-Over-Inheritance"><a href="#Composition-Over-Inheritance" class="headerlink" title="Composition Over Inheritance"></a>Composition Over Inheritance</h2><blockquote>
+<p>组合优于继承</p>
+</blockquote>
+<h3 id="为什么-9"><a href="#为什么-9" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>类之间的耦合更低</li>
+<li>继承打破封装</li>
+</ul>
+<h3 id="怎么做-9"><a href="#怎么做-9" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>继承前考虑父类是否有缺陷，而你是否愿意将缺陷传播到你的类中</li>
+<li>[has a]或者[use a]的类关系用组合；[is a]的情况，才能使用继承</li>
+</ul>
+<h2 id="Orthogonality"><a href="#Orthogonality" class="headerlink" title="Orthogonality"></a>Orthogonality</h2><blockquote>
+<p>正交性，系统中概念上不相干的事情不应该联系在一起</p>
+</blockquote>
+<h3 id="为什么-10"><a href="#为什么-10" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>设计越正交，异常越少，使得学习、阅读、编写代码更加容易</li>
+</ul>
+<h2 id="Robustness-Principle"><a href="#Robustness-Principle" class="headerlink" title="Robustness Principle"></a>Robustness Principle</h2><blockquote>
+<p>伯斯塔尔定律，对你想要做的要求严格，对你从其他人那里接收的保持宽松</p>
+</blockquote>
+<h3 id="为什么-11"><a href="#为什么-11" class="headerlink" title="为什么"></a>为什么</h3><p>为了在服务迭代过程中，提供者能够做出新的需求，同时对现有客户造成最小的影响</p>
+<h3 id="怎么做-10"><a href="#怎么做-10" class="headerlink" title="怎么做"></a>怎么做</h3><p>发送给其他机器的代码或者是命令，应该确保完全符合规范。但是接收的输入应该接受不符合规范的，只要含义清楚。</p>
+<h2 id="Inversion-of-Control"><a href="#Inversion-of-Control" class="headerlink" title="Inversion of Control"></a>Inversion of Control</h2><blockquote>
+<p>控制反转原则，也叫好莱坞原则（不要打电话给我，我们会打电话给你），使可重用的代码和解决具体问题的代码，即使他们在一个应用里</p>
+</blockquote>
+<h3 id="为什么-12"><a href="#为什么-12" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>控制反转被用来增加程序的模块化以及可扩展性</li>
+<li>将任务的执行与实现解耦</li>
+<li>将模块专注于他们所涉及的任务</li>
+<li>防止模块被替换带来的副作用</li>
+</ul>
+<h3 id="怎么做-11"><a href="#怎么做-11" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>使用工厂模式</li>
+<li>使用服务定位模式</li>
+<li>使用依赖注入</li>
+<li>使用上下文查找</li>
+<li>使用模板方法模式</li>
+<li>使用策略模式</li>
+</ul>
+<h2 id="Maximise-Cohesion？"><a href="#Maximise-Cohesion？" class="headerlink" title="Maximise Cohesion？"></a>Maximise Cohesion？</h2><blockquote>
+<p>最大化内聚，</p>
+</blockquote>
+<h2 id="Liskov-Substitution-Principle"><a href="#Liskov-Substitution-Principle" class="headerlink" title="Liskov Substitution Principle"></a>Liskov Substitution Principle</h2><blockquote>
+<p>里氏替换原则，程序中的对象可以被其子类替换，而不改变程序的正确性</p>
+</blockquote>
+<h2 id="Open-x2F-Closed-Principle"><a href="#Open-x2F-Closed-Principle" class="headerlink" title="Open&#x2F;Closed Principle"></a>Open&#x2F;Closed Principle</h2><blockquote>
+<p>开闭原则，软件实体应该对扩展开放，对修改关闭</p>
+</blockquote>
+<h3 id="为什么-13"><a href="#为什么-13" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过对现有代码最小化的改动来改善代码的可维护性和稳定性</li>
+</ul>
+<h3 id="怎么做-12"><a href="#怎么做-12" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li><p>编写可以扩展的类（而不是可以修改的类）</p>
+</li>
+<li><p>仅暴露可移动可修改的部分，隐藏其他部分</p>
+</li>
+</ul>
+<h2 id="Single-Responsibility-Principle"><a href="#Single-Responsibility-Principle" class="headerlink" title="Single Responsibility Principle"></a>Single Responsibility Principle</h2><blockquote>
+<p>单一责任原则，一个类不应该有超过一个需要改变的理由</p>
+</blockquote>
+<h3 id="为什么-14"><a href="#为什么-14" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>可维护性：改变应该仅在一个模块或者类中进行</li>
+</ul>
+<h3 id="怎么做-13"><a href="#怎么做-13" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>参考Curly’s Law</li>
+</ul>
+<h3 id="Hide-Implementation-Details"><a href="#Hide-Implementation-Details" class="headerlink" title="Hide Implementation Details"></a>Hide Implementation Details</h3><blockquote>
+<p>隐藏实现细节，一个软件模块通过提供一个接口来隐藏信息，同时不泄露任何不必要的信息</p>
+</blockquote>
+<h3 id="为什么-15"><a href="#为什么-15" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当一个实现改变，使用接口的客户端不用进行更改</li>
+</ul>
+<h3 id="怎么做-14"><a href="#怎么做-14" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>最小化类和变量的可访问性</li>
+<li>不要将变量数据设置为public</li>
+<li>避免放置私有的实现细节放到类的接口上</li>
+<li>减少耦合以隐藏更多的实现细节</li>
+</ul>
+<h2 id="Curly’s-Law"><a href="#Curly’s-Law" class="headerlink" title="Curly’s Law"></a>Curly’s Law</h2><blockquote>
+<p>科里定律，为任何特定代码选择一件单一、明确的目标，做一件事情</p>
+</blockquote>
+<h2 id="Encapsulate-What-Changes"><a href="#Encapsulate-What-Changes" class="headerlink" title="Encapsulate What Changes"></a>Encapsulate What Changes</h2><blockquote>
+<p>封装经常修改的代码</p>
+</blockquote>
+<h3 id="为什么-16"><a href="#为什么-16" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当改变发生时，减少需要修改的地方</li>
+</ul>
+<h3 id="怎么做-15"><a href="#怎么做-15" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>封装API背后不同的概念</li>
+<li>尽可能将不同概念分离到它自己的模块</li>
+</ul>
+<h2 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h2><blockquote>
+<p>接口隔离原则。将臃肿的接口减少为多个更小、更具体的客户端特定接口。接口应该更依赖于调用它的代码，而不是实现它的代码。</p>
+</blockquote>
+<h2 id="Command-Query-Separation"><a href="#Command-Query-Separation" class="headerlink" title="Command Query Separation"></a>Command Query Separation</h2><blockquote>
+<p>命令查询分离，每个方法要么是执行操作的命令，要么是向调用者返回数据的查询，但不能两个同事存在。这样就能使得使用者更加方向的调用。</p>
+</blockquote>
+<h3 id="为什么-17"><a href="#为什么-17" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过清除的将发放划分为查询和命令，程序员可以在不知道方法实现细节的情况下，更加有信心进行编码</li>
+</ul>
+<h3 id="怎么做-16"><a href="#怎么做-16" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将一个方法作为查询或命令实现</li>
+<li>明确方法的名称，通过约定名称的方式告知是查询还是命令</li>
+</ul>
+<h2 id="Murphy’s-Law"><a href="#Murphy’s-Law" class="headerlink" title="Murphy’s Law"></a>Murphy’s Law</h2><blockquote>
+<p>墨菲定律，任何可能出错的都会出错</p>
+</blockquote>
+<h2 id="Brooks’s-Law"><a href="#Brooks’s-Law" class="headerlink" title="Brooks’s Law"></a>Brooks’s Law</h2><blockquote>
+<p> 布鲁克斯法则，向已经延误的项目添加人力，只会使其更晚</p>
+</blockquote>
+<h2 id="Linus’s-Law"><a href="#Linus’s-Law" class="headerlink" title="Linus’s Law"></a>Linus’s Law</h2><blockquote>
+<p>林纳斯定律，给予足够的眼睛关注，所有的bug都会显现，代码检视很重要</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Aug Jungle
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://ajungle.cn/post/a151c9f2.html" title="设计原则">https://ajungle.cn/post/a151c9f2.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" rel="tag"># 设计原则</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/ff094b6e.html" rel="prev" title="中秋放个我最喜欢的歌曲视频">
+                  <i class="fa fa-chevron-left"></i> 中秋放个我最喜欢的歌曲视频
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2022</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aug Jungle</span>
+   
+  </div>
+
+  <div class="powered-by">
+    <img src="https://file.ajungle.cn/img/Hosted_Tencnet.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/OSS_qiniuyun.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/Hexo_NexT.svg" alt=""  style="display:inline-block">
+  </div>
+
+  <div class="beian">
+    <img src="https://file.ajungle.cn/img/icp.png" alt=""><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">湘ICP备 2020022557号-1 </a><br />
+      <img src="https://file.ajungle.cn/img/gongan.png" alt=""><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020022557" rel="noopener" target="_blank">湘公网安备 43312502000142号 </a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/comments.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/motion.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/next-boot.min.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/search/local-search.min.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"my-vercel-waline-bc7y9jsw2-griffonage.vercel.app","cssUrl":"https://file.ajungle.cn/img/waline.css","commentCount":false,"pageview":false,"avatar":"mm","pageSize":10,"visitor":false,"libUrl":"https://file.ajungle.cn/img/waline.js","meta":["nick","mail","link"],"requiredMeta":["mail"],"locale":{"placeholder":"雁过留痕，风过留声，人过留影，在此留下您的足迹~"},"el":"#waline","comment":true,"path":"/post/a151c9f2.html"}</script>
+<link rel="stylesheet" href="https://file.ajungle.cn/img/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>
