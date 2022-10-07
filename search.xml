@@ -223,6 +223,139 @@
       </tags>
   </entry>
   <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<h2 id="2022-10-06"><a href="#2022-10-06" class="headerlink" title="2022-10-06"></a>2022-10-06</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JDK8之List转Map实现解析</title>
     <url>/post/9a372c09.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
@@ -295,18 +428,6 @@
       <tags>
         <tag>JDK8</tag>
         <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
       </tags>
   </entry>
   <entry>
@@ -544,127 +665,6 @@
       </categories>
       <tags>
         <tag>设计原则</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次成都学车经历</title>
-    <url>/post/ca641055.html</url>
-    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
-<p>结束时间:<code>2020年12月14日</code></p>
-<p>总用时:<code>两个月</code></p>
-<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
-<p>科目一</p>
-<ul>
-<li>考试时间:<code>10月20日</code></li>
-<li>考试费用:<code>100</code>元</li>
-<li>备考时间:<code>1</code>天</li>
-</ul>
-<p>科目二</p>
-<ul>
-<li>考试时间:<code>12月04日</code></li>
-<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
-<li>总次数:<code>14</code>次</li>
-</ul>
-</li>
-</ul>
-<p>科目三</p>
-<ul>
-<li>考试时间:<code>12月14日</code></li>
-<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
-<li>总次数:<code>4</code>次</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
-</blockquote>
-<p>总费用:</p>
-<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
-<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
-<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
-<blockquote>
-<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
-</blockquote>
-<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
-<p>按照以下步骤:</p>
-<ul>
-<li><p>做精题</p>
-<ul>
-<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
-</ul>
-</li>
-<li><p>做总结归纳</p>
-<ul>
-<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
-</ul>
-</li>
-<li><p>刷错题(不多说)</p>
-</li>
-<li><p>多余时间刷本地区特有题目</p>
-<ul>
-<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
-</ul>
-</li>
-</ul>
-<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
-<p>结果:考试<code>98</code>分</p>
-<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
-<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
-<p><strong>科目二应该是练习时间花费最长的。</strong></p>
-<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
-<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
-<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
-<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>必做”精简题”,再做一般题(狂刷完事)</li>
-<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
-<li>必须要参加”模拟考试”,虽然要多加钱</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<h2 id="2022-10-06"><a href="#2022-10-06" class="headerlink" title="2022-10-06"></a>2022-10-06</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
-<blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
       </tags>
   </entry>
 </search>
