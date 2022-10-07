@@ -223,6 +223,18 @@
       </tags>
   </entry>
   <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>杂谈</title>
     <url>/post/bf4ee09f.html</url>
     <content><![CDATA[<span id="more"></span>
@@ -231,7 +243,7 @@
 <p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
 <p>记录自己的琐屑，记录自己的平凡。</p>
 <p><img src="https://file.ajungle.cn/img/sea-gaa179ad7b_1280.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-10-06"><a href="#2022-10-06" class="headerlink" title="2022-10-06"></a>2022-10-06</h2><p>今天是国庆假期的倒数第二天。</p>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
 <ol>
 <li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
 <li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
@@ -250,7 +262,7 @@
 <p>Mitch: But what is the “one thing?”</p>
 <p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
 </blockquote>
-<h2 id="2022-10-07"><a href="#2022-10-07" class="headerlink" title="2022-10-07"></a>2022-10-07</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
 <p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
 <p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
 <p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
@@ -270,18 +282,6 @@
       </categories>
       <tags>
         <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
       </tags>
   </entry>
   <entry>
