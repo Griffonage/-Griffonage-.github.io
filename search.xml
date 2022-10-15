@@ -1,6 +1,453 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL从MVCC到ReadView</title>
+    <url>/post/23ffdd3c.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
+<blockquote>
+<p>​	下表中<code>步骤3 、步骤5查询出的值分别是多少？ </code>将答案写在纸上，本文将解答你的疑惑，了解问题本质</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">A连接-事务A</th>
+<th align="center">B连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">start transaction;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">commit;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h2 id="先了解事务隔离级别"><a href="#先了解事务隔离级别" class="headerlink" title="先了解事务隔离级别"></a>先了解事务隔离级别</h2><ul>
+<li>Read Uncommitted (读未提交)：事务未提交的数据，对其他事务可见<ul>
+<li>问题：<code>脏读</code>-A事务读到了B事务修改的未提交的数据</li>
+</ul>
+</li>
+<li>Read Committed (读已提交)：事务只能看见已经提交的数据<ul>
+<li>问题：<code>不可重复读</code>-A事务每次查询，都得到最新的已经提交的数据，造成两次查询的结果不一致</li>
+</ul>
+</li>
+<li>Repeatable Read (可重复读)：事务中读取同一行的数据，得到的数据是一致的<ul>
+<li>问题：<code>幻读</code>-A事务如果是范围查询后，B事务又在该范围内插入数据，A事务将会查询到B事务插入的数据</li>
+</ul>
+</li>
+<li>Serializable (可串行化)：强制事务串行化执行，将读取到的每一行加锁，占用资源较大<ul>
+<li>问题：<code>慢</code></li>
+</ul>
+</li>
+</ul>
+<p>注：事务间的隔离性本质上是通过读写锁来实现，不在本文讨论范围内，可以阅读附录推荐了解</p>
+<blockquote>
+<p> InnoDB默认事务隔离级别是<code>REPEATABLE READ (可重复读)</code>,而这种事务的隔离级别会导致<code>幻读</code>， InnoDB采用了<code>MVCC</code>(多版本并发控制)来解决了这个问题。</p>
+</blockquote>
+<h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC(多版本并发控制)"></a>MVCC(多版本并发控制)</h2><p><code>Multi-Version Concurrency Control</code></p>
+<h3 id="表的隐藏字段"><a href="#表的隐藏字段" class="headerlink" title="表的隐藏字段"></a>表的隐藏字段</h3><p><strong>InnoDB</strong>引擎会为数据库中的每一行添加如下隐藏的列</p>
+<ul>
+<li><code>DB_TRX_ID</code>：行最新更新时，全局事务ID的值，单调递增</li>
+<li><code>DB_ROLL_PTR</code>：回滚指针，undo log回滚时，用来找寻回滚版本的指针</li>
+<li><code>DB_ROW_ID</code>：行唯一ID，在表有主键时不出现在任何索引中</li>
+</ul>
+<h3 id="binlog、redolog与undolog"><a href="#binlog、redolog与undolog" class="headerlink" title="binlog、redolog与undolog"></a>binlog、redolog与undolog</h3><p><strong><code>binlog</code><strong>：记录MySQL的数据变动语句，MySQL服务层实现，</strong>根据设置参数刷新进磁盘中</strong>，以二进制文件存储，一般用于<code>主从复制</code>、<code>数据恢复</code></p>
+<p><strong><code>redolog</code><strong>：</strong>Innodb特有</strong>，提高性能</p>
+<ul>
+<li><p>redo log buffer：内存容量，事务提交可以直接存放在内存中，<strong>根据设置参数刷新进磁盘中</strong></p>
+</li>
+<li><p>redo log file：磁盘上的日志文件，MySQL异常重启后，根据此文件将未提交的事务数据进行重做</p>
+</li>
+</ul>
+<p>注：不论是binlog或redolog都有日志丢失的风险，生产注意将sync_binlog、innodb_flush_log_at_trx_commit两个参数的设置，都设置为1可以分别防止日志丢失</p>
+<p><strong><code>undolog</code><strong>：</strong>Innodb实现MVCC的方式</strong>，控制数据的可见性</p>
+<p>来看看更新语句的undolog记录，假设stu_id&#x3D;1时，stu_name的 初始值为aaaaaa</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">开启事务</td>
+<td align="center">start transaction;</td>
+</tr>
+<tr>
+<td align="center">第一步</td>
+<td align="center">update student set stu_name &#x3D; “bbbbbb” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">第二步</td>
+<td align="center">update student set stu_name &#x3D; “cccccc” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">第三步</td>
+<td align="center">update student set stu_name &#x3D; “dddddd” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">提交事务</td>
+<td align="center">commit;</td>
+</tr>
+</tbody></table>
+<p>undo log 如下图所示：</p>
+<p><img src="https://file.ajungle.cn/img/20220718215350.png"></p>
+<p>可以看到，每一个<code>DB_ROLL_PTR</code>的值，都是上一个行版本<code>DB_TRX_ID</code>的值,只要通过最新的一行，就能通过这两个参数找到本次事务所有的数据变动，构成了数值变动的版本链，这个版本链的作用就是:</p>
+<blockquote>
+<p>控制版本链的哪个版本针对哪个事务是可见的</p>
+</blockquote>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>当前事务的<code>ReadView</code>和 undo log 的版本链里面的<code>DB_TRX_ID</code>进行一定规则的比对，从版本链中最新的版本开始比对，直到找到可见的版本为止</p>
+<h4 id="如何比对"><a href="#如何比对" class="headerlink" title="如何比对"></a>如何比对</h4><p>ReadView就是一个Class类，有如下字段：</p>
+<p><strong>m_ids</strong>：ReadView创建时，活跃读写事务ID列表</p>
+<p><strong>m_low_limit_id</strong>：ReadView创建时，活跃事务里面，最小的事务ID</p>
+<p><strong>m_up_limit_id</strong>：ReadView创建时，活跃事务里面，最大的事务ID + 1</p>
+<p><strong>m_creator_trx_id</strong>：ReadView创建者自身事务ID，仅开启事务是没有事务id的，默认为0，第一条语句执行后才会被赋予真正的值</p>
+<h4 id="比对说明"><a href="#比对说明" class="headerlink" title="比对说明"></a>比对说明</h4><ul>
+<li><p><code>DB_TRX_ID = creator_trx_id</code>：可见（当前事务可以看见自己修改的数据）</p>
+</li>
+<li><p><code>DB_TRX_ID &lt; m_low_limit_id</code> 时 : 可见（生成ReadView时，该事务已经提交）</p>
+</li>
+<li><p><code>DB_TRX_ID &gt;= m_up_limit_id</code> 时 :不可见（生成ReadView时，该事务还未创建）</p>
+</li>
+<li><p><code>m_low_limit_id &lt;= DB_TRX_ID &lt; m_up_limit_id</code>时</p>
+</li>
+<li><p>DB_TRX_ID 在 m_ids 列表里面 ：不可见（生成ReadView时，活跃事务还未提交）</p>
+</li>
+<li><p>DB_TRX_ID 不在 m_ids 列表里面 ：可见（生成ReadView时，事务已经提交）</p>
+</li>
+</ul>
+<h4 id="什么时候生成ReadView"><a href="#什么时候生成ReadView" class="headerlink" title="什么时候生成ReadView"></a>什么时候生成ReadView</h4><p>什么时候生成和MySQL的事务隔离级别有关</p>
+<ul>
+<li>Read Committed (读已提交)：开启事务后，每次读请求都会创建一份新的ReadView将旧的替换</li>
+<li>Repeatable Read (可重复读)：开启事务后，仅第一次读请求创建一次，直到事务结束</li>
+</ul>
+<h2 id="回到问题本身"><a href="#回到问题本身" class="headerlink" title="回到问题本身"></a>回到问题本身</h2><p>答案是：因为MySQL有不同的隔离级别，造成ReadView生成规则不一致，造成有有两种不同的结果</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">A连接-事务A</th>
+<th align="center">B连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">start transaction;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">commit;</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>REPEATABLE-READ (可重复读)</p>
+<ul>
+<li>序号3值：CCCCCC</li>
+<li>序号5值：AAAAAA</li>
+</ul>
+<p>READ-COMMITTED(读已提交)</p>
+<ul>
+<li>序号3值：CCCCCC</li>
+<li>序号5值：CCCCCC</li>
+</ul>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>MVCC在Read Uncommitted (读未提交)和Serializable (可串行化)下不工作，因为前者总是读取最新的数据行，后者会对所有读取的数据行加锁，也就不存在并发问题</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><p><a href="https://icyfenix.cn/architect-perspective/general-architecture/transaction/local.html">《凤凰架构》</a></p>
+</li>
+<li><p>《高性能MySQL》</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html">MySQL官方网站</a></p>
+</li>
+<li><p><a href="https://github.com/mysql/mysql-server/blob/5.7/storage/innobase/include/read0types.h">MySQL源码</a></p>
+</li>
+<li><p><a href="https://blog.jcole.us/innodb/">Jeremy Cole Blog</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/400965090">知乎文章1</a></p>
+</li>
+<li><p>查询MySQL事务隔离级别语句：<code>show variables like &#39;transaction_isolation&#39;;</code></p>
+</li>
+<li><p>改变数据库隔离级别：<code>SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<p><img src="https://file.ajungle.cn/img/sea-gaa179ad7b_1280.jpg" height="300px" width="100%"></img></p>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+</blockquote>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
+<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
+<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
+<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
+<p>后面怎么办呢？</p>
+<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
+<p>编程</p>
+<ul>
+<li>算法与数据结构，继续刷牛客网（优先级1）</li>
+<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
+<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
+<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JDK8之List转Map实现解析</title>
+    <url>/post/9a372c09.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>今天同事问到这个问题，之前只会实现，没有仔细分析过原理，现在分析分析</p>
+</blockquote>
+<h2 id="方式1（基本不用）"><a href="#方式1（基本不用）" class="headerlink" title="方式1（基本不用）"></a>方式1（基本不用）</h2><p>众所周知，在JDK8之后，List转Map的一般实现方式如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;张三&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;李四&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;王五&quot;</span>,<span class="number">20</span>);</span><br><span class="line">list.add(student1);</span><br><span class="line">list.add(student2);</span><br><span class="line">list.add(student3);</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(Student::getName, Student::getAge));</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式一存在的问题"><a href="#方式一存在的问题" class="headerlink" title="方式一存在的问题"></a>方式一存在的问题</h3><p><code>Collectors.toMap()</code>调用的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U&gt; Collector&lt;T, ?, Map&lt;K,U&gt;&gt; toMap(</span><br><span class="line">    								Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                                    Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CollectorImpl</span>&lt;&gt;(HashMap::<span class="keyword">new</span>,</span><br><span class="line">                               uniqKeysMapAccumulator(keyMapper, valueMapper),</span><br><span class="line">                               uniqKeysMapMerger(),</span><br><span class="line">                               CH_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在调用<code>CollectorImpl</code>的构造函数前，使用<code>uniqKeysMapAccumulator(keyMapper, valueMapper)</code>对数据进行了处理,处理代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T, K, V&gt;</span><br><span class="line">BiConsumer&lt;Map&lt;K, V&gt;, T&gt; <span class="title function_">uniqKeysMapAccumulator</span><span class="params">(Function&lt;? <span class="built_in">super</span> T, ? extends K&gt; keyMapper,</span></span><br><span class="line"><span class="params">                                                Function&lt;? <span class="built_in">super</span> T, ? extends V&gt; valueMapper)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (map, element) -&gt; &#123;</span><br><span class="line">        <span class="type">K</span> <span class="variable">k</span> <span class="operator">=</span> keyMapper.apply(element);</span><br><span class="line">        <span class="type">V</span> <span class="variable">v</span> <span class="operator">=</span> Objects.requireNonNull(valueMapper.apply(element));</span><br><span class="line">        <span class="type">V</span> <span class="variable">u</span> <span class="operator">=</span> map.putIfAbsent(k, v);</span><br><span class="line">        <span class="keyword">if</span> (u != <span class="literal">null</span>) <span class="keyword">throw</span> duplicateKeyException(k, u, v);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Objects.requireNonNull</code>：对值进行了判断，如果为null则抛出<code>NullPointerException</code></li>
+<li>通过<code>map.putIfAbsent(k, v);</code>及下面的判断，如果key已经存在，则抛出<code>duplicateKeyException</code></li>
+</ul>
+<h2 id="方式2（有缺陷）"><a href="#方式2（有缺陷）" class="headerlink" title="方式2（有缺陷）"></a>方式2（有缺陷）</h2><p><code>Collectors.toMap()</code>还有一个重载的方法，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U&gt; Collector&lt;T, ?, Map&lt;K,U&gt;&gt; toMap(</span><br><span class="line">    								Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                                    Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper,</span><br><span class="line">                                    BinaryOperator&lt;U&gt; mergeFunction) &#123;</span><br><span class="line">    <span class="keyword">return</span> toMap(keyMapper, valueMapper, mergeFunction, HashMap::<span class="keyword">new</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到return这里调用了类中另外一个同名不同参的<code>toMap</code>方法，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U, M <span class="keyword">extends</span> <span class="title class_">Map</span>&lt;K, U&gt;&gt; Collector&lt;T, ?, M&gt; toMap(</span><br><span class="line">    						 Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                             Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper,</span><br><span class="line">                             BinaryOperator&lt;U&gt; mergeFunction,</span><br><span class="line">                             Supplier&lt;M&gt; mapFactory) &#123;</span><br><span class="line">    BiConsumer&lt;M, T&gt; accumulator</span><br><span class="line">        = (map, element) -&gt; map.merge(keyMapper.apply(element),</span><br><span class="line">                                      valueMapper.apply(element), mergeFunction);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CollectorImpl</span>&lt;&gt;(mapFactory, accumulator, mapMerger(mergeFunction), CH_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，可以通过定义自己的<code>mergeFunction</code>也就是<code>对应map.merge的第三个remappingFunction参数</code>的来控制如何累加，优化后如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;张三&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;李四&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;王五&quot;</span>,<span class="number">20</span>);</span><br><span class="line">list.add(student1);</span><br><span class="line">list.add(student2);</span><br><span class="line">list.add(student3);</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(Student::getName, Student::getAge,(v1, v2)-&gt;v2));</span><br></pre></td></tr></table></figure>
+
+<p>这里，传入了lambda表达式<code>(v1, v2)-&gt;v2)</code>，当key出现重复时，移除原key对应的键值对，放入新key的键值对，<code>map.merge</code>具体代码实现如下：</p>
+<h3 id="方式2存在的问题"><a href="#方式2存在的问题" class="headerlink" title="方式2存在的问题"></a>方式2存在的问题</h3><p>在自定义key重复处处理逻辑后，在调用Map的merge方法时，实际上调用了<code>HashMap</code>的merge方法,在其第一行就是：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (value == <span class="literal">null</span> || remappingFunction == <span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br></pre></td></tr></table></figure>
+
+<p>当value为null时，抛出<code>NullPointerException</code>异常</p>
+<h3 id="方式2问题一般的处理方式"><a href="#方式2问题一般的处理方式" class="headerlink" title="方式2问题一般的处理方式"></a>方式2问题一般的处理方式</h3><p>对null情况进行提前判断，并赋给默认值</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">.collect(Collectors.toMap(</span><br><span class="line">	Student::getName, student -&gt; Optional.ofNullable(student.getAge()).orElse(<span class="number">1</span>)</span><br><span class="line">));</span><br></pre></td></tr></table></figure>
+
+<h2 id="方式3（建议使用）"><a href="#方式3（建议使用）" class="headerlink" title="方式3（建议使用）"></a>方式3（建议使用）</h2><p>.collect()方法可以自定义自己的<code>累加器容器</code>、<code>累加器容器元素添加方式</code>、<code>累加器容器合并</code>，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">        .collect(HashMap::<span class="keyword">new</span>,(m,v)-&gt;m.put(v.getName(),v.getAge()),HashMap::putAll);</span><br></pre></td></tr></table></figure>
+
+<h2 id="速度测试"><a href="#速度测试" class="headerlink" title="速度测试"></a>速度测试</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">100000</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span> ; i &lt; <span class="number">5000000</span> ;i++)&#123;</span><br><span class="line">    Student student= <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;测试&quot;</span>+i,i );</span><br><span class="line">    list.add(student);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//方式3-时间测试</span></span><br><span class="line"><span class="type">Instant</span> <span class="variable">now1</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(HashMap::<span class="keyword">new</span>,(m,v)-&gt;m.put(v.getName(),v.getAge()),HashMap::putAll);</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now2</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;方式3-时间测试：&quot;</span>+Duration.between(now1,now2).toMillis());</span><br><span class="line"></span><br><span class="line"><span class="comment">//方式2-时间测试</span></span><br><span class="line">Map&lt;String, Integer&gt; map2 = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(</span><br><span class="line">        Student::getName, student -&gt; Optional.ofNullable(student.getAge()).orElse(<span class="number">1</span>)</span><br><span class="line">    ));</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now3</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;方式2-时间测试：&quot;</span>+Duration.between(now2,now3).toMillis());</span><br><span class="line"></span><br><span class="line"><span class="comment">//直接使用forEach</span></span><br><span class="line">Map&lt;String, Integer&gt; map3 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(list.size());</span><br><span class="line"><span class="keyword">for</span>(Student student:list)&#123;</span><br><span class="line">    map3.put(student.getName(),student.getAge());</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now4</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;时间间隔3：&quot;</span>+Duration.between(now3,now4).toMillis());</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">方式<span class="number">3</span>-时间测试：<span class="number">738</span></span><br><span class="line">方式<span class="number">2</span>-时间测试：<span class="number">591</span></span><br><span class="line">时间间隔<span class="number">3</span>：<span class="number">338</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到，方式3虽然能够避免了空指针及键重复问题，但是创建map和putall的行为仍然会消耗额外时间，但是和方式2消耗时间差距不大，所以对性能要求不高时采用是没有什么问题的。</p>
+<p>​    直接使用forEach是时间最快的，但是需要自己维护实现细节，对性能要求高大批量数据时可以使用</p>
+</blockquote>
+<h2 id="额外记录"><a href="#额外记录" class="headerlink" title="额外记录"></a>额外记录</h2><p><code>.collect</code>：流的终端操作，接收一个<code>Collector&lt;? super T, A, R&gt; collector</code>参数，主要的作用是将流中元素汇聚成一个结果。</p>
+<p>最终调用了<code>CollectorImpl</code>类的4参数构造函数，进行了返回，所以对<code>CollectorImpl</code>类进行分析，<code>CollectorImpl</code>实现了<code>Collector</code>接口，接口未如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Collector</span>&lt;T, A, R&gt; &#123;</span><br><span class="line">    Supplier&lt;A&gt; <span class="title function_">supplier</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    BiConsumer&lt;A, T&gt; <span class="title function_">accumulator</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    BinaryOperator&lt;A&gt; <span class="title function_">combiner</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Function&lt;A, R&gt; <span class="title function_">finisher</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Set&lt;Characteristics&gt; <span class="title function_">characteristics</span><span class="params">()</span>;</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+
+<p><code>supplier()</code>：返回一个新的累加器容器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Supplier</span>&lt;T&gt; &#123;</span><br><span class="line">    T <span class="title function_">get</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>accumulator()</code>：将元素添加进累加器容器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BiConsumer</span>&lt;T, U&gt; &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(T t, U u)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>combiner()</code>：合并两个累加器容器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BinaryOperator</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">BiFunction</span>&lt;T,T,T&gt; &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BiFunction</span>&lt;T, U, R&gt; &#123;</span><br><span class="line"></span><br><span class="line">    R <span class="title function_">apply</span><span class="params">(T t, U u)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>finisher()</code>：结束前对累加器容器进行转换，转换成最终结果容器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Function</span>&lt;T, R&gt; &#123;</span><br><span class="line">    R <span class="title function_">apply</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>characteristics()</code>：定义<code>combiner()</code>函数的行为</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Characteristics</span> &#123;</span><br><span class="line">	<span class="comment">//表明默认多线程（得到并行流情况下）可以并行调用accumulator()且最终结果正确，不需要调用combiner()，因为操作的是同一个结果容器</span></span><br><span class="line">    CONCURRENT,</span><br><span class="line">	<span class="comment">//不保证结果的顺序性</span></span><br><span class="line">    UNORDERED,</span><br><span class="line">	<span class="comment">//表明 累加器容器 等于 最终结果容器，所以就不会调用finisher()进行最终转换</span></span><br><span class="line">    IDENTITY_FINISH</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>JDK8</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计原则</title>
     <url>/post/a151c9f2.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
@@ -235,453 +682,6 @@
       </categories>
       <tags>
         <tag>设计原则</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JDK8之List转Map实现解析</title>
-    <url>/post/9a372c09.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>今天同事问到这个问题，之前只会实现，没有仔细分析过原理，现在分析分析</p>
-</blockquote>
-<h2 id="方式1（基本不用）"><a href="#方式1（基本不用）" class="headerlink" title="方式1（基本不用）"></a>方式1（基本不用）</h2><p>众所周知，在JDK8之后，List转Map的一般实现方式如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;张三&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;李四&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;王五&quot;</span>,<span class="number">20</span>);</span><br><span class="line">list.add(student1);</span><br><span class="line">list.add(student2);</span><br><span class="line">list.add(student3);</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(Student::getName, Student::getAge));</span><br></pre></td></tr></table></figure>
-
-<h3 id="方式一存在的问题"><a href="#方式一存在的问题" class="headerlink" title="方式一存在的问题"></a>方式一存在的问题</h3><p><code>Collectors.toMap()</code>调用的方法如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U&gt; Collector&lt;T, ?, Map&lt;K,U&gt;&gt; toMap(</span><br><span class="line">    								Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                                    Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CollectorImpl</span>&lt;&gt;(HashMap::<span class="keyword">new</span>,</span><br><span class="line">                               uniqKeysMapAccumulator(keyMapper, valueMapper),</span><br><span class="line">                               uniqKeysMapMerger(),</span><br><span class="line">                               CH_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在调用<code>CollectorImpl</code>的构造函数前，使用<code>uniqKeysMapAccumulator(keyMapper, valueMapper)</code>对数据进行了处理,处理代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T, K, V&gt;</span><br><span class="line">BiConsumer&lt;Map&lt;K, V&gt;, T&gt; <span class="title function_">uniqKeysMapAccumulator</span><span class="params">(Function&lt;? <span class="built_in">super</span> T, ? extends K&gt; keyMapper,</span></span><br><span class="line"><span class="params">                                                Function&lt;? <span class="built_in">super</span> T, ? extends V&gt; valueMapper)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (map, element) -&gt; &#123;</span><br><span class="line">        <span class="type">K</span> <span class="variable">k</span> <span class="operator">=</span> keyMapper.apply(element);</span><br><span class="line">        <span class="type">V</span> <span class="variable">v</span> <span class="operator">=</span> Objects.requireNonNull(valueMapper.apply(element));</span><br><span class="line">        <span class="type">V</span> <span class="variable">u</span> <span class="operator">=</span> map.putIfAbsent(k, v);</span><br><span class="line">        <span class="keyword">if</span> (u != <span class="literal">null</span>) <span class="keyword">throw</span> duplicateKeyException(k, u, v);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>Objects.requireNonNull</code>：对值进行了判断，如果为null则抛出<code>NullPointerException</code></li>
-<li>通过<code>map.putIfAbsent(k, v);</code>及下面的判断，如果key已经存在，则抛出<code>duplicateKeyException</code></li>
-</ul>
-<h2 id="方式2（有缺陷）"><a href="#方式2（有缺陷）" class="headerlink" title="方式2（有缺陷）"></a>方式2（有缺陷）</h2><p><code>Collectors.toMap()</code>还有一个重载的方法，如下所示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U&gt; Collector&lt;T, ?, Map&lt;K,U&gt;&gt; toMap(</span><br><span class="line">    								Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                                    Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper,</span><br><span class="line">                                    BinaryOperator&lt;U&gt; mergeFunction) &#123;</span><br><span class="line">    <span class="keyword">return</span> toMap(keyMapper, valueMapper, mergeFunction, HashMap::<span class="keyword">new</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到return这里调用了类中另外一个同名不同参的<code>toMap</code>方法，如下所示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T, K, U, M <span class="keyword">extends</span> <span class="title class_">Map</span>&lt;K, U&gt;&gt; Collector&lt;T, ?, M&gt; toMap(</span><br><span class="line">    						 Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">K</span>&gt; keyMapper,</span><br><span class="line">                             Function&lt;? <span class="built_in">super</span> T, ? <span class="keyword">extends</span> <span class="title class_">U</span>&gt; valueMapper,</span><br><span class="line">                             BinaryOperator&lt;U&gt; mergeFunction,</span><br><span class="line">                             Supplier&lt;M&gt; mapFactory) &#123;</span><br><span class="line">    BiConsumer&lt;M, T&gt; accumulator</span><br><span class="line">        = (map, element) -&gt; map.merge(keyMapper.apply(element),</span><br><span class="line">                                      valueMapper.apply(element), mergeFunction);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CollectorImpl</span>&lt;&gt;(mapFactory, accumulator, mapMerger(mergeFunction), CH_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到，可以通过定义自己的<code>mergeFunction</code>也就是<code>对应map.merge的第三个remappingFunction参数</code>的来控制如何累加，优化后如下所示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;张三&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;李四&quot;</span>,<span class="number">18</span>);</span><br><span class="line"><span class="type">Student</span> <span class="variable">student3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;王五&quot;</span>,<span class="number">20</span>);</span><br><span class="line">list.add(student1);</span><br><span class="line">list.add(student2);</span><br><span class="line">list.add(student3);</span><br><span class="line"></span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(Student::getName, Student::getAge,(v1, v2)-&gt;v2));</span><br></pre></td></tr></table></figure>
-
-<p>这里，传入了lambda表达式<code>(v1, v2)-&gt;v2)</code>，当key出现重复时，移除原key对应的键值对，放入新key的键值对，<code>map.merge</code>具体代码实现如下：</p>
-<h3 id="方式2存在的问题"><a href="#方式2存在的问题" class="headerlink" title="方式2存在的问题"></a>方式2存在的问题</h3><p>在自定义key重复处处理逻辑后，在调用Map的merge方法时，实际上调用了<code>HashMap</code>的merge方法,在其第一行就是：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (value == <span class="literal">null</span> || remappingFunction == <span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br></pre></td></tr></table></figure>
-
-<p>当value为null时，抛出<code>NullPointerException</code>异常</p>
-<h3 id="方式2问题一般的处理方式"><a href="#方式2问题一般的处理方式" class="headerlink" title="方式2问题一般的处理方式"></a>方式2问题一般的处理方式</h3><p>对null情况进行提前判断，并赋给默认值</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">.collect(Collectors.toMap(</span><br><span class="line">	Student::getName, student -&gt; Optional.ofNullable(student.getAge()).orElse(<span class="number">1</span>)</span><br><span class="line">));</span><br></pre></td></tr></table></figure>
-
-<h2 id="方式3（建议使用）"><a href="#方式3（建议使用）" class="headerlink" title="方式3（建议使用）"></a>方式3（建议使用）</h2><p>.collect()方法可以自定义自己的<code>累加器容器</code>、<code>累加器容器元素添加方式</code>、<code>累加器容器合并</code>，如下所示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">        .collect(HashMap::<span class="keyword">new</span>,(m,v)-&gt;m.put(v.getName(),v.getAge()),HashMap::putAll);</span><br></pre></td></tr></table></figure>
-
-<h2 id="速度测试"><a href="#速度测试" class="headerlink" title="速度测试"></a>速度测试</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Student&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">100000</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span> ; i &lt; <span class="number">5000000</span> ;i++)&#123;</span><br><span class="line">    Student student= <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;测试&quot;</span>+i,i );</span><br><span class="line">    list.add(student);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//方式3-时间测试</span></span><br><span class="line"><span class="type">Instant</span> <span class="variable">now1</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">Map&lt;String, Integer&gt; map = list.stream()</span><br><span class="line">    .collect(HashMap::<span class="keyword">new</span>,(m,v)-&gt;m.put(v.getName(),v.getAge()),HashMap::putAll);</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now2</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;方式3-时间测试：&quot;</span>+Duration.between(now1,now2).toMillis());</span><br><span class="line"></span><br><span class="line"><span class="comment">//方式2-时间测试</span></span><br><span class="line">Map&lt;String, Integer&gt; map2 = list.stream()</span><br><span class="line">    .collect(Collectors.toMap(</span><br><span class="line">        Student::getName, student -&gt; Optional.ofNullable(student.getAge()).orElse(<span class="number">1</span>)</span><br><span class="line">    ));</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now3</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;方式2-时间测试：&quot;</span>+Duration.between(now2,now3).toMillis());</span><br><span class="line"></span><br><span class="line"><span class="comment">//直接使用forEach</span></span><br><span class="line">Map&lt;String, Integer&gt; map3 = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(list.size());</span><br><span class="line"><span class="keyword">for</span>(Student student:list)&#123;</span><br><span class="line">    map3.put(student.getName(),student.getAge());</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">Instant</span> <span class="variable">now4</span> <span class="operator">=</span> Instant.now();</span><br><span class="line">System.out.println(<span class="string">&quot;时间间隔3：&quot;</span>+Duration.between(now3,now4).toMillis());</span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">方式<span class="number">3</span>-时间测试：<span class="number">738</span></span><br><span class="line">方式<span class="number">2</span>-时间测试：<span class="number">591</span></span><br><span class="line">时间间隔<span class="number">3</span>：<span class="number">338</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到，方式3虽然能够避免了空指针及键重复问题，但是创建map和putall的行为仍然会消耗额外时间，但是和方式2消耗时间差距不大，所以对性能要求不高时采用是没有什么问题的。</p>
-<p>​    直接使用forEach是时间最快的，但是需要自己维护实现细节，对性能要求高大批量数据时可以使用</p>
-</blockquote>
-<h2 id="额外记录"><a href="#额外记录" class="headerlink" title="额外记录"></a>额外记录</h2><p><code>.collect</code>：流的终端操作，接收一个<code>Collector&lt;? super T, A, R&gt; collector</code>参数，主要的作用是将流中元素汇聚成一个结果。</p>
-<p>最终调用了<code>CollectorImpl</code>类的4参数构造函数，进行了返回，所以对<code>CollectorImpl</code>类进行分析，<code>CollectorImpl</code>实现了<code>Collector</code>接口，接口未如下所示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Collector</span>&lt;T, A, R&gt; &#123;</span><br><span class="line">    Supplier&lt;A&gt; <span class="title function_">supplier</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    BiConsumer&lt;A, T&gt; <span class="title function_">accumulator</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    BinaryOperator&lt;A&gt; <span class="title function_">combiner</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Function&lt;A, R&gt; <span class="title function_">finisher</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    Set&lt;Characteristics&gt; <span class="title function_">characteristics</span><span class="params">()</span>;</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
-
-<p><code>supplier()</code>：返回一个新的累加器容器</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Supplier</span>&lt;T&gt; &#123;</span><br><span class="line">    T <span class="title function_">get</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>accumulator()</code>：将元素添加进累加器容器</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BiConsumer</span>&lt;T, U&gt; &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(T t, U u)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>combiner()</code>：合并两个累加器容器</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BinaryOperator</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">BiFunction</span>&lt;T,T,T&gt; &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">BiFunction</span>&lt;T, U, R&gt; &#123;</span><br><span class="line"></span><br><span class="line">    R <span class="title function_">apply</span><span class="params">(T t, U u)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>finisher()</code>：结束前对累加器容器进行转换，转换成最终结果容器</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Function</span>&lt;T, R&gt; &#123;</span><br><span class="line">    R <span class="title function_">apply</span><span class="params">(T t)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>characteristics()</code>：定义<code>combiner()</code>函数的行为</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Characteristics</span> &#123;</span><br><span class="line">	<span class="comment">//表明默认多线程（得到并行流情况下）可以并行调用accumulator()且最终结果正确，不需要调用combiner()，因为操作的是同一个结果容器</span></span><br><span class="line">    CONCURRENT,</span><br><span class="line">	<span class="comment">//不保证结果的顺序性</span></span><br><span class="line">    UNORDERED,</span><br><span class="line">	<span class="comment">//表明 累加器容器 等于 最终结果容器，所以就不会调用finisher()进行最终转换</span></span><br><span class="line">    IDENTITY_FINISH</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>JDK8</tag>
-        <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<p><img src="https://file.ajungle.cn/img/sea-gaa179ad7b_1280.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
-<blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
-</blockquote>
-<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
-<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
-<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
-<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
-<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
-<p>后面怎么办呢？</p>
-<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
-<p>编程</p>
-<ul>
-<li>算法与数据结构，继续刷牛客网（优先级1）</li>
-<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
-<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
-<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL从MVCC到ReadView</title>
-    <url>/post/23ffdd3c.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
-<blockquote>
-<p>​	下表中<code>步骤3 、步骤5查询出的值分别是多少？ </code>将答案写在纸上，本文将解答你的疑惑，了解问题本质</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">A连接-事务A</th>
-<th align="center">B连接</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">start transaction;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"></td>
-<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"></td>
-<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">commit;</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h2 id="先了解事务隔离级别"><a href="#先了解事务隔离级别" class="headerlink" title="先了解事务隔离级别"></a>先了解事务隔离级别</h2><ul>
-<li>Read Uncommitted (读未提交)：事务未提交的数据，对其他事务可见<ul>
-<li>问题：<code>脏读</code>-A事务读到了B事务修改的未提交的数据</li>
-</ul>
-</li>
-<li>Read Committed (读已提交)：事务只能看见已经提交的数据<ul>
-<li>问题：<code>不可重复读</code>-A事务每次查询，都得到最新的已经提交的数据，造成两次查询的结果不一致</li>
-</ul>
-</li>
-<li>Repeatable Read (可重复读)：事务中读取同一行的数据，得到的数据是一致的<ul>
-<li>问题：<code>幻读</code>-A事务如果是范围查询后，B事务又在该范围内插入数据，A事务将会查询到B事务插入的数据</li>
-</ul>
-</li>
-<li>Serializable (可串行化)：强制事务串行化执行，将读取到的每一行加锁，占用资源较大<ul>
-<li>问题：<code>慢</code></li>
-</ul>
-</li>
-</ul>
-<p>注：事务间的隔离性本质上是通过读写锁来实现，不在本文讨论范围内，可以阅读附录推荐了解</p>
-<blockquote>
-<p> InnoDB默认事务隔离级别是<code>REPEATABLE READ (可重复读)</code>,而这种事务的隔离级别会导致<code>幻读</code>， InnoDB采用了<code>MVCC</code>(多版本并发控制)来解决了这个问题。</p>
-</blockquote>
-<h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC(多版本并发控制)"></a>MVCC(多版本并发控制)</h2><p><code>Multi-Version Concurrency Control</code></p>
-<h3 id="表的隐藏字段"><a href="#表的隐藏字段" class="headerlink" title="表的隐藏字段"></a>表的隐藏字段</h3><p><strong>InnoDB</strong>引擎会为数据库中的每一行添加如下隐藏的列</p>
-<ul>
-<li><code>DB_TRX_ID</code>：行最新更新时，全局事务ID的值，单调递增</li>
-<li><code>DB_ROLL_PTR</code>：回滚指针，undo log回滚时，用来找寻回滚版本的指针</li>
-<li><code>DB_ROW_ID</code>：行唯一ID，在表有主键时不出现在任何索引中</li>
-</ul>
-<h3 id="binlog、redolog与undolog"><a href="#binlog、redolog与undolog" class="headerlink" title="binlog、redolog与undolog"></a>binlog、redolog与undolog</h3><p><strong><code>binlog</code><strong>：记录MySQL的数据变动语句，MySQL服务层实现，</strong>根据设置参数刷新进磁盘中</strong>，以二进制文件存储，一般用于<code>主从复制</code>、<code>数据恢复</code></p>
-<p><strong><code>redolog</code><strong>：</strong>Innodb特有</strong>，提高性能</p>
-<ul>
-<li><p>redo log buffer：内存容量，事务提交可以直接存放在内存中，<strong>根据设置参数刷新进磁盘中</strong></p>
-</li>
-<li><p>redo log file：磁盘上的日志文件，MySQL异常重启后，根据此文件将未提交的事务数据进行重做</p>
-</li>
-</ul>
-<p>注：不论是binlog或redolog都有日志丢失的风险，生产注意将sync_binlog、innodb_flush_log_at_trx_commit两个参数的设置，都设置为1可以分别防止日志丢失</p>
-<p><strong><code>undolog</code><strong>：</strong>Innodb实现MVCC的方式</strong>，控制数据的可见性</p>
-<p>来看看更新语句的undolog记录，假设stu_id&#x3D;1时，stu_name的 初始值为aaaaaa</p>
-<table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">开启事务</td>
-<td align="center">start transaction;</td>
-</tr>
-<tr>
-<td align="center">第一步</td>
-<td align="center">update student set stu_name &#x3D; “bbbbbb” where stu_id &#x3D; 1;</td>
-</tr>
-<tr>
-<td align="center">第二步</td>
-<td align="center">update student set stu_name &#x3D; “cccccc” where stu_id &#x3D; 1;</td>
-</tr>
-<tr>
-<td align="center">第三步</td>
-<td align="center">update student set stu_name &#x3D; “dddddd” where stu_id &#x3D; 1;</td>
-</tr>
-<tr>
-<td align="center">提交事务</td>
-<td align="center">commit;</td>
-</tr>
-</tbody></table>
-<p>undo log 如下图所示：</p>
-<p><img src="https://file.ajungle.cn/img/20220718215350.png"></p>
-<p>可以看到，每一个<code>DB_ROLL_PTR</code>的值，都是上一个行版本<code>DB_TRX_ID</code>的值,只要通过最新的一行，就能通过这两个参数找到本次事务所有的数据变动，构成了数值变动的版本链，这个版本链的作用就是:</p>
-<blockquote>
-<p>控制版本链的哪个版本针对哪个事务是可见的</p>
-</blockquote>
-<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>当前事务的<code>ReadView</code>和 undo log 的版本链里面的<code>DB_TRX_ID</code>进行一定规则的比对，从版本链中最新的版本开始比对，直到找到可见的版本为止</p>
-<h4 id="如何比对"><a href="#如何比对" class="headerlink" title="如何比对"></a>如何比对</h4><p>ReadView就是一个Class类，有如下字段：</p>
-<p><strong>m_ids</strong>：ReadView创建时，活跃读写事务ID列表</p>
-<p><strong>m_low_limit_id</strong>：ReadView创建时，活跃事务里面，最小的事务ID</p>
-<p><strong>m_up_limit_id</strong>：ReadView创建时，活跃事务里面，最大的事务ID + 1</p>
-<p><strong>m_creator_trx_id</strong>：ReadView创建者自身事务ID，仅开启事务是没有事务id的，默认为0，第一条语句执行后才会被赋予真正的值</p>
-<h4 id="比对说明"><a href="#比对说明" class="headerlink" title="比对说明"></a>比对说明</h4><ul>
-<li><p><code>DB_TRX_ID = creator_trx_id</code>：可见（当前事务可以看见自己修改的数据）</p>
-</li>
-<li><p><code>DB_TRX_ID &lt; m_low_limit_id</code> 时 : 可见（生成ReadView时，该事务已经提交）</p>
-</li>
-<li><p><code>DB_TRX_ID &gt;= m_up_limit_id</code> 时 :不可见（生成ReadView时，该事务还未创建）</p>
-</li>
-<li><p><code>m_low_limit_id &lt;= DB_TRX_ID &lt; m_up_limit_id</code>时</p>
-</li>
-<li><p>DB_TRX_ID 在 m_ids 列表里面 ：不可见（生成ReadView时，活跃事务还未提交）</p>
-</li>
-<li><p>DB_TRX_ID 不在 m_ids 列表里面 ：可见（生成ReadView时，事务已经提交）</p>
-</li>
-</ul>
-<h4 id="什么时候生成ReadView"><a href="#什么时候生成ReadView" class="headerlink" title="什么时候生成ReadView"></a>什么时候生成ReadView</h4><p>什么时候生成和MySQL的事务隔离级别有关</p>
-<ul>
-<li>Read Committed (读已提交)：开启事务后，每次读请求都会创建一份新的ReadView将旧的替换</li>
-<li>Repeatable Read (可重复读)：开启事务后，仅第一次读请求创建一次，直到事务结束</li>
-</ul>
-<h2 id="回到问题本身"><a href="#回到问题本身" class="headerlink" title="回到问题本身"></a>回到问题本身</h2><p>答案是：因为MySQL有不同的隔离级别，造成ReadView生成规则不一致，造成有有两种不同的结果</p>
-<table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">A连接-事务A</th>
-<th align="center">B连接</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">start transaction;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"></td>
-<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 1;</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">select stu_name from student where stu_id &#x3D; 1;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"></td>
-<td align="center">update student set stu_name &#x3D; “CCCCCC” where stu_id &#x3D; 2;</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">select stu_name from student where stu_id &#x3D; 2;</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">commit;</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<p>REPEATABLE-READ (可重复读)</p>
-<ul>
-<li>序号3值：CCCCCC</li>
-<li>序号5值：AAAAAA</li>
-</ul>
-<p>READ-COMMITTED(读已提交)</p>
-<ul>
-<li>序号3值：CCCCCC</li>
-<li>序号5值：CCCCCC</li>
-</ul>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>MVCC在Read Uncommitted (读未提交)和Serializable (可串行化)下不工作，因为前者总是读取最新的数据行，后者会对所有读取的数据行加锁，也就不存在并发问题</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
-<li><p><a href="https://icyfenix.cn/architect-perspective/general-architecture/transaction/local.html">《凤凰架构》</a></p>
-</li>
-<li><p>《高性能MySQL》</p>
-</li>
-<li><p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html">MySQL官方网站</a></p>
-</li>
-<li><p><a href="https://github.com/mysql/mysql-server/blob/5.7/storage/innobase/include/read0types.h">MySQL源码</a></p>
-</li>
-<li><p><a href="https://blog.jcole.us/innodb/">Jeremy Cole Blog</a></p>
-</li>
-<li><p><a href="https://zhuanlan.zhihu.com/p/400965090">知乎文章1</a></p>
-</li>
-<li><p>查询MySQL事务隔离级别语句：<code>show variables like &#39;transaction_isolation&#39;;</code></p>
-</li>
-<li><p>改变数据库隔离级别：<code>SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;</code></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次成都学车经历</title>
-    <url>/post/ca641055.html</url>
-    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
-<p>结束时间:<code>2020年12月14日</code></p>
-<p>总用时:<code>两个月</code></p>
-<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
-<p>科目一</p>
-<ul>
-<li>考试时间:<code>10月20日</code></li>
-<li>考试费用:<code>100</code>元</li>
-<li>备考时间:<code>1</code>天</li>
-</ul>
-<p>科目二</p>
-<ul>
-<li>考试时间:<code>12月04日</code></li>
-<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
-<li>总次数:<code>14</code>次</li>
-</ul>
-</li>
-</ul>
-<p>科目三</p>
-<ul>
-<li>考试时间:<code>12月14日</code></li>
-<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
-<li>总次数:<code>4</code>次</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
-</blockquote>
-<p>总费用:</p>
-<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
-<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
-<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
-<blockquote>
-<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
-</blockquote>
-<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
-<p>按照以下步骤:</p>
-<ul>
-<li><p>做精题</p>
-<ul>
-<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
-</ul>
-</li>
-<li><p>做总结归纳</p>
-<ul>
-<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
-</ul>
-</li>
-<li><p>刷错题(不多说)</p>
-</li>
-<li><p>多余时间刷本地区特有题目</p>
-<ul>
-<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
-</ul>
-</li>
-</ul>
-<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
-<p>结果:考试<code>98</code>分</p>
-<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
-<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
-<p><strong>科目二应该是练习时间花费最长的。</strong></p>
-<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
-<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
-<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
-<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>必做”精简题”,再做一般题(狂刷完事)</li>
-<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
-<li>必须要参加”模拟考试”,虽然要多加钱</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
       </tags>
   </entry>
 </search>
