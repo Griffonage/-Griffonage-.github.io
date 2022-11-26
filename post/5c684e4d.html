@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#42b983"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://file.ajungle.cn/img/water.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://file.ajungle.cn/img/water.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#42b983">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ajungle.cn","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/config.min.js"></script>
+
+    <meta name="description" content="分析当使用limit和order by在一个非唯一字段上时，结果有时不符合预期问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL排序后分页错乱问题分析">
+<meta property="og:url" content="https://ajungle.cn/post/5c684e4d.html">
+<meta property="og:site_name" content="夜雨灯">
+<meta property="og:description" content="分析当使用limit和order by在一个非唯一字段上时，结果有时不符合预期问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://file.ajungle.cn/img/20221125235150.png">
+<meta property="article:published_time" content="2021-11-12T11:55:50.000Z">
+<meta property="article:modified_time" content="2022-11-26T08:38:58.187Z">
+<meta property="article:author" content="Aug Jungle">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://file.ajungle.cn/img/20221125235150.png">
+
+
+<link rel="canonical" href="https://ajungle.cn/post/5c684e4d.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ajungle.cn/post/5c684e4d.html","path":"post/5c684e4d.html","title":"MySQL排序后分页错乱问题分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL排序后分页错乱问题分析 | 夜雨灯</title>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/analytics/baidu-analytics.min.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9430108be0e834b3cf9a85c8cad2d98a"></script>
+
+
+
+<link rel="dns-prefetch" href="vc.ajungle.cn">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">夜雨灯</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">越贴近真实,真实越荒诞</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-时间轴"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>时间轴</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E9%97%AE%E9%A2%98%E5%87%BA%E5%8F%91"><span class="nav-number">1.</span> <span class="nav-text">从问题出发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A7%E7%94%9F%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.</span> <span class="nav-text">产生问题的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">如何解决问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL5-7%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">4.1.</span> <span class="nav-text">MySQL5.7字符编码修改</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aug Jungle"
+      src="https://file.ajungle.cn/img/avatar.png">
+  <p class="site-author-name" itemprop="name">Aug Jungle</p>
+  <div class="site-description" itemprop="description">记录不了真实,记录不了荒诞</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:runlevel@foxmail.com" title="E-Mail → mailto:runlevel@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://nv.ajungle.cn/" title="https:&#x2F;&#x2F;nv.ajungle.cn" rel="noopener" target="_blank">胖不了导航</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.foreverblog.cn/go.html" title="https:&#x2F;&#x2F;www.foreverblog.cn&#x2F;go.html" rel="noopener" target="_blank">虫洞</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ajungle.cn/post/5c684e4d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://file.ajungle.cn/img/avatar.png">
+      <meta itemprop="name" content="Aug Jungle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜雨灯">
+      <meta itemprop="description" content="记录不了真实,记录不了荒诞">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL排序后分页错乱问题分析 | 夜雨灯">
+      <meta itemprop="description" content="分析当使用limit和order by在一个非唯一字段上时，结果有时不符合预期问题。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL排序后分页错乱问题分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-12 19:55:50" itemprop="dateCreated datePublished" datetime="2021-11-12T19:55:50+08:00">2021-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-11-26 16:38:58" itemprop="dateModified" datetime="2022-11-26T16:38:58+08:00">2022-11-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/post/5c684e4d.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/post/5c684e4d.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">分析当使用limit和order by在一个非唯一字段上时，结果有时不符合预期问题。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+</blockquote>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a target="_blank" rel="noopener" href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Aug Jungle
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://ajungle.cn/post/5c684e4d.html" title="MySQL排序后分页错乱问题分析">https://ajungle.cn/post/5c684e4d.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/ca641055.html" rel="prev" title="记一次成都学车经历">
+                  <i class="fa fa-chevron-left"></i> 记一次成都学车经历
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/9a372c09.html" rel="next" title="JDK8之List转Map实现解析">
+                  JDK8之List转Map实现解析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2022</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aug Jungle</span>
+   
+  </div>
+
+  <div class="powered-by">
+    <img src="https://file.ajungle.cn/img/Hosted_Tencnet.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/OSS_qiniuyun.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/Hexo_NexT.svg" alt=""  style="display:inline-block">
+  </div>
+
+  <div class="beian">
+    <img src="https://file.ajungle.cn/img/icp.png" alt=""><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">湘ICP备 2020022557号-1 </a><br />
+      <img src="https://file.ajungle.cn/img/gongan.png" alt=""><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020022557" rel="noopener" target="_blank">湘公网安备 43312502000142号 </a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/comments.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/motion.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/next-boot.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/bookmark.min.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/search/local-search.min.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"vc.ajungle.cn","cssUrl":"https://file.ajungle.cn/img/waline.css","commentCount":false,"pageview":false,"avatar":"mm","pageSize":10,"visitor":false,"libUrl":"https://file.ajungle.cn/img/waline.js","meta":["mail"],"requiredMeta":["mail"],"locale":{"placeholder":"雁过留痕，风过留声，在此留下你的评论"},"el":"#waline","comment":true,"path":"/post/5c684e4d.html"}</script>
+<link rel="stylesheet" href="https://file.ajungle.cn/img/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>
