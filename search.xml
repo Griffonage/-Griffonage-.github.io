@@ -85,6 +85,45 @@
       </tags>
   </entry>
   <entry>
+    <title>MySQL排序后分页错乱问题分析</title>
+    <url>/post/5c684e4d.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+</blockquote>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL从MVCC到ReadView</title>
     <url>/post/23ffdd3c.html</url>
     <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
@@ -307,42 +346,29 @@
       </tags>
   </entry>
   <entry>
-    <title>MySQL排序后分页错乱问题分析</title>
-    <url>/post/5c684e4d.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
-<p><strong>1.建个表</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+    <title>国内访问Github提速教程</title>
+    <url>/post/901f844.html</url>
+    <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
+<p>可以通过修改host,达到加速的效果</p>
+<p>访问:<a href="https://www.ipaddress.com/">https://www.ipaddress.com/</a></p>
+<p>分别查询</p>
+<ul>
+<li><p><code>github.com</code></p>
+</li>
+<li><p><code>github.global.ssl.fastly.net</code></p>
+</li>
+</ul>
+<p>得到两个域名的IPV4地址,然后修改电脑目录下:<code>C:\Windows\System32\drivers\etc</code>的<code>hosts</code>文件内容</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="number">140.82</span><span class="number">.112</span><span class="number">.3</span> github.com</span><br><span class="line"><span class="number">199.232</span><span class="number">.69</span><span class="number">.194</span> github.global.ssl.fastly.net</span><br></pre></td></tr></table></figure>
 
-<p><strong>2.插入一些数据</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.执行查询语句得到结果</strong></p>
-<p><code>select * from student order by create_time;</code></p>
-<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
-</blockquote>
-<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
-<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
-<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
-<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
-<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
-<p><code>select * from student order by create_time,id limit 4,2;</code></p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
-<p>修改字符编码：</p>
-<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
-
-<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
-<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+<p>按照上面的格式填好(IP地址替换成自己得到的IPV4地址),再刷新下电脑的host缓存,<code>windows键+R</code>输入<code>cmd</code>,调出命令窗口输入<code>ipconfig /flushdns</code>即可完成</p>
+<p>注意:对于自建图床在Github上的,需要再添加一条<code>raw.githubusercontent.com</code>的解析地址,同上,因为Github对资源的存放位置的不一样</p>
+]]></content>
       <categories>
-        <category>数据库</category>
+        <category>Github</category>
       </categories>
       <tags>
-        <tag>MySQL</tag>
+        <tag>Github</tag>
       </tags>
   </entry>
   <entry>
@@ -1072,32 +1098,6 @@
       </categories>
       <tags>
         <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>国内访问Github提速教程</title>
-    <url>/post/901f844.html</url>
-    <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
-<p>可以通过修改host,达到加速的效果</p>
-<p>访问:<a href="https://www.ipaddress.com/">https://www.ipaddress.com/</a></p>
-<p>分别查询</p>
-<ul>
-<li><p><code>github.com</code></p>
-</li>
-<li><p><code>github.global.ssl.fastly.net</code></p>
-</li>
-</ul>
-<p>得到两个域名的IPV4地址,然后修改电脑目录下:<code>C:\Windows\System32\drivers\etc</code>的<code>hosts</code>文件内容</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="number">140.82</span><span class="number">.112</span><span class="number">.3</span> github.com</span><br><span class="line"><span class="number">199.232</span><span class="number">.69</span><span class="number">.194</span> github.global.ssl.fastly.net</span><br></pre></td></tr></table></figure>
-
-<p>按照上面的格式填好(IP地址替换成自己得到的IPV4地址),再刷新下电脑的host缓存,<code>windows键+R</code>输入<code>cmd</code>,调出命令窗口输入<code>ipconfig /flushdns</code>即可完成</p>
-<p>注意:对于自建图床在Github上的,需要再添加一条<code>raw.githubusercontent.com</code>的解析地址,同上,因为Github对资源的存放位置的不一样</p>
-]]></content>
-      <categories>
-        <category>Github</category>
-      </categories>
-      <tags>
-        <tag>Github</tag>
       </tags>
   </entry>
 </search>
