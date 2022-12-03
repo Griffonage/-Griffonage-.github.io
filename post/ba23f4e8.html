@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#42b983"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://file.ajungle.cn/img/water.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://file.ajungle.cn/img/water.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#42b983">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ajungle.cn","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/config.min.js"></script>
+
+    <meta name="description" content="设计模式之美阅读总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之美">
+<meta property="og:url" content="https://ajungle.cn/post/ba23f4e8.html">
+<meta property="og:site_name" content="夜雨灯">
+<meta property="og:description" content="设计模式之美阅读总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-05T13:30:00.000Z">
+<meta property="article:modified_time" content="2022-12-03T13:08:12.258Z">
+<meta property="article:author" content="Aug Jungle">
+<meta property="article:tag" content="书籍">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ajungle.cn/post/ba23f4e8.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ajungle.cn/post/ba23f4e8.html","path":"post/ba23f4e8.html","title":"设计模式之美"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>设计模式之美 | 夜雨灯</title>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/analytics/baidu-analytics.min.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?9430108be0e834b3cf9a85c8cad2d98a"></script>
+
+
+
+<link rel="dns-prefetch" href="vc.ajungle.cn">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">夜雨灯</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">越贴近真实,真实越荒诞</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-时间轴"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>时间轴</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">1.</span> <span class="nav-text">设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SOLID"><span class="nav-number">1.1.</span> <span class="nav-text">SOLID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#S-%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3"><span class="nav-number">1.1.1.</span> <span class="nav-text">S(单一职责)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#O%EF%BC%88%E5%BC%80%E9%97%AD%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">O（开闭）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L-%E9%87%8C%E5%BC%8F%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.1.3.</span> <span class="nav-text">L(里式替换)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB"><span class="nav-number">1.1.4.</span> <span class="nav-text">I(接口隔离)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D%EF%BC%88%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC%EF%BC%89"><span class="nav-number">1.1.5.</span> <span class="nav-text">D（依赖反转）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KISS"><span class="nav-number">1.2.</span> <span class="nav-text">KISS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YAGNI"><span class="nav-number">1.3.</span> <span class="nav-text">YAGNI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DRY"><span class="nav-number">1.4.</span> <span class="nav-text">DRY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LOD"><span class="nav-number">1.5.</span> <span class="nav-text">LOD</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%EF%BC%884%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">创建型（4）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.1.</span> <span class="nav-text">单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">饿汉式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%87%92%E6%B1%89%E5%BC%8F"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">懒汉式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%88%E5%8F%8C%E9%87%8D%E6%A3%80%E6%B5%8B%EF%BC%89"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">懒汉式（双重检测）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">静态内部类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB"><span class="nav-number">2.1.1.5.</span> <span class="nav-text">枚举类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">简单工厂</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4-%E5%88%9B%E5%BB%BA%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.2.1.1.</span> <span class="nav-text">前置步骤-创建接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%90%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">2.1.2.1.2.</span> <span class="nav-text">前置步骤-创建不同实现类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4-%E9%80%BB%E8%BE%91%E5%A4%84%E7%90%86"><span class="nav-number">2.1.2.1.3.</span> <span class="nav-text">前置步骤-逻辑处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82-%E4%B8%8D%E5%B8%A6%E7%BC%93%E5%AD%98"><span class="nav-number">2.1.2.1.4.</span> <span class="nav-text">简单工厂-不带缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82-%E5%B8%A6%E7%BC%93%E5%AD%98"><span class="nav-number">2.1.2.1.5.</span> <span class="nav-text">简单工厂-带缓存</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">工厂方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.2.2.1.</span> <span class="nav-text">创建工厂方法接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%B7%A5%E5%8E%82"><span class="nav-number">2.1.2.2.2.</span> <span class="nav-text">创建实现类工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%A4%84%E7%90%86"><span class="nav-number">2.1.2.2.3.</span> <span class="nav-text">逻辑处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%A4%84%E7%90%86-%E4%BC%98%E5%8C%96-%E5%8E%BB%E6%8E%89if-else"><span class="nav-number">2.1.2.2.4.</span> <span class="nav-text">逻辑处理(优化-去掉if-else)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">抽象工厂</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">解决了什么问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%E4%BC%98%E5%8C%96"><span class="nav-number">2.1.3.2.</span> <span class="nav-text">通过建造者模式优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lombok%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.1.3.3.</span> <span class="nav-text">lombok形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accessors%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.3.4.</span> <span class="nav-text">@Accessors的使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.4.</span> <span class="nav-text">原型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.4.1.</span> <span class="nav-text">说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%EF%BC%887%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">结构型（7）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.1.</span> <span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.2.3.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.4.</span> <span class="nav-text">装饰器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.5.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.6.</span> <span class="nav-text">门面模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.7.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.8.</span> <span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E4%B8%BA%E5%9E%8B%EF%BC%8811%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">行为型（11）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.2.</span> <span class="nav-text">模板模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.3.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.4.</span> <span class="nav-text">职责链模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.5.</span> <span class="nav-text">状态模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.6.</span> <span class="nav-text">迭代器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.7.</span> <span class="nav-text">访问者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.8.</span> <span class="nav-text">备忘录模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.9.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.10.</span> <span class="nav-text">解释器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E4%BB%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.11.</span> <span class="nav-text">中介模式</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aug Jungle"
+      src="https://file.ajungle.cn/img/avatar.png">
+  <p class="site-author-name" itemprop="name">Aug Jungle</p>
+  <div class="site-description" itemprop="description">记录不了真实,记录不了荒诞</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:runlevel@foxmail.com" title="E-Mail → mailto:runlevel@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://nv.ajungle.cn/" title="https:&#x2F;&#x2F;nv.ajungle.cn" rel="noopener" target="_blank">胖不了导航</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.foreverblog.cn/go.html" title="https:&#x2F;&#x2F;www.foreverblog.cn&#x2F;go.html" rel="noopener" target="_blank">虫洞</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ajungle.cn/post/ba23f4e8.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://file.ajungle.cn/img/avatar.png">
+      <meta itemprop="name" content="Aug Jungle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夜雨灯">
+      <meta itemprop="description" content="记录不了真实,记录不了荒诞">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="设计模式之美 | 夜雨灯">
+      <meta itemprop="description" content="设计模式之美阅读总结">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式之美
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-01-05 21:30:00" itemprop="dateCreated datePublished" datetime="2022-01-05T21:30:00+08:00">2022-01-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-12-03 21:08:12" itemprop="dateModified" datetime="2022-12-03T21:08:12+08:00">2022-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%B9%A6%E7%B1%8D/" itemprop="url" rel="index"><span itemprop="name">书籍</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/post/ba23f4e8.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/post/ba23f4e8.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">设计模式之美阅读总结</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <hr>
+<p><strong>明日复明日，明日何其多。我生待明日，万事成蹉跎</strong></p>
+<div style="text-align:right"><b><<明日歌>></b></div>
+
+<hr>
+<p>注：本文根据王争老师的《设计模式之美》进行了总结及优化，适合快速查找实现方式，并无探究实现原理及细节，如需探求底层设计思想，请阅读《设计模式之美》原文</p>
+<h1 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h1><h2 id="SOLID"><a href="#SOLID" class="headerlink" title="SOLID"></a>SOLID</h2><blockquote>
+<p>​	由5个原则组成</p>
+</blockquote>
+<h3 id="S-单一职责"><a href="#S-单一职责" class="headerlink" title="S(单一职责)"></a>S(单一职责)</h3><p>英文：<code>Single Responsibility Principle</code></p>
+<p>如何判断是否满足单一：</p>
+<ul>
+<li><p>主观判断</p>
+<ul>
+<li>不同应用场景、不同需求阶段下，判断的依据不同，需要动态分析</li>
+</ul>
+</li>
+<li><p>客观判断（也有很大主观性）</p>
+<ul>
+<li>类、属性、函数、代码过多（过多这个词就有很大主观性，需要分析和一定经验）</li>
+<li>依赖过多、私有方法过多</li>
+<li>类很难取名或者类中的大量方法都是操作某几个属性</li>
+</ul>
+</li>
+</ul>
+<h3 id="O（开闭）"><a href="#O（开闭）" class="headerlink" title="O（开闭）"></a>O（开闭）</h3><p>英文：<code>Open Closed Principle</code></p>
+<p>如何理解和实现“多扩展开放，对修改关闭”：</p>
+<ul>
+<li>代码可以让其他人不通过修改原有代码，就能够增加新的功能，这就是扩展性强的表现；平时多注意和学习扩展、抽象、封装这些知识，常说的设计模式，很多也是为了满足开闭而出现的</li>
+</ul>
+<h3 id="L-里式替换"><a href="#L-里式替换" class="headerlink" title="L(里式替换)"></a>L(里式替换)</h3><p>英文：<code>Liskov Substitution Principle</code></p>
+<p>在继承关系中，子类的设计要满足可以替换掉父类，且不改变原有的逻辑和正确性</p>
+<h3 id="I-接口隔离"><a href="#I-接口隔离" class="headerlink" title="I(接口隔离)"></a>I(接口隔离)</h3><p>英文：<code>Interface Segregation Principle</code></p>
+<p>调用者不应依赖到不需要的接口</p>
+<h3 id="D（依赖反转）"><a href="#D（依赖反转）" class="headerlink" title="D（依赖反转）"></a>D（依赖反转）</h3><p>英文：<code>Inversion Of Control</code></p>
+<ul>
+<li>控制反转：原来由自己控制整个流程执行，交给框架后由框架来进行控制</li>
+<li>依赖注入：不通过new创建对象，而通过构造函数或函数传参等方式传递给类使用</li>
+<li>依赖反转：高层模块不应依赖底层模块，而是应该通过抽象进行互相依赖，抽象不应依赖具体实现细节，具体实现细节依赖抽象</li>
+</ul>
+<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><p>英文：<code>Keep It Short and Simple</code></p>
+<p>尽量保持简单</p>
+<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><p>英文：<code>Yor Ain&#39;t Gonna Need It</code></p>
+<p>不要过度设计</p>
+<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><p>英文：<code>Don&#39;t Repeat Yourself</code></p>
+<p>不要写重复代码</p>
+<h2 id="LOD"><a href="#LOD" class="headerlink" title="LOD"></a>LOD</h2><p>英文：<code>The Least Knowledge Principle</code></p>
+<p>迪米特法则&#x2F;最小知识原则：</p>
+<p>不该有直接依赖关系的类之间，不要有依赖；有依赖关系的类之间，尽量只依赖必要的接口</p>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="创建型（4）"><a href="#创建型（4）" class="headerlink" title="创建型（4）"></a>创建型（4）</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h4 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">AtomicLong</span> <span class="variable">id</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//1.构造函数私有化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">IdGenerator</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2.静态化参数-同时赋值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span>  <span class="type">IdGenerator</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IdGenerator</span>();</span><br><span class="line">    <span class="comment">//3.提供公共方法供读取</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IdGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getId</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	优点：可以将初始化提前，帮助提早发现问题</p>
+</blockquote>
+<h4 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">AtomicLong</span> <span class="variable">id</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//1.构造函数私有化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">IdGenerator</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2.静态化参数-延迟赋值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">IdGenerator</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//3.提供公共方法供读取</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> IdGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">IdGenerator</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getId</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="懒汉式（双重检测）"><a href="#懒汉式（双重检测）" class="headerlink" title="懒汉式（双重检测）"></a>懒汉式（双重检测）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">AtomicLong</span> <span class="variable">id</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//1.构造函数私有化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">IdGenerator</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2.静态化参数-延迟赋值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">IdGenerator</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//3.提供公共方法供读取</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IdGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( instance == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (IdGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">IdGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getId</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	优点：锁的范围更小，并发量更大</p>
+</blockquote>
+<p>上面的<code>id</code>加上了<code>volatile</code>修饰符，作用是防止指令重排序，<code>参数 = new 对象()</code>有三步</p>
+<ol>
+<li>分配空间（对象的大小）</li>
+<li>空间赋值（对象的内容）</li>
+<li>将空间地址赋值给参数（对象的空间地址给参数）</li>
+</ol>
+<p>而在实际执行过程中，可能1直接到3，然后在2执行前，就使用了其中的方法，导致运行错误</p>
+<blockquote>
+<p>​	新版本JDK内部已经将1、2、3进行了原子化处理，不用再加<code>volatile</code>修饰符了</p>
+</blockquote>
+<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">AtomicLong</span> <span class="variable">id</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//1.构造函数私有化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">IdGenerator</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2.静态内部类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SingleHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">IdGenerator</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IdGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//3.提供公共方法供读取</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IdGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingleHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getId</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	优点：和<code>懒汉式（双重检测）</code>功能一样，但是更简洁</p>
+</blockquote>
+<h4 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">IdGenerator</span> &#123;</span><br><span class="line">    INSTANCE;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">AtomicLong</span> <span class="variable">id</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicLong</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">getId</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	优点：更简洁！</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9">枚举类实现单例的原理</a></p>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><h4 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h4><p>例如：设计一个消息发送功能模块，根据不同行为，创建不同的发送服务进行调用</p>
+<h5 id="前置步骤-创建接口"><a href="#前置步骤-创建接口" class="headerlink" title="前置步骤-创建接口"></a>前置步骤-创建接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SendInterface</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String receiver,String message)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="前置步骤-创建不同实现类"><a href="#前置步骤-创建不同实现类" class="headerlink" title="前置步骤-创建不同实现类"></a>前置步骤-创建不同实现类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//邮件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailService</span> <span class="keyword">implements</span> <span class="title class_">SendInterface</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String receiver, String message)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;发送给&quot;</span>+receiver+<span class="string">&quot;,信息:&quot;</span>+message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//站内信</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InnerService</span>  <span class="keyword">implements</span> <span class="title class_">SendInterface</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String receiver, String message)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;发送给&quot;</span>+receiver+<span class="string">&quot;,信息:&quot;</span>+message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//短信</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SmsService</span>  <span class="keyword">implements</span> <span class="title class_">SendInterface</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String receiver, String message)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;发送给&quot;</span>+receiver+<span class="string">&quot;,信息:&quot;</span>+message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="前置步骤-逻辑处理"><a href="#前置步骤-逻辑处理" class="headerlink" title="前置步骤-逻辑处理"></a>前置步骤-逻辑处理</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Notifacation</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String type,String receiver,String message)</span>&#123;</span><br><span class="line">        <span class="type">SendInterface</span> <span class="variable">sendInterface</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;email&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//邮件</span></span><br><span class="line">            sendInterface = <span class="keyword">new</span> <span class="title class_">EmailService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;sms&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//短信</span></span><br><span class="line">            sendInterface = <span class="keyword">new</span> <span class="title class_">SmsService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;inner&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//站内信</span></span><br><span class="line">            sendInterface = <span class="keyword">new</span> <span class="title class_">InnerService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;发送类型错误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        sendInterface.send(receiver,message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	上面代码是我实际处理消息模块的实现思路，根据不同的<code>type</code>动态调用不同的实现类</p>
+</blockquote>
+<h5 id="简单工厂-不带缓存"><a href="#简单工厂-不带缓存" class="headerlink" title="简单工厂-不带缓存"></a>简单工厂-不带缓存</h5><p>上面<code>逻辑处理</code>的部分，可以将对象的创建独立出来，就变成简单工厂的方式了，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Notifacation</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String type,String receiver,String message)</span>&#123;</span><br><span class="line">        <span class="type">SendInterface</span> <span class="variable">sendInterface</span> <span class="operator">=</span> createSendInterfaceFactory(type);</span><br><span class="line">        sendInterface.send(receiver,message);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> SendInterface <span class="title function_">createSendInterfaceFactory</span><span class="params">(String type)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;email&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//邮件</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">EmailService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;sms&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//短信</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SmsService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;inner&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//站内信</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">InnerService</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;发送类型错误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="简单工厂-带缓存"><a href="#简单工厂-带缓存" class="headerlink" title="简单工厂-带缓存"></a>简单工厂-带缓存</h5><p>上面处理每次调用会创建新的对象，调用比较频繁会占用大量资源，可以创建后缓存起来，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Notifacation</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String,SendInterface&gt; cacheMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        cacheMap.put(<span class="string">&quot;email&quot;</span>,<span class="keyword">new</span> <span class="title class_">EmailService</span>());</span><br><span class="line">        cacheMap.put(<span class="string">&quot;sms&quot;</span>,<span class="keyword">new</span> <span class="title class_">SmsService</span>());</span><br><span class="line">        cacheMap.put(<span class="string">&quot;inner&quot;</span>,<span class="keyword">new</span> <span class="title class_">InnerService</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String type,String receiver,String message)</span>&#123;</span><br><span class="line">        <span class="type">SendInterface</span> <span class="variable">sendInterface</span> <span class="operator">=</span> createSendInterface(type);</span><br><span class="line">        sendInterface.send(receiver,message);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> SendInterface <span class="title function_">createSendInterface</span><span class="params">(String type)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cacheMap.get(type);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><p>作用：将创建实现类抽离出去</p>
+<h5 id="创建工厂方法接口"><a href="#创建工厂方法接口" class="headerlink" title="创建工厂方法接口"></a>创建工厂方法接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SendInterfaceFactory</span> &#123;</span><br><span class="line">    SendInterface <span class="title function_">createSendInterface</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建实现类工厂"><a href="#创建实现类工厂" class="headerlink" title="创建实现类工厂"></a>创建实现类工厂</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//邮件工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmailServiceFactory</span> <span class="keyword">implements</span> <span class="title class_">SendInterfaceFactory</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> SendInterface <span class="title function_">createSendInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">EmailService</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//站内信工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InnerServiceFactory</span> <span class="keyword">implements</span> <span class="title class_">SendInterfaceFactory</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> SendInterface <span class="title function_">createSendInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">InnerService</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//短信工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SmsServiceFactory</span> <span class="keyword">implements</span> <span class="title class_">SendInterfaceFactory</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> SendInterface <span class="title function_">createSendInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SmsService</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="逻辑处理"><a href="#逻辑处理" class="headerlink" title="逻辑处理"></a>逻辑处理</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Notifacation</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String type,String receiver,String message)</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">SendInterfaceFactory</span> <span class="variable">sendInterfaceFactory</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;email&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//邮件</span></span><br><span class="line">            sendInterfaceFactory = <span class="keyword">new</span> <span class="title class_">EmailServiceFactory</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;sms&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//短信</span></span><br><span class="line">            sendInterfaceFactory = <span class="keyword">new</span> <span class="title class_">SmsServiceFactory</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;inner&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="comment">//站内信</span></span><br><span class="line">            sendInterfaceFactory = <span class="keyword">new</span> <span class="title class_">InnerServiceFactory</span>();</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;发送类型错误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">SendInterface</span> <span class="variable">sendInterface</span> <span class="operator">=</span> sendInterfaceFactory.createSendInterface();</span><br><span class="line">        sendInterface.send(receiver,message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到，这里只是将类的创建抽象出去，但是没有干掉if-else</p>
+</blockquote>
+<h5 id="逻辑处理-优化-去掉if-else"><a href="#逻辑处理-优化-去掉if-else" class="headerlink" title="逻辑处理(优化-去掉if-else)"></a>逻辑处理(优化-去掉if-else)</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Notifacation</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String,SendInterfaceFactory&gt; mapFactory = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        mapFactory.put(<span class="string">&quot;email&quot;</span>,<span class="keyword">new</span> <span class="title class_">EmailServiceFactory</span>());</span><br><span class="line">        mapFactory.put(<span class="string">&quot;sms&quot;</span>,<span class="keyword">new</span> <span class="title class_">SmsServiceFactory</span>());</span><br><span class="line">        mapFactory.put(<span class="string">&quot;inner&quot;</span>,<span class="keyword">new</span> <span class="title class_">InnerServiceFactory</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send</span><span class="params">(String type,String receiver,String message)</span>&#123;</span><br><span class="line">        <span class="type">SendInterfaceFactory</span> <span class="variable">sendInterfaceFactory</span> <span class="operator">=</span> createSendInterfaceFactory(type);</span><br><span class="line">        <span class="type">SendInterface</span> <span class="variable">sendInterface</span> <span class="operator">=</span> sendInterfaceFactory.createSendInterface();</span><br><span class="line">        sendInterface.send(receiver,message);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> SendInterfaceFactory <span class="title function_">createSendInterfaceFactory</span><span class="params">(String type)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mapFactory.get(type);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h4><p>作用：对多种情况下的优化，例如出现需要根据配置文件的方式进行消息的发送</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SendInterfaceFactory</span> &#123;</span><br><span class="line">    SendInterface <span class="title function_">createSendInterface</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">//增加</span></span><br><span class="line">    SendConfigInterface <span class="title function_">createSendConfigInterface</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	增加后，所有工厂类需要实现此抽象方法，即每个工厂类都可以创建两个处理相同事情，但是不同的处理方式的实现类</p>
+</blockquote>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><h4 id="解决了什么问题"><a href="#解决了什么问题" class="headerlink" title="解决了什么问题"></a>解决了什么问题</h4><p>原代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line">    <span class="keyword">private</span> Boolean isStudent;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, Integer age, Boolean isStudent)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">        <span class="built_in">this</span>.isStudent = isStudent;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getAddress</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> address;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAddress</span><span class="params">(String address)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(address == <span class="literal">null</span> || address.length() &gt; <span class="number">20</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;地址参数设置错误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.address = address;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于一般实体类的属性值设置，采取的方式是：1.<code>必传字段通过构造函数传入</code>2.<code>非必填字段通过</code></p>
+<p>存在的问题：</p>
+<ol>
+<li>如果必传字段很多，则构造函数会太长，而如果不通过构造函数传入，而是通过set方法赋值，则在没调用set方法的情况下，必传字段无法进行校验</li>
+<li>如果属性值有依赖关系，例如<code>isStudent</code>是true,则必须传地址，也没有办法处理</li>
+<li>如果要求对象是不可变对象时，即创建后，不能暴露出set方法</li>
+</ol>
+<h4 id="通过建造者模式优化"><a href="#通过建造者模式优化" class="headerlink" title="通过建造者模式优化"></a>通过建造者模式优化</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line">    <span class="keyword">private</span> Boolean isStudent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(PersonBuilder personBuilder)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = personBuilder.name;</span><br><span class="line">        <span class="built_in">this</span>.age = personBuilder.age;</span><br><span class="line">        <span class="built_in">this</span>.address = personBuilder.address;</span><br><span class="line">        <span class="built_in">this</span>.isStudent = personBuilder.isStudent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">PersonBuilder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Boolean</span> <span class="variable">DEFAULT_IS_STUDENT</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line">        <span class="keyword">private</span> Integer age;</span><br><span class="line">        <span class="keyword">private</span> String address;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">isStudent</span> <span class="operator">=</span> DEFAULT_IS_STUDENT;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Person <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="comment">//build的时候进行参数校验，依赖关系校验等</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">this</span>.isStudent == <span class="literal">true</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(address == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;学生必须有地址&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> PersonBuilder <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;姓名必须不为空&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">this</span>.name = name;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> PersonBuilder <span class="title function_">setAge</span><span class="params">(Integer age)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(age == <span class="literal">null</span>)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;年龄必须不为空&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">this</span>.age = age;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> PersonBuilder <span class="title function_">setAddress</span><span class="params">(String address)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.address = address;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> PersonBuilder <span class="title function_">setStudent</span><span class="params">(Boolean student)</span> &#123;</span><br><span class="line">            isStudent = student;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>.Builder()</span><br><span class="line">    .setName(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .setAge(<span class="number">18</span>)</span><br><span class="line">    .setStudent(<span class="literal">true</span>)</span><br><span class="line">    .setAddress(<span class="string">&quot;我有地址&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<h4 id="lombok形式"><a href="#lombok形式" class="headerlink" title="lombok形式"></a>lombok形式</h4><p>再次优化成lombok的注解<code>@Builder</code>的形式</p>
+<p>在<code>Person</code>类中增加如下方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Person.PersonBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>.PersonBuilder();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> Person.builder()</span><br><span class="line">    .setName(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .setAge(<span class="number">18</span>)</span><br><span class="line">    .setStudent(<span class="literal">true</span>)</span><br><span class="line">    .setAddress(<span class="string">&quot;我有地址&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到，只要再给静态内部类的set相关方法名换一下，就可以做到和lombok的@builder注解完全一致的效果</p>
+</blockquote>
+<h4 id="Accessors的使用"><a href="#Accessors的使用" class="headerlink" title="@Accessors的使用"></a>@Accessors的使用</h4><p><code>Accessors</code>注解有三个属性</p>
+<ul>
+<li><code>fluent</code>：会将set前缀去掉，例如原来方法名是<code>setName</code>，加上后就变成<code>name</code></li>
+<li><code>chain</code>：set方法将返回this代替原本的void</li>
+</ul>
+<p>使用<code>@Accessors</code>和<code>@Setter</code>配合可以很好的简化原来静态内部类的代码，如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line">    <span class="keyword">private</span> Boolean isStudent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(PersonBuilder personBuilder)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = personBuilder.name;</span><br><span class="line">        <span class="built_in">this</span>.age = personBuilder.age;</span><br><span class="line">        <span class="built_in">this</span>.address = personBuilder.address;</span><br><span class="line">        <span class="built_in">this</span>.isStudent = personBuilder.isStudent;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Person.PersonBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>.PersonBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">PersonBuilder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Boolean</span> <span class="variable">DEFAULT_IS_STUDENT</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line">        <span class="keyword">private</span> Integer age;</span><br><span class="line">        <span class="keyword">private</span> String address;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">isStudent</span> <span class="operator">=</span> DEFAULT_IS_STUDENT;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Person <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="comment">//build的时候进行参数校验，依赖关系校验等</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">this</span>.isStudent == <span class="literal">true</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(address == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;学生必须有地址&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>简化后使用方式：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> Person.builder()</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .age(<span class="number">18</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>利用已有对象进行复制的方式，来创建新对象，达到节省空间及时间的方式，叫做原型模式，需要理解下<a href="https://ajungle.cn/2019/02/12/%E9%97%AE%E9%A2%98/%E3%80%90%E9%97%AE%E9%A2%98%E3%80%91Java%E6%B7%B1%E5%85%8B%E9%9A%86%E6%B5%85%E5%85%8B%E9%9A%86/#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%A4%8D%E5%88%B6%E6%96%B9%E5%BC%8F">浅拷贝和深拷贝</a>。在复制时可以采取浅拷贝老对象得到新对象，新对象指向老对象指向的的散列值，然后新对象对需要更新的内部值进行移除，再添加（移除指向散列值的引用，再添加新引用，则不会影响到老对象指向的散列值），而如果直接修改，会对老对象指向的散列值造成影响，不可取。</p>
+<h2 id="结构型（7）"><a href="#结构型（7）" class="headerlink" title="结构型（7）"></a>结构型（7）</h2><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p>作用：将业务代码与非业务代码进行分离</p>
+<p>常用场景：监控、统计、鉴权、限流、事务、幂等</p>
+<p><a href="/post/907a70d0.html">详细介绍请点击此处</a></p>
+<h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><ul>
+<li>理解方式一：<code>将抽象和实现解耦，让它们可以独立变化</code></li>
+<li>理解方式二：<code>通过组合代替继承关系，避免继承层次的指数级爆炸</code></li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>JDBC驱动实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://119.91.255.95/blog?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;allowMultiQueries=true&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> DriverManager.getConnection(url);</span><br><span class="line"></span><br><span class="line"><span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> connection.createStatement();</span><br><span class="line"></span><br><span class="line"><span class="type">String</span> <span class="variable">queryStr</span> <span class="operator">=</span> <span class="string">&quot;select * from user&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> statement.executeQuery(queryStr);</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (resultSet.next())&#123;</span><br><span class="line">    resultSet.getString(<span class="number">1</span>);</span><br><span class="line">    resultSet.getInt(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h3 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h3><h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><h2 id="行为型（11）"><a href="#行为型（11）" class="headerlink" title="行为型（11）"></a>行为型（11）</h2><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h3 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h3><h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><h3 id="职责链模式"><a href="#职责链模式" class="headerlink" title="职责链模式"></a>职责链模式</h3><h3 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h3><h3 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h3><h3 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h3><h3 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h3><h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><h3 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h3><h3 id="中介模式"><a href="#中介模式" class="headerlink" title="中介模式"></a>中介模式</h3>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Aug Jungle
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://ajungle.cn/post/ba23f4e8.html" title="设计模式之美">https://ajungle.cn/post/ba23f4e8.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E4%B9%A6%E7%B1%8D/" rel="tag"># 书籍</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/e1b9f839.html" rel="prev" title="《Effective Java》学习笔记">
+                  <i class="fa fa-chevron-left"></i> 《Effective Java》学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/907a70d0.html" rel="next" title="设计模式之代理模式">
+                  设计模式之代理模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2022</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aug Jungle</span>
+   
+  </div>
+
+  <div class="powered-by">
+    <img src="https://file.ajungle.cn/img/Hosted_Tencnet.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/OSS_qiniuyun.svg" alt=""  style="display:inline-block">
+    <img src="https://file.ajungle.cn/img/Hexo_NexT.svg" alt=""  style="display:inline-block">
+  </div>
+
+  <div class="beian">
+    <img src="https://file.ajungle.cn/img/icp.png" alt=""><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">湘ICP备 2020022557号-1 </a><br />
+      <img src="https://file.ajungle.cn/img/gongan.png" alt=""><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2020022557" rel="noopener" target="_blank">湘公网安备 43312502000142号 </a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/comments.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/motion.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/next-boot.min.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/search/local-search.min.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"vc.ajungle.cn","cssUrl":"https://file.ajungle.cn/img/waline.css","commentCount":false,"pageview":false,"avatar":"mm","pageSize":10,"visitor":false,"libUrl":"https://file.ajungle.cn/img/waline.js","meta":["mail"],"requiredMeta":["mail"],"locale":{"placeholder":"雁过留痕，风过留声，在此留下你的评论"},"el":"#waline","comment":true,"path":"/post/ba23f4e8.html"}</script>
+<link rel="stylesheet" href="https://file.ajungle.cn/img/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>
