@@ -27,90 +27,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《Effective Java》学习笔记</title>
-    <url>/post/e1b9f839.html</url>
-    <content><![CDATA[<blockquote>
-<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
-</blockquote>
-<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li><p>有名字</p>
-</li>
-<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
-</li>
-<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
-</li>
-<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
-</li>
-<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
-</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><p>没有public或者protected构造方法的类不能被子类化</p>
-</li>
-<li><p>API文档中很难找到</p>
-</li>
-</ul>
-<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>解决参数过多问题</li>
-<li>可以对参数间依赖关系进行校验</li>
-<li>去掉创建对象时的中间状态</li>
-<li>可以不暴露类中的set方法，使其变成不可变对象</li>
-</ul>
-<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>创建对象前必须先创建它的builder</li>
-<li>代码比较复杂，4个以上参数才适用</li>
-</ul>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
-<p>简单情况下可以直接使用@Builder</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
-
-<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
-<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
-<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
-<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由JVM保证线程安全，同时实现了懒加载</p>
-<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
-]]></content>
-      <categories>
-        <category>书籍</category>
-      </categories>
-      <tags>
-        <tag>编程,书籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>国内访问Github提速教程</title>
-    <url>/post/901f844.html</url>
-    <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
-<p>可以通过修改host,达到加速的效果</p>
-<p>访问:<a href="https://www.ipaddress.com/">https://www.ipaddress.com/</a></p>
-<p>分别查询</p>
-<ul>
-<li><p><code>github.com</code></p>
-</li>
-<li><p><code>github.global.ssl.fastly.net</code></p>
-</li>
-</ul>
-<p>得到两个域名的IPV4地址,然后修改电脑目录下:<code>C:\Windows\System32\drivers\etc</code>的<code>hosts</code>文件内容</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="number">140.82</span><span class="number">.112</span><span class="number">.3</span> github.com</span><br><span class="line"><span class="number">199.232</span><span class="number">.69</span><span class="number">.194</span> github.global.ssl.fastly.net</span><br></pre></td></tr></table></figure>
-
-<p>按照上面的格式填好(IP地址替换成自己得到的IPV4地址),再刷新下电脑的host缓存,<code>windows键+R</code>输入<code>cmd</code>,调出命令窗口输入<code>ipconfig /flushdns</code>即可完成</p>
-<p>注意:对于自建图床在Github上的,需要再添加一条<code>raw.githubusercontent.com</code>的解析地址,同上,因为Github对资源的存放位置的不一样</p>
-]]></content>
-      <categories>
-        <category>Github</category>
-      </categories>
-      <tags>
-        <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL从MVCC到ReadView</title>
     <url>/post/23ffdd3c.html</url>
     <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
@@ -372,6 +288,90 @@
       </tags>
   </entry>
   <entry>
+    <title>《Effective Java》学习笔记</title>
+    <url>/post/e1b9f839.html</url>
+    <content><![CDATA[<blockquote>
+<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
+</blockquote>
+<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>有名字</p>
+</li>
+<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
+</li>
+<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
+</li>
+<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
+</li>
+<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>没有public或者protected构造方法的类不能被子类化</p>
+</li>
+<li><p>API文档中很难找到</p>
+</li>
+</ul>
+<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>解决参数过多问题</li>
+<li>可以对参数间依赖关系进行校验</li>
+<li>去掉创建对象时的中间状态</li>
+<li>可以不暴露类中的set方法，使其变成不可变对象</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>创建对象前必须先创建它的builder</li>
+<li>代码比较复杂，4个以上参数才适用</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
+<p>简单情况下可以直接使用@Builder</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
+<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
+<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
+<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由JVM保证线程安全，同时实现了懒加载</p>
+<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
+]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>编程,书籍</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>国内访问Github提速教程</title>
+    <url>/post/901f844.html</url>
+    <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
+<p>可以通过修改host,达到加速的效果</p>
+<p>访问:<a href="https://www.ipaddress.com/">https://www.ipaddress.com/</a></p>
+<p>分别查询</p>
+<ul>
+<li><p><code>github.com</code></p>
+</li>
+<li><p><code>github.global.ssl.fastly.net</code></p>
+</li>
+</ul>
+<p>得到两个域名的IPV4地址,然后修改电脑目录下:<code>C:\Windows\System32\drivers\etc</code>的<code>hosts</code>文件内容</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="number">140.82</span><span class="number">.112</span><span class="number">.3</span> github.com</span><br><span class="line"><span class="number">199.232</span><span class="number">.69</span><span class="number">.194</span> github.global.ssl.fastly.net</span><br></pre></td></tr></table></figure>
+
+<p>按照上面的格式填好(IP地址替换成自己得到的IPV4地址),再刷新下电脑的host缓存,<code>windows键+R</code>输入<code>cmd</code>,调出命令窗口输入<code>ipconfig /flushdns</code>即可完成</p>
+<p>注意:对于自建图床在Github上的,需要再添加一条<code>raw.githubusercontent.com</code>的解析地址,同上,因为Github对资源的存放位置的不一样</p>
+]]></content>
+      <categories>
+        <category>Github</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>中秋放个我喜欢的歌曲</title>
     <url>/post/ff094b6e.html</url>
     <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
@@ -603,86 +603,6 @@
       <tags>
         <tag>JDK8</tag>
         <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设计模式之代理模式</title>
-    <url>/post/907a70d0.html</url>
-    <content><![CDATA[<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><h3 id="静态代理的特点"><a href="#静态代理的特点" class="headerlink" title="静态代理的特点"></a>静态代理的特点</h3><ul>
-<li><code>代理对象</code>和<code>被代理对象</code>实现同一个接口</li>
-<li><code>代理对象</code>持有<code>被代理对象</code>的引用</li>
-<li>调用时，<code>代理对象</code>调用<code>被代理对象</code>的相应方法，可以在调用的前后，增加额外功能</li>
-</ul>
-<h3 id="静态代理的实例"><a href="#静态代理的实例" class="headerlink" title="静态代理的实例"></a>静态代理的实例</h3><blockquote>
-<p>​	实例作用：保存数据时，进行事务控制</p>
-</blockquote>
-<h3 id="原方法"><a href="#原方法" class="headerlink" title="原方法"></a>原方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="静态代理后"><a href="#静态代理后" class="headerlink" title="静态代理后"></a>静态代理后</h3><p><strong>1.增加接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserServiceI</span> &#123;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.<code>被代理对象</code>实现接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.<code>代理对象</code>实现接口，同时持有<code>被代理对象</code>的引用</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserStaticProxyService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    PlatformTransactionManager platformTransactionManager;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    TransactionDefinition transactionDefinition;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//开启事务</span></span><br><span class="line">        <span class="type">TransactionStatus</span> <span class="variable">transactionStatus</span> <span class="operator">=</span> platformTransactionManager.getTransaction(transactionDefinition);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.insertUser();</span><br><span class="line">            <span class="comment">//未发生异常,事务提交</span></span><br><span class="line">            platformTransactionManager.commit(transactionStatus);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//发生异常,回滚事务</span></span><br><span class="line">            platformTransactionManager.rollback(transactionStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>4.使用方式：注入<code>代理类</code>的bean，由<code>代理类</code>持有<code>被代理类</code>的引用来调用方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserStaticProxyService userStaticProxyService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation(value = &quot;第一次测试接口&quot;,notes = &quot;@author jungle&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/test/one&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title function_">testOne</span><span class="params">()</span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//代理类调用</span></span><br><span class="line">        userStaticProxyService.insertUser();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><h3 id="静态代理和动态代理的区别"><a href="#静态代理和动态代理的区别" class="headerlink" title="静态代理和动态代理的区别"></a>静态代理和动态代理的区别</h3><ol>
-<li><code>静态代理</code>在编译生成class文件，<code>动态代理</code>在运行时生成字节码加载到JVM</li>
-<li><code>静态代理</code>的<code>代理对象</code>和<code>被代理对象</code>都需要实现同一接口，动态代理则无此限制</li>
-</ol>
-<h3 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h3><h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
-<li><code>需要代理的类</code>需要实现一个接口中的所有抽象方法</li>
-<li>通过<code>Proxy</code>类的<code>newProxyInstance</code>指定<code>类加载器</code>、<code>需要代理的类接口</code>及<code>执行代理类中方法的执行器</code></li>
-<li><code>执行代理类中方法的执行器</code>需要实现<code>InvocationHandler</code>接口，执行调用逻辑</li>
-</ul>
-<p>Proxy  ： 负责动态生成代理</p>
-<ul>
-<li>newProxyInstance<ul>
-<li>ClassLoader   被代理类的类加载器</li>
-<li>Class&lt;?&gt;[]       代理类要实现的接口</li>
-<li>InvocationHandler    代理类中需要加入的功能</li>
-</ul>
-</li>
-</ul>
-<p>InvocationHandler：代理类新增的功能</p>
-<ul>
-<li>invoke<ul>
-<li>Object  proxy   代理的实例</li>
-<li>Method             被拦截的方法</li>
-<li>Object[] args    方法的参数</li>
-</ul>
-</li>
-</ul>
-<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代理工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> target.getClass().getClassLoader();</span><br><span class="line">        <span class="comment">//找到被代理类的所有接口</span></span><br><span class="line">        Class&lt;?&gt;[] interfaces = target.getClass().getInterfaces();</span><br><span class="line">        <span class="comment">//找到代理逻辑</span></span><br><span class="line">        <span class="type">PerformanceMonitorHandler</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PerformanceMonitorHandler</span>(target);</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader,interfaces,h);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PerformanceMonitorHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//执行方法调用</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">proxy</span> <span class="operator">=</span> (NuclearWeaponBoomService)ProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	注：曾用此实现了生产Redis降级<del>.</del></p>
-</blockquote>
-<h3 id="CGlib动态代理"><a href="#CGlib动态代理" class="headerlink" title="CGlib动态代理"></a>CGlib动态代理</h3><h4 id="实习方式"><a href="#实习方式" class="headerlink" title="实习方式"></a>实习方式</h4><ul>
-<li>cglib : code generation lib 代码生成库</li>
-<li>使用继承的方式来生成代理类</li>
-<li>代理类继承被代理类，覆盖被代理类的方法，在实现中调用父类的相应方法</li>
-</ul>
-<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//生产工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">        <span class="comment">//创建增强器</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置被代理类,也就是父类</span></span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置方法拦截器,也就是代理逻辑</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">PerformanceMonitorInterceptor</span>());</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorInterceptor</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object target, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//调用父类相应方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> methodProxy.invokeSuper(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//原方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">proxy</span> <span class="operator">=</span> (Nuclear)CglibProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="JDK、CGlib动态代理的区别"><a href="#JDK、CGlib动态代理的区别" class="headerlink" title="JDK、CGlib动态代理的区别"></a>JDK、CGlib动态代理的区别</h3><ul>
-<li>jdk使用接口的方式实现动态代理</li>
-<li>cglib使用继承的方式实现动态代理</li>
-<li>性能：jdk1.8之前 cglib 胜出  、 jdk1.8之后 jdk方式胜出</li>
-<li>spring 默认是用jdk动态代理生成代理类，但是也支持cglib</li>
-</ul>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-      </categories>
-      <tags>
-        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -920,6 +840,86 @@
       </categories>
       <tags>
         <tag>设计原则</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式之代理模式</title>
+    <url>/post/907a70d0.html</url>
+    <content><![CDATA[<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><h3 id="静态代理的特点"><a href="#静态代理的特点" class="headerlink" title="静态代理的特点"></a>静态代理的特点</h3><ul>
+<li><code>代理对象</code>和<code>被代理对象</code>实现同一个接口</li>
+<li><code>代理对象</code>持有<code>被代理对象</code>的引用</li>
+<li>调用时，<code>代理对象</code>调用<code>被代理对象</code>的相应方法，可以在调用的前后，增加额外功能</li>
+</ul>
+<h3 id="静态代理的实例"><a href="#静态代理的实例" class="headerlink" title="静态代理的实例"></a>静态代理的实例</h3><blockquote>
+<p>​	实例作用：保存数据时，进行事务控制</p>
+</blockquote>
+<h3 id="原方法"><a href="#原方法" class="headerlink" title="原方法"></a>原方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="静态代理后"><a href="#静态代理后" class="headerlink" title="静态代理后"></a>静态代理后</h3><p><strong>1.增加接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserServiceI</span> &#123;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.<code>被代理对象</code>实现接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.<code>代理对象</code>实现接口，同时持有<code>被代理对象</code>的引用</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserStaticProxyService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    PlatformTransactionManager platformTransactionManager;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    TransactionDefinition transactionDefinition;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//开启事务</span></span><br><span class="line">        <span class="type">TransactionStatus</span> <span class="variable">transactionStatus</span> <span class="operator">=</span> platformTransactionManager.getTransaction(transactionDefinition);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.insertUser();</span><br><span class="line">            <span class="comment">//未发生异常,事务提交</span></span><br><span class="line">            platformTransactionManager.commit(transactionStatus);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//发生异常,回滚事务</span></span><br><span class="line">            platformTransactionManager.rollback(transactionStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.使用方式：注入<code>代理类</code>的bean，由<code>代理类</code>持有<code>被代理类</code>的引用来调用方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserStaticProxyService userStaticProxyService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation(value = &quot;第一次测试接口&quot;,notes = &quot;@author jungle&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/test/one&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title function_">testOne</span><span class="params">()</span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//代理类调用</span></span><br><span class="line">        userStaticProxyService.insertUser();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><h3 id="静态代理和动态代理的区别"><a href="#静态代理和动态代理的区别" class="headerlink" title="静态代理和动态代理的区别"></a>静态代理和动态代理的区别</h3><ol>
+<li><code>静态代理</code>在编译生成class文件，<code>动态代理</code>在运行时生成字节码加载到JVM</li>
+<li><code>静态代理</code>的<code>代理对象</code>和<code>被代理对象</code>都需要实现同一接口，动态代理则无此限制</li>
+</ol>
+<h3 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h3><h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
+<li><code>需要代理的类</code>需要实现一个接口中的所有抽象方法</li>
+<li>通过<code>Proxy</code>类的<code>newProxyInstance</code>指定<code>类加载器</code>、<code>需要代理的类接口</code>及<code>执行代理类中方法的执行器</code></li>
+<li><code>执行代理类中方法的执行器</code>需要实现<code>InvocationHandler</code>接口，执行调用逻辑</li>
+</ul>
+<p>Proxy  ： 负责动态生成代理</p>
+<ul>
+<li>newProxyInstance<ul>
+<li>ClassLoader   被代理类的类加载器</li>
+<li>Class&lt;?&gt;[]       代理类要实现的接口</li>
+<li>InvocationHandler    代理类中需要加入的功能</li>
+</ul>
+</li>
+</ul>
+<p>InvocationHandler：代理类新增的功能</p>
+<ul>
+<li>invoke<ul>
+<li>Object  proxy   代理的实例</li>
+<li>Method             被拦截的方法</li>
+<li>Object[] args    方法的参数</li>
+</ul>
+</li>
+</ul>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代理工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> target.getClass().getClassLoader();</span><br><span class="line">        <span class="comment">//找到被代理类的所有接口</span></span><br><span class="line">        Class&lt;?&gt;[] interfaces = target.getClass().getInterfaces();</span><br><span class="line">        <span class="comment">//找到代理逻辑</span></span><br><span class="line">        <span class="type">PerformanceMonitorHandler</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PerformanceMonitorHandler</span>(target);</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader,interfaces,h);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PerformanceMonitorHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//执行方法调用</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">proxy</span> <span class="operator">=</span> (NuclearWeaponBoomService)ProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	注：曾用此实现了生产Redis降级<del>.</del></p>
+</blockquote>
+<h3 id="CGlib动态代理"><a href="#CGlib动态代理" class="headerlink" title="CGlib动态代理"></a>CGlib动态代理</h3><h4 id="实习方式"><a href="#实习方式" class="headerlink" title="实习方式"></a>实习方式</h4><ul>
+<li>cglib : code generation lib 代码生成库</li>
+<li>使用继承的方式来生成代理类</li>
+<li>代理类继承被代理类，覆盖被代理类的方法，在实现中调用父类的相应方法</li>
+</ul>
+<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//生产工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">        <span class="comment">//创建增强器</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置被代理类,也就是父类</span></span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置方法拦截器,也就是代理逻辑</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">PerformanceMonitorInterceptor</span>());</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorInterceptor</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object target, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//调用父类相应方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> methodProxy.invokeSuper(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//原方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">proxy</span> <span class="operator">=</span> (Nuclear)CglibProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDK、CGlib动态代理的区别"><a href="#JDK、CGlib动态代理的区别" class="headerlink" title="JDK、CGlib动态代理的区别"></a>JDK、CGlib动态代理的区别</h3><ul>
+<li>jdk使用接口的方式实现动态代理</li>
+<li>cglib使用继承的方式实现动态代理</li>
+<li>性能：jdk1.8之前 cglib 胜出  、 jdk1.8之后 jdk方式胜出</li>
+<li>spring 默认是用jdk动态代理生成代理类，但是也支持cglib</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
