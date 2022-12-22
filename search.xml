@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>博客文章总目录</title>
+    <title>文章总目录</title>
     <url>/post/ef59632d.html</url>
     <content><![CDATA[<p>计算机技术</p>
 <ul>
@@ -9,7 +9,7 @@
 </li>
 <li><p>数据库：<a href="/post/23ffdd3c.html">MySQL从MVCC到ReadView</a> ┃ <a href="/post/5c684e4d.html">MySQL排序后分页错乱问题分析</a></p>
 </li>
-<li><p>Java：<a href="/post/9a372c09.html">JDK之List转Map实现解析</a> ┃ <a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a></p>
+<li><p>Java：<a href="/post/9a372c09.html">JDK之List转Map实现解析</a> ┃ <a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a> ┃ <a href="/post/a4854be7.html">JDK动态代理实现Redis降级</a></p>
 </li>
 <li><p>小技巧：<a href="/post/901f844.html">国内访问Github提速教程</a></p>
 </li>
@@ -372,18 +372,6 @@
       </tags>
   </entry>
   <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>杂谈</title>
     <url>/post/bf4ee09f.html</url>
     <content><![CDATA[<span id="more"></span>
@@ -440,6 +428,18 @@
       </categories>
       <tags>
         <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
       </tags>
   </entry>
   <entry>
@@ -603,6 +603,38 @@
       <tags>
         <tag>JDK8</tag>
         <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JDK动态代理实现Redis降级</title>
+    <url>/post/a4854be7.html</url>
+    <content><![CDATA[<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>防止<code>Redis</code>服务不可用导致服务不可用，保证业务正常流程，在<code>Redis</code>服务崩掉后，走数据库进行加锁解锁操作，需要尽量不修改原有<code>Redis</code>代码</p>
+<p>原有redis示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><h3 id="增加A接口"><a href="#增加A接口" class="headerlink" title="增加A接口"></a>增加A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line">   Boolean <span class="title function_">set</span><span class="params">(String key,<span class="type">long</span> expireTime)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="原有redis类实现A"><a href="#原有redis类实现A" class="headerlink" title="原有redis类实现A"></a>原有redis类实现A</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加MySQL加锁类实现A接口"><a href="#增加MySQL加锁类实现A接口" class="headerlink" title="增加MySQL加锁类实现A接口"></a>增加MySQL加锁类实现A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TCacheInfoMapper tCacheInfoMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入database内部&quot;</span>);</span><br><span class="line">        <span class="type">TCacheInfo</span> <span class="variable">tCacheInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TCacheInfo</span>();</span><br><span class="line">        tCacheInfo.setId(<span class="number">1515155L</span>);</span><br><span class="line">        tCacheInfo.setCreateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setUpdateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setCacheKey(key);</span><br><span class="line">        tCacheInfo.setCacheValue(key);</span><br><span class="line">        tCacheInfo.setExpireTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setVersion(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> tCacheInfoMapper.insert(tCacheInfo) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="对原有类进行代理"><a href="#对原有类进行代理" class="headerlink" title="对原有类进行代理"></a>对原有类进行代理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalConfiguration</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> RedisServiceI &amp;&amp; <span class="string">&quot;oldRedisService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">            bean = getProxyBean(bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getProxyBean</span><span class="params">(Object bean)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  Proxy</span><br><span class="line">                .newProxyInstance(</span><br><span class="line">                        <span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                        bean.getClass().getInterfaces(),</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">DynamicProxyHandler</span>(bean)</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    Object redisBean;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DynamicProxyHandler</span><span class="params">(Object redisBean)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.redisBean = redisBean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        log.info(<span class="string">&quot;代理开始执行:&quot;</span>+method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//调用原有方法</span></span><br><span class="line">            obj = method.invoke(redisBean, args);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InvocationTargetException e)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.getTargetException() <span class="keyword">instanceof</span> BussinessException)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BussinessException</span>(ErrorCode.CA000001,<span class="string">&quot;自定义的异常,需要抛出让全局异常处理&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//执行数据库加锁类的方法</span></span><br><span class="line">            <span class="type">RedisServiceI</span> <span class="variable">bean</span> <span class="operator">=</span> (RedisServiceI) SpringContextUtil.getContext().getBean(<span class="string">&quot;databaseService&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(bean, args);</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(<span class="string">&quot;代理结束执行&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RedisServiceI redisServiceI;</span><br></pre></td></tr></table></figure>
+
+<p>因为上面<code>OldRedisService</code>类使用了<code>@Primary</code>注解，所以会优先被注入到接口中</p>
+<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
+<li>上面的方式有个缺点，这样修改后，原来的<code>OldRedisService</code>类就不能被注入了，因为已经被代理了。可以优化一下，不代理原有的<code>OldRedisService</code>类，而是新写一个类，也实现<code>RedisServiceI</code>,新类所有方法全部调用<code>OldRedisService</code>，且使用<code>@Primary</code>保证被优先注入接口，最后代理这个新写的类即可。</li>
+<li>其实还有一个锁的数据一致性问题，在Redis加锁后，Redis崩了，是无法同步到数据库中的，这个处理比较麻烦，如果对业务要求比较高需要注意一下</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
