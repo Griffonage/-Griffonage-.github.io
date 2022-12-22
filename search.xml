@@ -111,6 +111,45 @@
       </tags>
   </entry>
   <entry>
+    <title>MySQL排序后分页错乱问题分析</title>
+    <url>/post/5c684e4d.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+</blockquote>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL从MVCC到ReadView</title>
     <url>/post/23ffdd3c.html</url>
     <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>假设有 <strong>student</strong> 表存在，且 <strong>stu_name</strong> 字段的<code>初始值都为 AAAAAA</code></p>
@@ -333,6 +372,18 @@
       </tags>
   </entry>
   <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>杂谈</title>
     <url>/post/bf4ee09f.html</url>
     <content><![CDATA[<span id="more"></span>
@@ -480,18 +531,6 @@
       </tags>
   </entry>
   <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JDK8之List转Map实现解析</title>
     <url>/post/9a372c09.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
@@ -567,42 +606,240 @@
       </tags>
   </entry>
   <entry>
-    <title>MySQL排序后分页错乱问题分析</title>
-    <url>/post/5c684e4d.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
-<p><strong>1.建个表</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.插入一些数据</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.执行查询语句得到结果</strong></p>
-<p><code>select * from student order by create_time;</code></p>
-<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+    <title>设计原则</title>
+    <url>/post/a151c9f2.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
+<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><blockquote>
+<p>Keep It Simple Stupid（保持简单直白）</p>
 </blockquote>
-<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
-<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
-<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
-<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
-<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
-<p><code>select * from student order by create_time,id limit 4,2;</code></p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
-<p>修改字符编码：</p>
-<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
-
-<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
-<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>更少的代码节省更多的时间，减少更多的Bug，以及更容易修改</li>
+<li>简单是复杂的更高水平</li>
+<li>完美并不是没有东西可以被添加进来，而是没有东西可以被带走</li>
+</ul>
+<h3 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>不要使用大部分人难以理解的代码，让其晦涩难懂</li>
+<li>不要过度优化，不是封装的越多越深越好，也不是底层函数或者高级语法用的越多越好</li>
+</ul>
+<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><blockquote>
+<p>you aren’t gonna need it（你不会需要它-不要实现非必要的东西）</p>
+</blockquote>
+<h3 id="为什么-1"><a href="#为什么-1" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>你的时间非常宝贵，任何为将来可能需要的功能做的工作，不但会导致你从当前必须实现的功能分心，而且还浪费了阅读者的时间</li>
+<li>这将导致代码臃肿、软件变得庞大且复杂</li>
+</ul>
+<h3 id="怎么做-1"><a href="#怎么做-1" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>在日常开发中，需要尽可能评估好设计的复杂度，不要过度设计。发现自己设计有不足的地方，，要有<code>持续重构</code>的精神，不断完善自己的设计，不要等到事情累计到不得不重构的时候，那时可能影响范围已经很大，事情往往已经到了积重难返的阶段</li>
+</ul>
+<h3 id="KISS和YAGNI的异同"><a href="#KISS和YAGNI的异同" class="headerlink" title="KISS和YAGNI的异同"></a>KISS和YAGNI的异同</h3><p>KISS和YAGNI都是在阐述<code>简单</code>这个事情，只是看待的角度不同，KISS是从<code>如何做</code>(保持简单)的角度，YAGNI是从<code>要不要做</code>(不要过度设计)的角度</p>
+<h2 id="DTSTTCPW"><a href="#DTSTTCPW" class="headerlink" title="DTSTTCPW"></a>DTSTTCPW</h2><blockquote>
+<p>Do The Simplest Thing That Could Possibly Work（做最简单的事情，如果它可能工作）</p>
+</blockquote>
+<h3 id="为什么-2"><a href="#为什么-2" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>如果我们致力于解决真正的问题，就能最大限度地解决真正的问题</li>
+<li>专业程序员就是能写出白痴程序员都能读懂的代码，白痴程序员就是写出即使专业程序员都无法读懂的代码</li>
+</ul>
+<h3 id="怎么做-2"><a href="#怎么做-2" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>询问自己：完成这件事最简单的方式是什么</li>
+</ul>
+<h2 id="Separation-of-Concerns"><a href="#Separation-of-Concerns" class="headerlink" title="Separation of Concerns"></a>Separation of Concerns</h2><blockquote>
+<p>关注点分离是将计算机程序分离成不同部分的设计原则，这样每个部分都单独处理自己的关注点。例如，业务逻辑与非业务逻辑是不同的关注点，更改业务逻辑不应该影响到非业务逻辑</p>
+</blockquote>
+<h3 id="为什么-3"><a href="#为什么-3" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>简化软件的开发和维护</li>
+<li>当每个关注点分离足够好时，代码的可复用性更高且开发及迭代更加具备独立性</li>
+</ul>
+<h3 id="怎么做-3"><a href="#怎么做-3" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将程序尽可能分离成各自独立的单一模块中</li>
+</ul>
+<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><blockquote>
+<p>Dont’t Repeat Yourself（不要写重复的代码）</p>
+<p>系统中的每一个部分都应该单一、清晰、且具备权威性。项目中每一个重要的功能应该仅在一份源代码中，如果相似的功能出现在两个不同的地方，通过抽象出不同部分将其结合起来往往是有益的</p>
+</blockquote>
+<h3 id="为什么-4"><a href="#为什么-4" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>重复可能导致维护困难、因果颠倒、逻辑互斥</li>
+<li>修改系统中任何一个单一的部分，不会改变到其他没有关联的地方</li>
+<li>逻辑上相关联的部分修改时，可以保持可预测及同步性</li>
+</ul>
+<h3 id="怎么做-4"><a href="#怎么做-4" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将业务规则、长的表达式、if语句、数学公式、元数据等等，放在一个地方</li>
+<li>在代码中使用单一、明确的来源</li>
+<li>当相似功能的代码出现在不同位置3次时，就应该重构这段代码（为什么不是两次，因为过早的重构可能会导致错误的抽象，而3次时，维护的成本已经超过了重构的成本，以及可能潜在的糟糕设计）</li>
+</ul>
+<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><p>我最怕那些copy别人一大段代码的！！！简直噩梦！！！关键我还碰到了！！！苍天呐！！！</p>
+<h2 id="Code-For-The-Maintainer"><a href="#Code-For-The-Maintainer" class="headerlink" title="Code For The Maintainer"></a>Code For The Maintainer</h2><blockquote>
+<p>为维护者而编写</p>
+</blockquote>
+<h3 id="为什么-5"><a href="#为什么-5" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前为止，维护是任何一个项目最昂贵的阶段</li>
+</ul>
+<h3 id="怎么做-5"><a href="#怎么做-5" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>做一个维护者</li>
+<li>编写代码时，要将维护你代码的人，当成知道你居住地址且有暴力倾向的精神病患者</li>
+<li>编写代码和注释时，要关照级别较低的人，让他们也能够愉快的阅读并能从中学习</li>
+<li>不要让他人思考</li>
+<li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
+</ul>
+<h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
+<p>避免过早优化（理解过早和非过早至关重要）</p>
+</blockquote>
+<h3 id="为什么-6"><a href="#为什么-6" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前还不清楚瓶颈在哪里</li>
+<li>优化后，可能变得更加难以阅读及维护</li>
+</ul>
+<h3 id="怎么做-6"><a href="#怎么做-6" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>让它更加正确、更加快速</li>
+<li>不要在不需要时优化，而是在分析及发现瓶颈后再优化</li>
+</ul>
+<h2 id="Minimise-Coupling"><a href="#Minimise-Coupling" class="headerlink" title="Minimise Coupling"></a>Minimise Coupling</h2><blockquote>
+<p>最小化耦合（耦合是模块&#x2F;组件间项目依赖的程度）</p>
+</blockquote>
+<h3 id="为什么-7"><a href="#为什么-7" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li><p>一个模块的改变经常会对其他模块造成影响</p>
+</li>
+<li><p>由于模块间的相互依赖，使用及组装可能花费更多的时间</p>
+</li>
+<li><p>模块间相互依赖程度高容易导致复用性及可测试降低</p>
+</li>
+</ul>
+<h3 id="怎么做-7"><a href="#怎么做-7" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>消除或者减少不必要的联系</li>
+<li>通过隐藏实现细节来减少耦合</li>
+<li>遵循<code>迪米特法则</code></li>
+</ul>
+<h2 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h2><blockquote>
+<p>迪米特法则（不要和陌生人说话。如果两个类无需直接通信，那么就不应该发生直接的相互调用，而应该通过第三方转发调用）</p>
+</blockquote>
+<h3 id="为什么-8"><a href="#为什么-8" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>直接通常导致增强耦合</li>
+<li>直接通常显示了过多的实现细节</li>
+</ul>
+<h3 id="怎么做-8"><a href="#怎么做-8" class="headerlink" title="怎么做"></a>怎么做</h3><p>一个对象的方法只能通过一下方式调用：</p>
+<ul>
+<li>对象本身</li>
+<li>方法中的一个参数</li>
+<li>方法中被创建的对象</li>
+<li>对象中的直接属性或字段</li>
+</ul>
+<h2 id="Composition-Over-Inheritance"><a href="#Composition-Over-Inheritance" class="headerlink" title="Composition Over Inheritance"></a>Composition Over Inheritance</h2><blockquote>
+<p>组合优于继承</p>
+</blockquote>
+<h3 id="为什么-9"><a href="#为什么-9" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>类之间的耦合更低</li>
+<li>继承打破封装</li>
+</ul>
+<h3 id="怎么做-9"><a href="#怎么做-9" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>继承前考虑父类是否有缺陷，而你是否愿意将缺陷传播到你的类中</li>
+<li>[has a]或者[use a]的类关系用组合；[is a]的情况，才能使用继承</li>
+</ul>
+<h2 id="Orthogonality"><a href="#Orthogonality" class="headerlink" title="Orthogonality"></a>Orthogonality</h2><blockquote>
+<p>正交性，系统中概念上不相干的事情不应该联系在一起</p>
+</blockquote>
+<h3 id="为什么-10"><a href="#为什么-10" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>设计越正交，异常越少，使得学习、阅读、编写代码更加容易</li>
+</ul>
+<h2 id="Robustness-Principle"><a href="#Robustness-Principle" class="headerlink" title="Robustness Principle"></a>Robustness Principle</h2><blockquote>
+<p>伯斯塔尔定律，对你想要做的要求严格，对你从其他人那里接收的保持宽松</p>
+</blockquote>
+<h3 id="为什么-11"><a href="#为什么-11" class="headerlink" title="为什么"></a>为什么</h3><p>为了在服务迭代过程中，提供者能够做出新的需求，同时对现有客户造成最小的影响</p>
+<h3 id="怎么做-10"><a href="#怎么做-10" class="headerlink" title="怎么做"></a>怎么做</h3><p>发送给其他机器的代码或者是命令，应该确保完全符合规范。但是接收的输入应该接受不符合规范的，只要含义清楚。</p>
+<h2 id="Inversion-of-Control"><a href="#Inversion-of-Control" class="headerlink" title="Inversion of Control"></a>Inversion of Control</h2><blockquote>
+<p>控制反转原则，也叫好莱坞原则（不要打电话给我，我们会打电话给你），使可重用的代码和解决具体问题的代码，即使他们在一个应用里</p>
+</blockquote>
+<h3 id="为什么-12"><a href="#为什么-12" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>控制反转被用来增加程序的模块化以及可扩展性</li>
+<li>将任务的执行与实现解耦</li>
+<li>将模块专注于他们所涉及的任务</li>
+<li>防止模块被替换带来的副作用</li>
+</ul>
+<h3 id="怎么做-11"><a href="#怎么做-11" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>使用工厂模式</li>
+<li>使用服务定位模式</li>
+<li>使用依赖注入</li>
+<li>使用上下文查找</li>
+<li>使用模板方法模式</li>
+<li>使用策略模式</li>
+</ul>
+<h2 id="Maximise-Cohesion？"><a href="#Maximise-Cohesion？" class="headerlink" title="Maximise Cohesion？"></a>Maximise Cohesion？</h2><blockquote>
+<p>最大化内聚，</p>
+</blockquote>
+<h2 id="Liskov-Substitution-Principle"><a href="#Liskov-Substitution-Principle" class="headerlink" title="Liskov Substitution Principle"></a>Liskov Substitution Principle</h2><blockquote>
+<p>里氏替换原则，程序中的对象可以被其子类替换，而不改变程序的正确性</p>
+</blockquote>
+<h2 id="Open-x2F-Closed-Principle"><a href="#Open-x2F-Closed-Principle" class="headerlink" title="Open&#x2F;Closed Principle"></a>Open&#x2F;Closed Principle</h2><blockquote>
+<p>开闭原则，软件实体应该对扩展开放，对修改关闭</p>
+</blockquote>
+<h3 id="为什么-13"><a href="#为什么-13" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过对现有代码最小化的改动来改善代码的可维护性和稳定性</li>
+</ul>
+<h3 id="怎么做-12"><a href="#怎么做-12" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li><p>编写可以扩展的类（而不是可以修改的类）</p>
+</li>
+<li><p>仅暴露可移动可修改的部分，隐藏其他部分</p>
+</li>
+</ul>
+<h2 id="Single-Responsibility-Principle"><a href="#Single-Responsibility-Principle" class="headerlink" title="Single Responsibility Principle"></a>Single Responsibility Principle</h2><blockquote>
+<p>单一责任原则，一个类不应该有超过一个需要改变的理由</p>
+</blockquote>
+<h3 id="为什么-14"><a href="#为什么-14" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>可维护性：改变应该仅在一个模块或者类中进行</li>
+</ul>
+<h3 id="怎么做-13"><a href="#怎么做-13" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>参考Curly’s Law</li>
+</ul>
+<h3 id="Hide-Implementation-Details"><a href="#Hide-Implementation-Details" class="headerlink" title="Hide Implementation Details"></a>Hide Implementation Details</h3><blockquote>
+<p>隐藏实现细节，一个软件模块通过提供一个接口来隐藏信息，同时不泄露任何不必要的信息</p>
+</blockquote>
+<h3 id="为什么-15"><a href="#为什么-15" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当一个实现改变，使用接口的客户端不用进行更改</li>
+</ul>
+<h3 id="怎么做-14"><a href="#怎么做-14" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>最小化类和变量的可访问性</li>
+<li>不要将变量数据设置为public</li>
+<li>避免放置私有的实现细节放到类的接口上</li>
+<li>减少耦合以隐藏更多的实现细节</li>
+</ul>
+<h2 id="Curly’s-Law"><a href="#Curly’s-Law" class="headerlink" title="Curly’s Law"></a>Curly’s Law</h2><blockquote>
+<p>科里定律，为任何特定代码选择一件单一、明确的目标，做一件事情</p>
+</blockquote>
+<h2 id="Encapsulate-What-Changes"><a href="#Encapsulate-What-Changes" class="headerlink" title="Encapsulate What Changes"></a>Encapsulate What Changes</h2><blockquote>
+<p>封装经常修改的代码</p>
+</blockquote>
+<h3 id="为什么-16"><a href="#为什么-16" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当改变发生时，减少需要修改的地方</li>
+</ul>
+<h3 id="怎么做-15"><a href="#怎么做-15" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>封装API背后不同的概念</li>
+<li>尽可能将不同概念分离到它自己的模块</li>
+</ul>
+<h2 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h2><blockquote>
+<p>接口隔离原则。将臃肿的接口减少为多个更小、更具体的客户端特定接口。接口应该更依赖于调用它的代码，而不是实现它的代码。</p>
+</blockquote>
+<h2 id="Command-Query-Separation"><a href="#Command-Query-Separation" class="headerlink" title="Command Query Separation"></a>Command Query Separation</h2><blockquote>
+<p>命令查询分离，每个方法要么是执行操作的命令，要么是向调用者返回数据的查询，但不能两个同时存在。这样就能使得使用者更加方向的调用。</p>
+</blockquote>
+<h3 id="为什么-17"><a href="#为什么-17" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过清除的将发放划分为查询和命令，程序员可以在不知道方法实现细节的情况下，更加有信心进行编码</li>
+</ul>
+<h3 id="怎么做-16"><a href="#怎么做-16" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将一个方法作为查询或命令实现</li>
+<li>明确方法的名称，通过约定名称的方式告知是查询还是命令</li>
+</ul>
+<h2 id="Murphy’s-Law"><a href="#Murphy’s-Law" class="headerlink" title="Murphy’s Law"></a>Murphy’s Law</h2><blockquote>
+<p>墨菲定律，任何可能出错的都会出错</p>
+</blockquote>
+<h2 id="Brooks’s-Law"><a href="#Brooks’s-Law" class="headerlink" title="Brooks’s Law"></a>Brooks’s Law</h2><blockquote>
+<p> 布鲁克斯法则，向已经延误的项目添加人力，只会使其更晚</p>
+</blockquote>
+<h2 id="Linus’s-Law"><a href="#Linus’s-Law" class="headerlink" title="Linus’s Law"></a>Linus’s Law</h2><blockquote>
+<p>林纳斯定律，给予足够的眼睛关注，所有的bug都会显现，代码检视很重要</p>
+</blockquote>
+]]></content>
       <categories>
-        <category>数据库</category>
+        <category>编程</category>
       </categories>
       <tags>
-        <tag>MySQL</tag>
+        <tag>设计原则</tag>
       </tags>
   </entry>
   <entry>
@@ -861,243 +1098,6 @@
       </categories>
       <tags>
         <tag>书籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设计原则</title>
-    <url>/post/a151c9f2.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
-<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><blockquote>
-<p>Keep It Simple Stupid（保持简单直白）</p>
-</blockquote>
-<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>更少的代码节省更多的时间，减少更多的Bug，以及更容易修改</li>
-<li>简单是复杂的更高水平</li>
-<li>完美并不是没有东西可以被添加进来，而是没有东西可以被带走</li>
-</ul>
-<h3 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>不要使用大部分人难以理解的代码，让其晦涩难懂</li>
-<li>不要过度优化，不是封装的越多越深越好，也不是底层函数或者高级语法用的越多越好</li>
-</ul>
-<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><blockquote>
-<p>you aren’t gonna need it（你不会需要它-不要实现非必要的东西）</p>
-</blockquote>
-<h3 id="为什么-1"><a href="#为什么-1" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>你的时间非常宝贵，任何为将来可能需要的功能做的工作，不但会导致你从当前必须实现的功能分心，而且还浪费了阅读者的时间</li>
-<li>这将导致代码臃肿、软件变得庞大且复杂</li>
-</ul>
-<h3 id="怎么做-1"><a href="#怎么做-1" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>在日常开发中，需要尽可能评估好设计的复杂度，不要过度设计。发现自己设计有不足的地方，，要有<code>持续重构</code>的精神，不断完善自己的设计，不要等到事情累计到不得不重构的时候，那时可能影响范围已经很大，事情往往已经到了积重难返的阶段</li>
-</ul>
-<h3 id="KISS和YAGNI的异同"><a href="#KISS和YAGNI的异同" class="headerlink" title="KISS和YAGNI的异同"></a>KISS和YAGNI的异同</h3><p>KISS和YAGNI都是在阐述<code>简单</code>这个事情，只是看待的角度不同，KISS是从<code>如何做</code>(保持简单)的角度，YAGNI是从<code>要不要做</code>(不要过度设计)的角度</p>
-<h2 id="DTSTTCPW"><a href="#DTSTTCPW" class="headerlink" title="DTSTTCPW"></a>DTSTTCPW</h2><blockquote>
-<p>Do The Simplest Thing That Could Possibly Work（做最简单的事情，如果它可能工作）</p>
-</blockquote>
-<h3 id="为什么-2"><a href="#为什么-2" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>如果我们致力于解决真正的问题，就能最大限度地解决真正的问题</li>
-<li>专业程序员就是能写出白痴程序员都能读懂的代码，白痴程序员就是写出即使专业程序员都无法读懂的代码</li>
-</ul>
-<h3 id="怎么做-2"><a href="#怎么做-2" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>询问自己：完成这件事最简单的方式是什么</li>
-</ul>
-<h2 id="Separation-of-Concerns"><a href="#Separation-of-Concerns" class="headerlink" title="Separation of Concerns"></a>Separation of Concerns</h2><blockquote>
-<p>关注点分离是将计算机程序分离成不同部分的设计原则，这样每个部分都单独处理自己的关注点。例如，业务逻辑与非业务逻辑是不同的关注点，更改业务逻辑不应该影响到非业务逻辑</p>
-</blockquote>
-<h3 id="为什么-3"><a href="#为什么-3" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>简化软件的开发和维护</li>
-<li>当每个关注点分离足够好时，代码的可复用性更高且开发及迭代更加具备独立性</li>
-</ul>
-<h3 id="怎么做-3"><a href="#怎么做-3" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将程序尽可能分离成各自独立的单一模块中</li>
-</ul>
-<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><blockquote>
-<p>Dont’t Repeat Yourself（不要写重复的代码）</p>
-<p>系统中的每一个部分都应该单一、清晰、且具备权威性。项目中每一个重要的功能应该仅在一份源代码中，如果相似的功能出现在两个不同的地方，通过抽象出不同部分将其结合起来往往是有益的</p>
-</blockquote>
-<h3 id="为什么-4"><a href="#为什么-4" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>重复可能导致维护困难、因果颠倒、逻辑互斥</li>
-<li>修改系统中任何一个单一的部分，不会改变到其他没有关联的地方</li>
-<li>逻辑上相关联的部分修改时，可以保持可预测及同步性</li>
-</ul>
-<h3 id="怎么做-4"><a href="#怎么做-4" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将业务规则、长的表达式、if语句、数学公式、元数据等等，放在一个地方</li>
-<li>在代码中使用单一、明确的来源</li>
-<li>当相似功能的代码出现在不同位置3次时，就应该重构这段代码（为什么不是两次，因为过早的重构可能会导致错误的抽象，而3次时，维护的成本已经超过了重构的成本，以及可能潜在的糟糕设计）</li>
-</ul>
-<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><p>我最怕那些copy别人一大段代码的！！！简直噩梦！！！关键我还碰到了！！！苍天呐！！！</p>
-<h2 id="Code-For-The-Maintainer"><a href="#Code-For-The-Maintainer" class="headerlink" title="Code For The Maintainer"></a>Code For The Maintainer</h2><blockquote>
-<p>为维护者而编写</p>
-</blockquote>
-<h3 id="为什么-5"><a href="#为什么-5" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>目前为止，维护是任何一个项目最昂贵的阶段</li>
-</ul>
-<h3 id="怎么做-5"><a href="#怎么做-5" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>做一个维护者</li>
-<li>编写代码时，要将维护你代码的人，当成知道你居住地址且有暴力倾向的精神病患者</li>
-<li>编写代码和注释时，要关照级别较低的人，让他们也能够愉快的阅读并能从中学习</li>
-<li>不要让他人思考</li>
-<li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
-</ul>
-<h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
-<p>避免过早优化（理解过早和非过早至关重要）</p>
-</blockquote>
-<h3 id="为什么-6"><a href="#为什么-6" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>目前还不清楚瓶颈在哪里</li>
-<li>优化后，可能变得更加难以阅读及维护</li>
-</ul>
-<h3 id="怎么做-6"><a href="#怎么做-6" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>让它更加正确、更加快速</li>
-<li>不要在不需要时优化，而是在分析及发现瓶颈后再优化</li>
-</ul>
-<h2 id="Minimise-Coupling"><a href="#Minimise-Coupling" class="headerlink" title="Minimise Coupling"></a>Minimise Coupling</h2><blockquote>
-<p>最小化耦合（耦合是模块&#x2F;组件间项目依赖的程度）</p>
-</blockquote>
-<h3 id="为什么-7"><a href="#为什么-7" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li><p>一个模块的改变经常会对其他模块造成影响</p>
-</li>
-<li><p>由于模块间的相互依赖，使用及组装可能花费更多的时间</p>
-</li>
-<li><p>模块间相互依赖程度高容易导致复用性及可测试降低</p>
-</li>
-</ul>
-<h3 id="怎么做-7"><a href="#怎么做-7" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>消除或者减少不必要的联系</li>
-<li>通过隐藏实现细节来减少耦合</li>
-<li>遵循<code>迪米特法则</code></li>
-</ul>
-<h2 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h2><blockquote>
-<p>迪米特法则（不要和陌生人说话。如果两个类无需直接通信，那么就不应该发生直接的相互调用，而应该通过第三方转发调用）</p>
-</blockquote>
-<h3 id="为什么-8"><a href="#为什么-8" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>直接通常导致增强耦合</li>
-<li>直接通常显示了过多的实现细节</li>
-</ul>
-<h3 id="怎么做-8"><a href="#怎么做-8" class="headerlink" title="怎么做"></a>怎么做</h3><p>一个对象的方法只能通过一下方式调用：</p>
-<ul>
-<li>对象本身</li>
-<li>方法中的一个参数</li>
-<li>方法中被创建的对象</li>
-<li>对象中的直接属性或字段</li>
-</ul>
-<h2 id="Composition-Over-Inheritance"><a href="#Composition-Over-Inheritance" class="headerlink" title="Composition Over Inheritance"></a>Composition Over Inheritance</h2><blockquote>
-<p>组合优于继承</p>
-</blockquote>
-<h3 id="为什么-9"><a href="#为什么-9" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>类之间的耦合更低</li>
-<li>继承打破封装</li>
-</ul>
-<h3 id="怎么做-9"><a href="#怎么做-9" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>继承前考虑父类是否有缺陷，而你是否愿意将缺陷传播到你的类中</li>
-<li>[has a]或者[use a]的类关系用组合；[is a]的情况，才能使用继承</li>
-</ul>
-<h2 id="Orthogonality"><a href="#Orthogonality" class="headerlink" title="Orthogonality"></a>Orthogonality</h2><blockquote>
-<p>正交性，系统中概念上不相干的事情不应该联系在一起</p>
-</blockquote>
-<h3 id="为什么-10"><a href="#为什么-10" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>设计越正交，异常越少，使得学习、阅读、编写代码更加容易</li>
-</ul>
-<h2 id="Robustness-Principle"><a href="#Robustness-Principle" class="headerlink" title="Robustness Principle"></a>Robustness Principle</h2><blockquote>
-<p>伯斯塔尔定律，对你想要做的要求严格，对你从其他人那里接收的保持宽松</p>
-</blockquote>
-<h3 id="为什么-11"><a href="#为什么-11" class="headerlink" title="为什么"></a>为什么</h3><p>为了在服务迭代过程中，提供者能够做出新的需求，同时对现有客户造成最小的影响</p>
-<h3 id="怎么做-10"><a href="#怎么做-10" class="headerlink" title="怎么做"></a>怎么做</h3><p>发送给其他机器的代码或者是命令，应该确保完全符合规范。但是接收的输入应该接受不符合规范的，只要含义清楚。</p>
-<h2 id="Inversion-of-Control"><a href="#Inversion-of-Control" class="headerlink" title="Inversion of Control"></a>Inversion of Control</h2><blockquote>
-<p>控制反转原则，也叫好莱坞原则（不要打电话给我，我们会打电话给你），使可重用的代码和解决具体问题的代码，即使他们在一个应用里</p>
-</blockquote>
-<h3 id="为什么-12"><a href="#为什么-12" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>控制反转被用来增加程序的模块化以及可扩展性</li>
-<li>将任务的执行与实现解耦</li>
-<li>将模块专注于他们所涉及的任务</li>
-<li>防止模块被替换带来的副作用</li>
-</ul>
-<h3 id="怎么做-11"><a href="#怎么做-11" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>使用工厂模式</li>
-<li>使用服务定位模式</li>
-<li>使用依赖注入</li>
-<li>使用上下文查找</li>
-<li>使用模板方法模式</li>
-<li>使用策略模式</li>
-</ul>
-<h2 id="Maximise-Cohesion？"><a href="#Maximise-Cohesion？" class="headerlink" title="Maximise Cohesion？"></a>Maximise Cohesion？</h2><blockquote>
-<p>最大化内聚，</p>
-</blockquote>
-<h2 id="Liskov-Substitution-Principle"><a href="#Liskov-Substitution-Principle" class="headerlink" title="Liskov Substitution Principle"></a>Liskov Substitution Principle</h2><blockquote>
-<p>里氏替换原则，程序中的对象可以被其子类替换，而不改变程序的正确性</p>
-</blockquote>
-<h2 id="Open-x2F-Closed-Principle"><a href="#Open-x2F-Closed-Principle" class="headerlink" title="Open&#x2F;Closed Principle"></a>Open&#x2F;Closed Principle</h2><blockquote>
-<p>开闭原则，软件实体应该对扩展开放，对修改关闭</p>
-</blockquote>
-<h3 id="为什么-13"><a href="#为什么-13" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>通过对现有代码最小化的改动来改善代码的可维护性和稳定性</li>
-</ul>
-<h3 id="怎么做-12"><a href="#怎么做-12" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li><p>编写可以扩展的类（而不是可以修改的类）</p>
-</li>
-<li><p>仅暴露可移动可修改的部分，隐藏其他部分</p>
-</li>
-</ul>
-<h2 id="Single-Responsibility-Principle"><a href="#Single-Responsibility-Principle" class="headerlink" title="Single Responsibility Principle"></a>Single Responsibility Principle</h2><blockquote>
-<p>单一责任原则，一个类不应该有超过一个需要改变的理由</p>
-</blockquote>
-<h3 id="为什么-14"><a href="#为什么-14" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>可维护性：改变应该仅在一个模块或者类中进行</li>
-</ul>
-<h3 id="怎么做-13"><a href="#怎么做-13" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>参考Curly’s Law</li>
-</ul>
-<h3 id="Hide-Implementation-Details"><a href="#Hide-Implementation-Details" class="headerlink" title="Hide Implementation Details"></a>Hide Implementation Details</h3><blockquote>
-<p>隐藏实现细节，一个软件模块通过提供一个接口来隐藏信息，同时不泄露任何不必要的信息</p>
-</blockquote>
-<h3 id="为什么-15"><a href="#为什么-15" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>当一个实现改变，使用接口的客户端不用进行更改</li>
-</ul>
-<h3 id="怎么做-14"><a href="#怎么做-14" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>最小化类和变量的可访问性</li>
-<li>不要将变量数据设置为public</li>
-<li>避免放置私有的实现细节放到类的接口上</li>
-<li>减少耦合以隐藏更多的实现细节</li>
-</ul>
-<h2 id="Curly’s-Law"><a href="#Curly’s-Law" class="headerlink" title="Curly’s Law"></a>Curly’s Law</h2><blockquote>
-<p>科里定律，为任何特定代码选择一件单一、明确的目标，做一件事情</p>
-</blockquote>
-<h2 id="Encapsulate-What-Changes"><a href="#Encapsulate-What-Changes" class="headerlink" title="Encapsulate What Changes"></a>Encapsulate What Changes</h2><blockquote>
-<p>封装经常修改的代码</p>
-</blockquote>
-<h3 id="为什么-16"><a href="#为什么-16" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>当改变发生时，减少需要修改的地方</li>
-</ul>
-<h3 id="怎么做-15"><a href="#怎么做-15" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>封装API背后不同的概念</li>
-<li>尽可能将不同概念分离到它自己的模块</li>
-</ul>
-<h2 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h2><blockquote>
-<p>接口隔离原则。将臃肿的接口减少为多个更小、更具体的客户端特定接口。接口应该更依赖于调用它的代码，而不是实现它的代码。</p>
-</blockquote>
-<h2 id="Command-Query-Separation"><a href="#Command-Query-Separation" class="headerlink" title="Command Query Separation"></a>Command Query Separation</h2><blockquote>
-<p>命令查询分离，每个方法要么是执行操作的命令，要么是向调用者返回数据的查询，但不能两个同时存在。这样就能使得使用者更加方向的调用。</p>
-</blockquote>
-<h3 id="为什么-17"><a href="#为什么-17" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>通过清除的将发放划分为查询和命令，程序员可以在不知道方法实现细节的情况下，更加有信心进行编码</li>
-</ul>
-<h3 id="怎么做-16"><a href="#怎么做-16" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将一个方法作为查询或命令实现</li>
-<li>明确方法的名称，通过约定名称的方式告知是查询还是命令</li>
-</ul>
-<h2 id="Murphy’s-Law"><a href="#Murphy’s-Law" class="headerlink" title="Murphy’s Law"></a>Murphy’s Law</h2><blockquote>
-<p>墨菲定律，任何可能出错的都会出错</p>
-</blockquote>
-<h2 id="Brooks’s-Law"><a href="#Brooks’s-Law" class="headerlink" title="Brooks’s Law"></a>Brooks’s Law</h2><blockquote>
-<p> 布鲁克斯法则，向已经延误的项目添加人力，只会使其更晚</p>
-</blockquote>
-<h2 id="Linus’s-Law"><a href="#Linus’s-Law" class="headerlink" title="Linus’s Law"></a>Linus’s Law</h2><blockquote>
-<p>林纳斯定律，给予足够的眼睛关注，所有的bug都会显现，代码检视很重要</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>设计原则</tag>
       </tags>
   </entry>
 </search>
