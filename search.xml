@@ -24,6 +24,64 @@
       </tags>
   </entry>
   <entry>
+    <title>《Effective Java》学习笔记</title>
+    <url>/post/e1b9f839.html</url>
+    <content><![CDATA[<blockquote>
+<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
+</blockquote>
+<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>有名字</p>
+</li>
+<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
+</li>
+<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
+</li>
+<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
+</li>
+<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>没有public或者protected构造方法的类不能被子类化</p>
+</li>
+<li><p>API文档中很难找到</p>
+</li>
+</ul>
+<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>解决参数过多问题</li>
+<li>可以对参数间依赖关系进行校验</li>
+<li>去掉创建对象时的中间状态</li>
+<li>可以不暴露类中的set方法，使其变成不可变对象</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>创建对象前必须先创建它的builder</li>
+<li>代码比较复杂，4个以上参数才适用</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
+<p>简单情况下可以直接使用@Builder</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
+<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
+<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
+<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由JVM保证线程安全，同时实现了懒加载</p>
+<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
+]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>编程,书籍</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>国内访问Github提速教程</title>
     <url>/post/901f844.html</url>
     <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
@@ -47,45 +105,6 @@
       </categories>
       <tags>
         <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL排序后分页错乱问题分析</title>
-    <url>/post/5c684e4d.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
-<p><strong>1.建个表</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.插入一些数据</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.执行查询语句得到结果</strong></p>
-<p><code>select * from student order by create_time;</code></p>
-<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
-</blockquote>
-<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
-<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
-<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
-<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
-<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
-<p><code>select * from student order by create_time,id limit 4,2;</code></p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
-<p>修改字符编码：</p>
-<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
-
-<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
-<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -311,257 +330,42 @@
       </tags>
   </entry>
   <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<span id="more"></span>
+    <title>MySQL排序后分页错乱问题分析</title>
+    <url>/post/5c684e4d.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<p><img src="https://file.ajungle.cn/img/sohucs.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
-<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
-<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
-<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
-<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
-<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
-<p>我觉得实在是奇观，也觉得很荒唐。</p>
-<p>更觉得可悲。</p>
-<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
-<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
-<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
-<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
-<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
-<p>周天，天朗气清、惠风和畅，出门玩耍</p>
-<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
-<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
-<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
-<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
-<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
-<p>后面怎么办呢？</p>
-<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
-<p>编程</p>
-<ul>
-<li>算法与数据结构，继续刷牛客网（优先级1）</li>
-<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
-<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
-<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
-</ul>
-<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
 </blockquote>
-]]></content>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>日记</category>
+        <category>数据库</category>
       </categories>
       <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《Effective Java》学习笔记</title>
-    <url>/post/e1b9f839.html</url>
-    <content><![CDATA[<blockquote>
-<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
-</blockquote>
-<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li><p>有名字</p>
-</li>
-<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
-</li>
-<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
-</li>
-<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
-</li>
-<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
-</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><p>没有public或者protected构造方法的类不能被子类化</p>
-</li>
-<li><p>API文档中很难找到</p>
-</li>
-</ul>
-<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>解决参数过多问题</li>
-<li>可以对参数间依赖关系进行校验</li>
-<li>去掉创建对象时的中间状态</li>
-<li>可以不暴露类中的set方法，使其变成不可变对象</li>
-</ul>
-<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>创建对象前必须先创建它的builder</li>
-<li>代码比较复杂，4个以上参数才适用</li>
-</ul>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
-<p>简单情况下可以直接使用@Builder</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
-
-<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
-<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
-<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
-<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由JVM保证线程安全，同时实现了懒加载</p>
-<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
-]]></content>
-      <categories>
-        <category>书籍</category>
-      </categories>
-      <tags>
-        <tag>编程,书籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次成都学车经历</title>
-    <url>/post/ca641055.html</url>
-    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
-<p>结束时间:<code>2020年12月14日</code></p>
-<p>总用时:<code>两个月</code></p>
-<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
-<p>科目一</p>
-<ul>
-<li>考试时间:<code>10月20日</code></li>
-<li>考试费用:<code>100</code>元</li>
-<li>备考时间:<code>1</code>天</li>
-</ul>
-<p>科目二</p>
-<ul>
-<li>考试时间:<code>12月04日</code></li>
-<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
-<li>总次数:<code>14</code>次</li>
-</ul>
-</li>
-</ul>
-<p>科目三</p>
-<ul>
-<li>考试时间:<code>12月14日</code></li>
-<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
-<li>总次数:<code>4</code>次</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
-</blockquote>
-<p>总费用:</p>
-<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
-<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
-<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
-<blockquote>
-<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
-</blockquote>
-<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
-<p>按照以下步骤:</p>
-<ul>
-<li><p>做精题</p>
-<ul>
-<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
-</ul>
-</li>
-<li><p>做总结归纳</p>
-<ul>
-<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
-</ul>
-</li>
-<li><p>刷错题(不多说)</p>
-</li>
-<li><p>多余时间刷本地区特有题目</p>
-<ul>
-<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
-</ul>
-</li>
-</ul>
-<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
-<p>结果:考试<code>98</code>分</p>
-<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
-<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
-<p><strong>科目二应该是练习时间花费最长的。</strong></p>
-<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
-<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
-<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
-<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>必做”精简题”,再做一般题(狂刷完事)</li>
-<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
-<li>必须要参加”模拟考试”,虽然要多加钱</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JDK动态代理实现Redis降级</title>
-    <url>/post/a4854be7.html</url>
-    <content><![CDATA[<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>防止<code>Redis</code>服务不可用导致服务不可用，保证业务正常流程，在<code>Redis</code>服务崩掉后，走数据库进行加锁解锁操作，需要尽量不修改原有<code>Redis</code>代码</p>
-<p>原有redis示例如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><h3 id="增加A接口"><a href="#增加A接口" class="headerlink" title="增加A接口"></a>增加A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line">   Boolean <span class="title function_">set</span><span class="params">(String key,<span class="type">long</span> expireTime)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="原有redis类实现A"><a href="#原有redis类实现A" class="headerlink" title="原有redis类实现A"></a>原有redis类实现A</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="增加MySQL加锁类实现A接口"><a href="#增加MySQL加锁类实现A接口" class="headerlink" title="增加MySQL加锁类实现A接口"></a>增加MySQL加锁类实现A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TCacheInfoMapper tCacheInfoMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入database内部&quot;</span>);</span><br><span class="line">        <span class="type">TCacheInfo</span> <span class="variable">tCacheInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TCacheInfo</span>();</span><br><span class="line">        tCacheInfo.setId(<span class="number">1515155L</span>);</span><br><span class="line">        tCacheInfo.setCreateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setUpdateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setCacheKey(key);</span><br><span class="line">        tCacheInfo.setCacheValue(key);</span><br><span class="line">        tCacheInfo.setExpireTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setVersion(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> tCacheInfoMapper.insert(tCacheInfo) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="对原有类进行代理"><a href="#对原有类进行代理" class="headerlink" title="对原有类进行代理"></a>对原有类进行代理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalConfiguration</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> RedisServiceI &amp;&amp; <span class="string">&quot;oldRedisService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">            bean = getProxyBean(bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getProxyBean</span><span class="params">(Object bean)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  Proxy</span><br><span class="line">                .newProxyInstance(</span><br><span class="line">                        <span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                        bean.getClass().getInterfaces(),</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">DynamicProxyHandler</span>(bean)</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    Object redisBean;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DynamicProxyHandler</span><span class="params">(Object redisBean)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.redisBean = redisBean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        log.info(<span class="string">&quot;代理开始执行:&quot;</span>+method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//调用原有方法</span></span><br><span class="line">            obj = method.invoke(redisBean, args);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InvocationTargetException e)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.getTargetException() <span class="keyword">instanceof</span> BussinessException)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BussinessException</span>(ErrorCode.CA000001,<span class="string">&quot;自定义的异常,需要抛出让全局异常处理&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//执行数据库加锁类的方法</span></span><br><span class="line">            <span class="type">RedisServiceI</span> <span class="variable">bean</span> <span class="operator">=</span> (RedisServiceI) SpringContextUtil.getContext().getBean(<span class="string">&quot;databaseService&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(bean, args);</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(<span class="string">&quot;代理结束执行&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RedisServiceI redisServiceI;</span><br></pre></td></tr></table></figure>
-
-<p>因为上面<code>OldRedisService</code>类使用了<code>@Primary</code>注解，所以会优先被注入到接口中</p>
-<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
-<li>上面的方式有个缺点，这样修改后，原来的<code>OldRedisService</code>类就不能被注入了，因为已经被代理了。可以优化一下，不代理原有的<code>OldRedisService</code>类，而是新写一个类，也实现<code>RedisServiceI</code>,新类所有方法全部调用<code>OldRedisService</code>，且使用<code>@Primary</code>保证被优先注入接口，最后代理这个新写的类即可。</li>
-<li>其实还有一个锁的数据一致性问题，在Redis加锁后，Redis崩了，是无法同步到数据库中的，这个处理比较麻烦，如果对业务要求比较高需要注意一下</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -640,83 +444,35 @@
       </tags>
   </entry>
   <entry>
-    <title>设计模式之代理模式</title>
-    <url>/post/907a70d0.html</url>
-    <content><![CDATA[<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><h3 id="静态代理的特点"><a href="#静态代理的特点" class="headerlink" title="静态代理的特点"></a>静态代理的特点</h3><ul>
-<li><code>代理对象</code>和<code>被代理对象</code>实现同一个接口</li>
-<li><code>代理对象</code>持有<code>被代理对象</code>的引用</li>
-<li>调用时，<code>代理对象</code>调用<code>被代理对象</code>的相应方法，可以在调用的前后，增加额外功能</li>
-</ul>
-<h3 id="静态代理的实例"><a href="#静态代理的实例" class="headerlink" title="静态代理的实例"></a>静态代理的实例</h3><blockquote>
-<p>​	实例作用：保存数据时，进行事务控制</p>
-</blockquote>
-<h3 id="原方法"><a href="#原方法" class="headerlink" title="原方法"></a>原方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>JDK动态代理实现Redis降级</title>
+    <url>/post/a4854be7.html</url>
+    <content><![CDATA[<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>防止<code>Redis</code>服务不可用导致服务不可用，保证业务正常流程，在<code>Redis</code>服务崩掉后，走数据库进行加锁解锁操作，需要尽量不修改原有<code>Redis</code>代码</p>
+<p>原有redis示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="静态代理后"><a href="#静态代理后" class="headerlink" title="静态代理后"></a>静态代理后</h3><p><strong>1.增加接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserServiceI</span> &#123;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><h3 id="增加A接口"><a href="#增加A接口" class="headerlink" title="增加A接口"></a>增加A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line">   Boolean <span class="title function_">set</span><span class="params">(String key,<span class="type">long</span> expireTime)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>2.<code>被代理对象</code>实现接口</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="原有redis类实现A"><a href="#原有redis类实现A" class="headerlink" title="原有redis类实现A"></a>原有redis类实现A</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>3.<code>代理对象</code>实现接口，同时持有<code>被代理对象</code>的引用</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserStaticProxyService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    PlatformTransactionManager platformTransactionManager;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    TransactionDefinition transactionDefinition;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//开启事务</span></span><br><span class="line">        <span class="type">TransactionStatus</span> <span class="variable">transactionStatus</span> <span class="operator">=</span> platformTransactionManager.getTransaction(transactionDefinition);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.insertUser();</span><br><span class="line">            <span class="comment">//未发生异常,事务提交</span></span><br><span class="line">            platformTransactionManager.commit(transactionStatus);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//发生异常,回滚事务</span></span><br><span class="line">            platformTransactionManager.rollback(transactionStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="增加MySQL加锁类实现A接口"><a href="#增加MySQL加锁类实现A接口" class="headerlink" title="增加MySQL加锁类实现A接口"></a>增加MySQL加锁类实现A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TCacheInfoMapper tCacheInfoMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入database内部&quot;</span>);</span><br><span class="line">        <span class="type">TCacheInfo</span> <span class="variable">tCacheInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TCacheInfo</span>();</span><br><span class="line">        tCacheInfo.setId(<span class="number">1515155L</span>);</span><br><span class="line">        tCacheInfo.setCreateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setUpdateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setCacheKey(key);</span><br><span class="line">        tCacheInfo.setCacheValue(key);</span><br><span class="line">        tCacheInfo.setExpireTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setVersion(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> tCacheInfoMapper.insert(tCacheInfo) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>4.使用方式：注入<code>代理类</code>的bean，由<code>代理类</code>持有<code>被代理类</code>的引用来调用方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserStaticProxyService userStaticProxyService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation(value = &quot;第一次测试接口&quot;,notes = &quot;@author jungle&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/test/one&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title function_">testOne</span><span class="params">()</span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//代理类调用</span></span><br><span class="line">        userStaticProxyService.insertUser();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="对原有类进行代理"><a href="#对原有类进行代理" class="headerlink" title="对原有类进行代理"></a>对原有类进行代理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalConfiguration</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> RedisServiceI &amp;&amp; <span class="string">&quot;oldRedisService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">            bean = getProxyBean(bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getProxyBean</span><span class="params">(Object bean)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  Proxy</span><br><span class="line">                .newProxyInstance(</span><br><span class="line">                        <span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                        bean.getClass().getInterfaces(),</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">DynamicProxyHandler</span>(bean)</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><h3 id="静态代理和动态代理的区别"><a href="#静态代理和动态代理的区别" class="headerlink" title="静态代理和动态代理的区别"></a>静态代理和动态代理的区别</h3><ol>
-<li><code>静态代理</code>在编译生成class文件，<code>动态代理</code>在运行时生成字节码加载到JVM</li>
-<li><code>静态代理</code>的<code>代理对象</code>和<code>被代理对象</code>都需要实现同一接口，动态代理则无此限制</li>
-</ol>
-<h3 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h3><h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
-<li><code>需要代理的类</code>需要实现一个接口中的所有抽象方法</li>
-<li>通过<code>Proxy</code>类的<code>newProxyInstance</code>指定<code>类加载器</code>、<code>需要代理的类接口</code>及<code>执行代理类中方法的执行器</code></li>
-<li><code>执行代理类中方法的执行器</code>需要实现<code>InvocationHandler</code>接口，执行调用逻辑</li>
-</ul>
-<p>Proxy  ： 负责动态生成代理</p>
-<ul>
-<li>newProxyInstance<ul>
-<li>ClassLoader   被代理类的类加载器</li>
-<li>Class&lt;?&gt;[]       代理类要实现的接口</li>
-<li>InvocationHandler    代理类中需要加入的功能</li>
-</ul>
-</li>
-</ul>
-<p>InvocationHandler：代理类新增的功能</p>
-<ul>
-<li>invoke<ul>
-<li>Object  proxy   代理的实例</li>
-<li>Method             被拦截的方法</li>
-<li>Object[] args    方法的参数</li>
-</ul>
-</li>
-</ul>
-<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代理工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> target.getClass().getClassLoader();</span><br><span class="line">        <span class="comment">//找到被代理类的所有接口</span></span><br><span class="line">        Class&lt;?&gt;[] interfaces = target.getClass().getInterfaces();</span><br><span class="line">        <span class="comment">//找到代理逻辑</span></span><br><span class="line">        <span class="type">PerformanceMonitorHandler</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PerformanceMonitorHandler</span>(target);</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader,interfaces,h);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PerformanceMonitorHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//执行方法调用</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">proxy</span> <span class="operator">=</span> (NuclearWeaponBoomService)ProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    Object redisBean;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DynamicProxyHandler</span><span class="params">(Object redisBean)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.redisBean = redisBean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        log.info(<span class="string">&quot;代理开始执行:&quot;</span>+method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//调用原有方法</span></span><br><span class="line">            obj = method.invoke(redisBean, args);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InvocationTargetException e)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.getTargetException() <span class="keyword">instanceof</span> BussinessException)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BussinessException</span>(ErrorCode.CA000001,<span class="string">&quot;自定义的异常,需要抛出让全局异常处理&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//执行数据库加锁类的方法</span></span><br><span class="line">            <span class="type">RedisServiceI</span> <span class="variable">bean</span> <span class="operator">=</span> (RedisServiceI) SpringContextUtil.getContext().getBean(<span class="string">&quot;databaseService&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(bean, args);</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(<span class="string">&quot;代理结束执行&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>​	注：曾用此实现了生产Redis降级<del>.</del></p>
-</blockquote>
-<h3 id="CGlib动态代理"><a href="#CGlib动态代理" class="headerlink" title="CGlib动态代理"></a>CGlib动态代理</h3><h4 id="实习方式"><a href="#实习方式" class="headerlink" title="实习方式"></a>实习方式</h4><ul>
-<li>cglib : code generation lib 代码生成库</li>
-<li>使用继承的方式来生成代理类</li>
-<li>代理类继承被代理类，覆盖被代理类的方法，在实现中调用父类的相应方法</li>
-</ul>
-<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//生产工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">        <span class="comment">//创建增强器</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置被代理类,也就是父类</span></span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置方法拦截器,也就是代理逻辑</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">PerformanceMonitorInterceptor</span>());</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorInterceptor</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object target, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//调用父类相应方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> methodProxy.invokeSuper(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//原方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">proxy</span> <span class="operator">=</span> (Nuclear)CglibProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RedisServiceI redisServiceI;</span><br></pre></td></tr></table></figure>
 
-
-
-<h3 id="JDK、CGlib动态代理的区别"><a href="#JDK、CGlib动态代理的区别" class="headerlink" title="JDK、CGlib动态代理的区别"></a>JDK、CGlib动态代理的区别</h3><ul>
-<li>jdk使用接口的方式实现动态代理</li>
-<li>cglib使用继承的方式实现动态代理</li>
-<li>性能：jdk1.8之前 cglib 胜出  、 jdk1.8之后 jdk方式胜出</li>
-<li>spring 默认是用jdk动态代理生成代理类，但是也支持cglib</li>
+<p>因为上面<code>OldRedisService</code>类使用了<code>@Primary</code>注解，所以会优先被注入到接口中</p>
+<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
+<li>上面的方式有个缺点，这样修改后，原来的<code>OldRedisService</code>类就不能被注入了，因为已经被代理了。可以优化一下，不代理原有的<code>OldRedisService</code>类，而是新写一个类，也实现<code>RedisServiceI</code>,新类所有方法全部调用<code>OldRedisService</code>，且使用<code>@Primary</code>保证被优先注入接口，最后代理这个新写的类即可。</li>
+<li>其实还有一个锁的数据一致性问题，在Redis加锁后，Redis崩了，是无法同步到数据库中的，这个处理比较麻烦，如果对业务要求比较高需要注意一下</li>
 </ul>
 ]]></content>
       <categories>
-        <category>设计模式</category>
+        <category>Java</category>
       </categories>
       <tags>
-        <tag>设计模式</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -957,6 +713,86 @@
       </tags>
   </entry>
   <entry>
+    <title>设计模式之代理模式</title>
+    <url>/post/907a70d0.html</url>
+    <content><![CDATA[<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><h3 id="静态代理的特点"><a href="#静态代理的特点" class="headerlink" title="静态代理的特点"></a>静态代理的特点</h3><ul>
+<li><code>代理对象</code>和<code>被代理对象</code>实现同一个接口</li>
+<li><code>代理对象</code>持有<code>被代理对象</code>的引用</li>
+<li>调用时，<code>代理对象</code>调用<code>被代理对象</code>的相应方法，可以在调用的前后，增加额外功能</li>
+</ul>
+<h3 id="静态代理的实例"><a href="#静态代理的实例" class="headerlink" title="静态代理的实例"></a>静态代理的实例</h3><blockquote>
+<p>​	实例作用：保存数据时，进行事务控制</p>
+</blockquote>
+<h3 id="原方法"><a href="#原方法" class="headerlink" title="原方法"></a>原方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="静态代理后"><a href="#静态代理后" class="headerlink" title="静态代理后"></a>静态代理后</h3><p><strong>1.增加接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserServiceI</span> &#123;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.<code>被代理对象</code>实现接口</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UsUserMapper usUserMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//用户信息</span></span><br><span class="line">        <span class="type">UsUser</span> <span class="variable">usUser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UsUser</span>();</span><br><span class="line">        usUser.setUserId(<span class="number">1234567912</span>);</span><br><span class="line">        usUser.setUserAccount(<span class="string">&quot;测试用户&quot;</span>);</span><br><span class="line">        <span class="comment">//插入</span></span><br><span class="line">        usUserMapper.insert(usUser);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.<code>代理对象</code>实现接口，同时持有<code>被代理对象</code>的引用</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserStaticProxyService</span> <span class="keyword">implements</span> <span class="title class_">UserServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    PlatformTransactionManager platformTransactionManager;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    TransactionDefinition transactionDefinition;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertUser</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//开启事务</span></span><br><span class="line">        <span class="type">TransactionStatus</span> <span class="variable">transactionStatus</span> <span class="operator">=</span> platformTransactionManager.getTransaction(transactionDefinition);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            userService.insertUser();</span><br><span class="line">            <span class="comment">//未发生异常,事务提交</span></span><br><span class="line">            platformTransactionManager.commit(transactionStatus);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//发生异常,回滚事务</span></span><br><span class="line">            platformTransactionManager.rollback(transactionStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.使用方式：注入<code>代理类</code>的bean，由<code>代理类</code>持有<code>被代理类</code>的引用来调用方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserStaticProxyService userStaticProxyService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation(value = &quot;第一次测试接口&quot;,notes = &quot;@author jungle&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/test/one&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title function_">testOne</span><span class="params">()</span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//代理类调用</span></span><br><span class="line">        userStaticProxyService.insertUser();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok().build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><h3 id="静态代理和动态代理的区别"><a href="#静态代理和动态代理的区别" class="headerlink" title="静态代理和动态代理的区别"></a>静态代理和动态代理的区别</h3><ol>
+<li><code>静态代理</code>在编译生成class文件，<code>动态代理</code>在运行时生成字节码加载到JVM</li>
+<li><code>静态代理</code>的<code>代理对象</code>和<code>被代理对象</code>都需要实现同一接口，动态代理则无此限制</li>
+</ol>
+<h3 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h3><h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
+<li><code>需要代理的类</code>需要实现一个接口中的所有抽象方法</li>
+<li>通过<code>Proxy</code>类的<code>newProxyInstance</code>指定<code>类加载器</code>、<code>需要代理的类接口</code>及<code>执行代理类中方法的执行器</code></li>
+<li><code>执行代理类中方法的执行器</code>需要实现<code>InvocationHandler</code>接口，执行调用逻辑</li>
+</ul>
+<p>Proxy  ： 负责动态生成代理</p>
+<ul>
+<li>newProxyInstance<ul>
+<li>ClassLoader   被代理类的类加载器</li>
+<li>Class&lt;?&gt;[]       代理类要实现的接口</li>
+<li>InvocationHandler    代理类中需要加入的功能</li>
+</ul>
+</li>
+</ul>
+<p>InvocationHandler：代理类新增的功能</p>
+<ul>
+<li>invoke<ul>
+<li>Object  proxy   代理的实例</li>
+<li>Method             被拦截的方法</li>
+<li>Object[] args    方法的参数</li>
+</ul>
+</li>
+</ul>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代理工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> target.getClass().getClassLoader();</span><br><span class="line">        <span class="comment">//找到被代理类的所有接口</span></span><br><span class="line">        Class&lt;?&gt;[] interfaces = target.getClass().getInterfaces();</span><br><span class="line">        <span class="comment">//找到代理逻辑</span></span><br><span class="line">        <span class="type">PerformanceMonitorHandler</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PerformanceMonitorHandler</span>(target);</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader,interfaces,h);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">NuclearWeaponBoomService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PerformanceMonitorHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//执行方法调用</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">NuclearWeaponBoomService</span> <span class="variable">proxy</span> <span class="operator">=</span> (NuclearWeaponBoomService)ProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	注：曾用此实现了生产Redis降级<del>.</del></p>
+</blockquote>
+<h3 id="CGlib动态代理"><a href="#CGlib动态代理" class="headerlink" title="CGlib动态代理"></a>CGlib动态代理</h3><h4 id="实习方式"><a href="#实习方式" class="headerlink" title="实习方式"></a>实习方式</h4><ul>
+<li>cglib : code generation lib 代码生成库</li>
+<li>使用继承的方式来生成代理类</li>
+<li>代理类继承被代理类，覆盖被代理类的方法，在实现中调用父类的相应方法</li>
+</ul>
+<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//生产工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyFactory</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">createProxy</span><span class="params">(Object target)</span>&#123;</span><br><span class="line">        <span class="comment">//创建增强器</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置被代理类,也就是父类</span></span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置方法拦截器,也就是代理逻辑</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">PerformanceMonitorInterceptor</span>());</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;  i&gt; <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;线程异常&quot;</span>,e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;boom&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//代理逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerformanceMonitorInterceptor</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object target, Method method, Object[] args, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//前置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">before</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="comment">//调用父类相应方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> methodProxy.invokeSuper(target, args);</span><br><span class="line">        <span class="comment">//后置处理</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">after</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;方法:&quot;</span>+method.getName()+<span class="string">&quot;共执行了:&quot;</span>+(after-before)+<span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//原方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Nuclear</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startBoom</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PerfApp</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">nwbs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NuclearWeaponBoomServiceImpl</span>();</span><br><span class="line">        <span class="type">Nuclear</span> <span class="variable">proxy</span> <span class="operator">=</span> (Nuclear)CglibProxyFactory.createProxy(nwbs);</span><br><span class="line">        proxy.startBoom();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDK、CGlib动态代理的区别"><a href="#JDK、CGlib动态代理的区别" class="headerlink" title="JDK、CGlib动态代理的区别"></a>JDK、CGlib动态代理的区别</h3><ul>
+<li>jdk使用接口的方式实现动态代理</li>
+<li>cglib使用继承的方式实现动态代理</li>
+<li>性能：jdk1.8之前 cglib 胜出  、 jdk1.8之后 jdk方式胜出</li>
+<li>spring 默认是用jdk动态代理生成代理类，但是也支持cglib</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计模式之美</title>
     <url>/post/ba23f4e8.html</url>
     <content><![CDATA[<hr>
@@ -1132,6 +968,170 @@
       </categories>
       <tags>
         <tag>书籍</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<p><img src="https://file.ajungle.cn/img/sohucs.jpg" height="300px" width="100%"></img></p>
+<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
+<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
+<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
+<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
+<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
+<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
+<p>我觉得实在是奇观，也觉得很荒唐。</p>
+<p>更觉得可悲。</p>
+<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
+<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
+<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
+<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
+<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
+<p>周天，天朗气清、惠风和畅，出门玩耍</p>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
+<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
+<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
+<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
+<p>后面怎么办呢？</p>
+<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
+<p>编程</p>
+<ul>
+<li>算法与数据结构，继续刷牛客网（优先级1）</li>
+<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
+<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
+<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+</ul>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
       </tags>
   </entry>
 </search>
