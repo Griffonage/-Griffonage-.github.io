@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>夜雨灯</title>
+  <title>学习知识总结</title>
   
   <subtitle>越贴近真实,真实越荒诞</subtitle>
-  <link href="https://ajungle.cn/atom.xml" rel="self"/>
+  <link href="https://runlevel.top/atom.xml" rel="self"/>
   
-  <link href="https://ajungle.cn/"/>
+  <link href="https://runlevel.top/"/>
   <updated>2022-12-22T13:42:46.857Z</updated>
-  <id>https://ajungle.cn/</id>
+  <id>https://runlevel.top/</id>
   
   <author>
     <name>Aug Jungle</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>文章总目录</title>
-    <link href="https://ajungle.cn/post/ef59632d.html"/>
-    <id>https://ajungle.cn/post/ef59632d.html</id>
+    <link href="https://runlevel.top/post/ef59632d.html"/>
+    <id>https://runlevel.top/post/ef59632d.html</id>
     <published>2022-12-03T12:28:00.000Z</published>
     <updated>2022-12-22T13:42:46.857Z</updated>
     
@@ -35,17 +35,17 @@
     
     
     
-    <category term="目录" scheme="https://ajungle.cn/categories/%E7%9B%AE%E5%BD%95/"/>
+    <category term="目录" scheme="https://runlevel.top/categories/%E7%9B%AE%E5%BD%95/"/>
     
     
-    <category term="目录" scheme="https://ajungle.cn/tags/%E7%9B%AE%E5%BD%95/"/>
+    <category term="目录" scheme="https://runlevel.top/tags/%E7%9B%AE%E5%BD%95/"/>
     
   </entry>
   
   <entry>
     <title>杂谈</title>
-    <link href="https://ajungle.cn/post/bf4ee09f.html"/>
-    <id>https://ajungle.cn/post/bf4ee09f.html</id>
+    <link href="https://runlevel.top/post/bf4ee09f.html"/>
+    <id>https://runlevel.top/post/bf4ee09f.html</id>
     <published>2022-10-06T14:49:00.000Z</published>
     <updated>2022-12-22T14:46:57.488Z</updated>
     
@@ -56,17 +56,17 @@
     
     
     
-    <category term="日记" scheme="https://ajungle.cn/categories/%E6%97%A5%E8%AE%B0/"/>
+    <category term="日记" scheme="https://runlevel.top/categories/%E6%97%A5%E8%AE%B0/"/>
     
     
-    <category term="日记" scheme="https://ajungle.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    <category term="日记" scheme="https://runlevel.top/tags/%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>设计原则</title>
-    <link href="https://ajungle.cn/post/a151c9f2.html"/>
-    <id>https://ajungle.cn/post/a151c9f2.html</id>
+    <link href="https://runlevel.top/post/a151c9f2.html"/>
+    <id>https://runlevel.top/post/a151c9f2.html</id>
     <published>2022-09-22T10:42:05.000Z</published>
     <updated>2022-10-02T08:34:25.144Z</updated>
     
@@ -77,17 +77,17 @@
     
     
     
-    <category term="编程" scheme="https://ajungle.cn/categories/%E7%BC%96%E7%A8%8B/"/>
+    <category term="编程" scheme="https://runlevel.top/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="设计原则" scheme="https://ajungle.cn/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"/>
+    <category term="设计原则" scheme="https://runlevel.top/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"/>
     
   </entry>
   
   <entry>
     <title>中秋放个我喜欢的歌曲</title>
-    <link href="https://ajungle.cn/post/ff094b6e.html"/>
-    <id>https://ajungle.cn/post/ff094b6e.html</id>
+    <link href="https://runlevel.top/post/ff094b6e.html"/>
+    <id>https://runlevel.top/post/ff094b6e.html</id>
     <published>2022-09-10T13:54:05.000Z</published>
     <updated>2022-10-06T14:04:57.098Z</updated>
     
@@ -101,17 +101,17 @@
     
     
     
-    <category term="视频" scheme="https://ajungle.cn/categories/%E8%A7%86%E9%A2%91/"/>
+    <category term="视频" scheme="https://runlevel.top/categories/%E8%A7%86%E9%A2%91/"/>
     
     
-    <category term="视频" scheme="https://ajungle.cn/tags/%E8%A7%86%E9%A2%91/"/>
+    <category term="视频" scheme="https://runlevel.top/tags/%E8%A7%86%E9%A2%91/"/>
     
   </entry>
   
   <entry>
     <title>国内访问Github提速教程</title>
-    <link href="https://ajungle.cn/post/901f844.html"/>
-    <id>https://ajungle.cn/post/901f844.html</id>
+    <link href="https://runlevel.top/post/901f844.html"/>
+    <id>https://runlevel.top/post/901f844.html</id>
     <published>2022-08-14T05:22:10.000Z</published>
     <updated>2022-12-03T12:58:44.727Z</updated>
     
@@ -122,17 +122,17 @@
     
     
     
-    <category term="Github" scheme="https://ajungle.cn/categories/Github/"/>
+    <category term="Github" scheme="https://runlevel.top/categories/Github/"/>
     
     
-    <category term="Github" scheme="https://ajungle.cn/tags/Github/"/>
+    <category term="Github" scheme="https://runlevel.top/tags/Github/"/>
     
   </entry>
   
   <entry>
     <title>MySQL从MVCC到ReadView</title>
-    <link href="https://ajungle.cn/post/23ffdd3c.html"/>
-    <id>https://ajungle.cn/post/23ffdd3c.html</id>
+    <link href="https://runlevel.top/post/23ffdd3c.html"/>
+    <id>https://runlevel.top/post/23ffdd3c.html</id>
     <published>2022-07-12T10:17:00.000Z</published>
     <updated>2022-07-25T09:19:33.081Z</updated>
     
@@ -143,17 +143,17 @@
     
     
     
-    <category term="数据库" scheme="https://ajungle.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <category term="数据库" scheme="https://runlevel.top/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-    <category term="MySQL" scheme="https://ajungle.cn/tags/MySQL/"/>
+    <category term="MySQL" scheme="https://runlevel.top/tags/MySQL/"/>
     
   </entry>
   
   <entry>
     <title>JDK8之List转Map实现解析</title>
-    <link href="https://ajungle.cn/post/9a372c09.html"/>
-    <id>https://ajungle.cn/post/9a372c09.html</id>
+    <link href="https://runlevel.top/post/9a372c09.html"/>
+    <id>https://runlevel.top/post/9a372c09.html</id>
     <published>2022-04-23T09:08:00.000Z</published>
     <updated>2022-07-28T08:21:58.393Z</updated>
     
@@ -164,19 +164,19 @@
     
     
     
-    <category term="编程" scheme="https://ajungle.cn/categories/%E7%BC%96%E7%A8%8B/"/>
+    <category term="编程" scheme="https://runlevel.top/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="JDK8" scheme="https://ajungle.cn/tags/JDK8/"/>
+    <category term="JDK8" scheme="https://runlevel.top/tags/JDK8/"/>
     
-    <category term="编程" scheme="https://ajungle.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    <category term="编程" scheme="https://runlevel.top/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
   <entry>
     <title>设计模式之代理模式</title>
-    <link href="https://ajungle.cn/post/907a70d0.html"/>
-    <id>https://ajungle.cn/post/907a70d0.html</id>
+    <link href="https://runlevel.top/post/907a70d0.html"/>
+    <id>https://runlevel.top/post/907a70d0.html</id>
     <published>2022-02-10T12:28:00.000Z</published>
     <updated>2022-12-03T13:02:07.460Z</updated>
     
@@ -187,17 +187,17 @@
     
     
     
-    <category term="设计模式" scheme="https://ajungle.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    <category term="设计模式" scheme="https://runlevel.top/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
     
-    <category term="设计模式" scheme="https://ajungle.cn/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    <category term="设计模式" scheme="https://runlevel.top/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   
   <entry>
     <title>设计模式之美</title>
-    <link href="https://ajungle.cn/post/ba23f4e8.html"/>
-    <id>https://ajungle.cn/post/ba23f4e8.html</id>
+    <link href="https://runlevel.top/post/ba23f4e8.html"/>
+    <id>https://runlevel.top/post/ba23f4e8.html</id>
     <published>2022-01-05T13:30:00.000Z</published>
     <updated>2022-12-03T13:08:12.258Z</updated>
     
@@ -208,17 +208,17 @@
     
     
     
-    <category term="书籍" scheme="https://ajungle.cn/categories/%E4%B9%A6%E7%B1%8D/"/>
+    <category term="书籍" scheme="https://runlevel.top/categories/%E4%B9%A6%E7%B1%8D/"/>
     
     
-    <category term="书籍" scheme="https://ajungle.cn/tags/%E4%B9%A6%E7%B1%8D/"/>
+    <category term="书籍" scheme="https://runlevel.top/tags/%E4%B9%A6%E7%B1%8D/"/>
     
   </entry>
   
   <entry>
     <title>《Effective Java》学习笔记</title>
-    <link href="https://ajungle.cn/post/e1b9f839.html"/>
-    <id>https://ajungle.cn/post/e1b9f839.html</id>
+    <link href="https://runlevel.top/post/e1b9f839.html"/>
+    <id>https://runlevel.top/post/e1b9f839.html</id>
     <published>2021-11-27T10:27:00.000Z</published>
     <updated>2022-11-30T14:05:30.684Z</updated>
     
@@ -229,17 +229,17 @@
     
     
     
-    <category term="书籍" scheme="https://ajungle.cn/categories/%E4%B9%A6%E7%B1%8D/"/>
+    <category term="书籍" scheme="https://runlevel.top/categories/%E4%B9%A6%E7%B1%8D/"/>
     
     
-    <category term="编程,书籍" scheme="https://ajungle.cn/tags/%E7%BC%96%E7%A8%8B-%E4%B9%A6%E7%B1%8D/"/>
+    <category term="编程,书籍" scheme="https://runlevel.top/tags/%E7%BC%96%E7%A8%8B-%E4%B9%A6%E7%B1%8D/"/>
     
   </entry>
   
   <entry>
     <title>MySQL排序后分页错乱问题分析</title>
-    <link href="https://ajungle.cn/post/5c684e4d.html"/>
-    <id>https://ajungle.cn/post/5c684e4d.html</id>
+    <link href="https://runlevel.top/post/5c684e4d.html"/>
+    <id>https://runlevel.top/post/5c684e4d.html</id>
     <published>2021-11-12T11:55:50.000Z</published>
     <updated>2022-11-26T08:38:58.187Z</updated>
     
@@ -250,17 +250,17 @@
     
     
     
-    <category term="数据库" scheme="https://ajungle.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <category term="数据库" scheme="https://runlevel.top/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-    <category term="MySQL" scheme="https://ajungle.cn/tags/MySQL/"/>
+    <category term="MySQL" scheme="https://runlevel.top/tags/MySQL/"/>
     
   </entry>
   
   <entry>
     <title>记一次成都学车经历</title>
-    <link href="https://ajungle.cn/post/ca641055.html"/>
-    <id>https://ajungle.cn/post/ca641055.html</id>
+    <link href="https://runlevel.top/post/ca641055.html"/>
+    <id>https://runlevel.top/post/ca641055.html</id>
     <published>2021-05-16T13:30:00.000Z</published>
     <updated>2022-07-24T02:29:19.921Z</updated>
     
@@ -271,17 +271,17 @@
     
     
     
-    <category term="日记" scheme="https://ajungle.cn/categories/%E6%97%A5%E8%AE%B0/"/>
+    <category term="日记" scheme="https://runlevel.top/categories/%E6%97%A5%E8%AE%B0/"/>
     
     
-    <category term="日记" scheme="https://ajungle.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    <category term="日记" scheme="https://runlevel.top/tags/%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>JDK动态代理实现Redis降级</title>
-    <link href="https://ajungle.cn/post/a4854be7.html"/>
-    <id>https://ajungle.cn/post/a4854be7.html</id>
+    <link href="https://runlevel.top/post/a4854be7.html"/>
+    <id>https://runlevel.top/post/a4854be7.html</id>
     <published>2021-03-24T13:05:34.000Z</published>
     <updated>2022-12-22T13:11:12.051Z</updated>
     
@@ -292,10 +292,10 @@
     
     
     
-    <category term="Java" scheme="https://ajungle.cn/categories/Java/"/>
+    <category term="Java" scheme="https://runlevel.top/categories/Java/"/>
     
     
-    <category term="Java" scheme="https://ajungle.cn/tags/Java/"/>
+    <category term="Java" scheme="https://runlevel.top/tags/Java/"/>
     
   </entry>
   

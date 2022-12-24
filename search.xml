@@ -24,6 +24,64 @@
       </tags>
   </entry>
   <entry>
+    <title>《Effective Java》学习笔记</title>
+    <url>/post/e1b9f839.html</url>
+    <content><![CDATA[<blockquote>
+<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
+</blockquote>
+<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>有名字</p>
+</li>
+<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
+</li>
+<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
+</li>
+<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
+</li>
+<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>没有public或者protected构造方法的类不能被子类化</p>
+</li>
+<li><p>API文档中很难找到</p>
+</li>
+</ul>
+<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>解决参数过多问题</li>
+<li>可以对参数间依赖关系进行校验</li>
+<li>去掉创建对象时的中间状态</li>
+<li>可以不暴露类中的set方法，使其变成不可变对象</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>创建对象前必须先创建它的builder</li>
+<li>代码比较复杂，4个以上参数才适用</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
+<p>简单情况下可以直接使用@Builder</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
+<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
+<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
+<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由JVM保证线程安全，同时实现了懒加载</p>
+<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
+]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>编程,书籍</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>国内访问Github提速教程</title>
     <url>/post/901f844.html</url>
     <content><![CDATA[<p>在国内访问Github时会出现速度太慢问题,Picgo上传到Github图床也会出现无法预览情况</p>
@@ -47,170 +105,6 @@
       </categories>
       <tags>
         <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>中秋放个我喜欢的歌曲</title>
-    <url>/post/ff094b6e.html</url>
-    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
-]]></content>
-      <categories>
-        <category>视频</category>
-      </categories>
-      <tags>
-        <tag>视频</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<p><img src="https://file.ajungle.cn/img/sohucs.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
-<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
-<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
-<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
-<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
-<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
-<p>我觉得实在是奇观，也觉得很荒唐。</p>
-<p>更觉得可悲。</p>
-<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
-<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
-<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
-<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
-<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
-<p>周天，天朗气清、惠风和畅，出门玩耍</p>
-<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
-<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
-<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
-<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
-<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
-<p>后面怎么办呢？</p>
-<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
-<p>编程</p>
-<ul>
-<li>算法与数据结构，继续刷牛客网（优先级1）</li>
-<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
-<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
-<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
-</ul>
-<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
-<blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次成都学车经历</title>
-    <url>/post/ca641055.html</url>
-    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
-<p>结束时间:<code>2020年12月14日</code></p>
-<p>总用时:<code>两个月</code></p>
-<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
-<p>科目一</p>
-<ul>
-<li>考试时间:<code>10月20日</code></li>
-<li>考试费用:<code>100</code>元</li>
-<li>备考时间:<code>1</code>天</li>
-</ul>
-<p>科目二</p>
-<ul>
-<li>考试时间:<code>12月04日</code></li>
-<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
-<li>总次数:<code>14</code>次</li>
-</ul>
-</li>
-</ul>
-<p>科目三</p>
-<ul>
-<li>考试时间:<code>12月14日</code></li>
-<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
-<li>总次数:<code>4</code>次</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
-</blockquote>
-<p>总费用:</p>
-<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
-<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
-<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
-<blockquote>
-<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
-</blockquote>
-<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
-<p>按照以下步骤:</p>
-<ul>
-<li><p>做精题</p>
-<ul>
-<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
-</ul>
-</li>
-<li><p>做总结归纳</p>
-<ul>
-<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
-</ul>
-</li>
-<li><p>刷错题(不多说)</p>
-</li>
-<li><p>多余时间刷本地区特有题目</p>
-<ul>
-<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
-</ul>
-</li>
-</ul>
-<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
-<p>结果:考试<code>98</code>分</p>
-<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
-<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
-<p><strong>科目二应该是练习时间花费最长的。</strong></p>
-<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
-<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
-<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
-<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>必做”精简题”,再做一般题(狂刷完事)</li>
-<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
-<li>必须要参加”模拟考试”,虽然要多加钱</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
       </tags>
   </entry>
   <entry>
@@ -472,6 +366,170 @@
       </categories>
       <tags>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>中秋放个我喜欢的歌曲</title>
+    <url>/post/ff094b6e.html</url>
+    <content><![CDATA[<video src="https://file.ajungle.cn/video/CanonRock.mp4" preload="metadata" controlslist="nodownload" controls playsinline poster=""></video>
+]]></content>
+      <categories>
+        <category>视频</category>
+      </categories>
+      <tags>
+        <tag>视频</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<p><img src="https://file.ajungle.cn/img/sohucs.jpg" height="300px" width="100%"></img></p>
+<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
+<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
+<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
+<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
+<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
+<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
+<p>我觉得实在是奇观，也觉得很荒唐。</p>
+<p>更觉得可悲。</p>
+<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
+<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
+<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
+<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
+<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
+<p>周天，天朗气清、惠风和畅，出门玩耍</p>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
+<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
+<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
+<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
+<p>后面怎么办呢？</p>
+<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
+<p>编程</p>
+<ul>
+<li>算法与数据结构，继续刷牛客网（优先级1）</li>
+<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
+<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
+<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+</ul>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
       </tags>
   </entry>
   <entry>
@@ -896,64 +954,6 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《Effective Java》学习笔记</title>
-    <url>/post/e1b9f839.html</url>
-    <content><![CDATA[<blockquote>
-<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
-</blockquote>
-<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li><p>有名字</p>
-</li>
-<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
-</li>
-<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
-</li>
-<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
-</li>
-<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
-</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><p>没有public或者protected构造方法的类不能被子类化</p>
-</li>
-<li><p>API文档中很难找到</p>
-</li>
-</ul>
-<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>解决参数过多问题</li>
-<li>可以对参数间依赖关系进行校验</li>
-<li>去掉创建对象时的中间状态</li>
-<li>可以不暴露类中的set方法，使其变成不可变对象</li>
-</ul>
-<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>创建对象前必须先创建它的builder</li>
-<li>代码比较复杂，4个以上参数才适用</li>
-</ul>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
-<p>简单情况下可以直接使用@Builder</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
-
-<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
-<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
-<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
-<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由JVM保证线程安全，同时实现了懒加载</p>
-<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
-]]></content>
-      <categories>
-        <category>书籍</category>
-      </categories>
-      <tags>
-        <tag>编程,书籍</tag>
       </tags>
   </entry>
   <entry>
