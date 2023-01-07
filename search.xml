@@ -24,421 +24,61 @@
       </tags>
   </entry>
   <entry>
-    <title>基于DDD领域驱动电商履约案例实战</title>
-    <url>/post/7e0416c.html</url>
-    <content><![CDATA[<h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a>战略设计</h2><p>有界上下文的划分、映射、子域类型（核心子域、支持子域、通用子域）的确定、通用语言的确定</p>
-<p><strong>有界上下文</strong></p>
-<p>每个有界上下文，都有自己的一套问题要解决，有界上下文 -&gt; 子域 -&gt; 通用语言 -&gt; 一个小团队&#x2F;个人 -&gt; 子系统&#x2F;微服务</p>
-<p>领域包含多个子域（多个有界上下文），一般来说子域和有界上下文一一对应（无强制）</p>
-<p><strong>通用语言</strong></p>
-<p>限定于当前有界上下文的边界范围之内，专门描述你的有界上下文里各种各</p>
-<p>事情，如：动作、操作、行为、名词、事务、字段、数据、状态、命令、事件</p>
-<p>等，全部要有一套统一的命名规范&#x2F;规定 -&gt; 通用语言</p>
-<h3 id="用事件风暴会议寻找履约有界上下文"><a href="#用事件风暴会议寻找履约有界上下文" class="headerlink" title="用事件风暴会议寻找履约有界上下文"></a>用事件风暴会议寻找履约有界上下文</h3><ul>
-<li>开启会议，召集程序员、用户、产品经理、管理者、其它人，开始一块梳理，**相关的所有事件（动词、动作），有多少事件就说多少时间，但凡是跟**相关的事件，都可以说出来</li>
-<li>把所有梳理出来的**相关的时间，按照时间线进行排列，按照时间发生的先后顺序，做一个梳理</li>
-<li>梳理出来**相关的所有的用户界面和命令，针对所有上面的所有事件的发生，是否有系统用户界面，有用户参与进来发出一个指令、命令（在系统界面里，点击按钮、提交表单、发起操作），驱动了履约各个事件的执行</li>
-<li>把用户界面、命令、事件，安装时间线，先后顺序，交互逻辑，全部串联起来，一环一环的</li>
-<li>在上面的那个大串联的逻辑里，找出来履约有界上下文，哪些事情应该是要属于履约要解决的问题，哪些事情明显是属于别的有界上下文，是属于别人要去做的事情</li>
-</ul>
-<blockquote>
-<p>​	根据对业务的理解，把技术的东西剥离掉，把数据库表的设计全部剥离掉，纯粹站在业务的角度，去进行风暴会议，梳理出所有业务相关的流程和东西</p>
+    <title>《Effective Java》学习笔记</title>
+    <url>/post/e1b9f839.html</url>
+    <content><![CDATA[<blockquote>
+<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
 </blockquote>
-<h3 id="不同子域类型分析"><a href="#不同子域类型分析" class="headerlink" title="不同子域类型分析"></a>不同子域类型分析</h3><p>核心子域：对于**领域而言，用于完成用户**这个核心需求，所需要具备的一些核心子域(例如淘宝：商品子域、订单子域、支付子域、履约子域、会员子域、营销子域)</p>
-<p>支持子域：负责支持核心子域（例如淘宝：仓储子域、物流子域 -&gt; 履约子域；财务子域；报表子域）</p>
-<p>通用子域：不用自己公司开发，都是外购的软件，或者是第三方的通用的平台和系统(例如：第三方支付平台、第三方物流平台)</p>
-<h3 id="上下文映射"><a href="#上下文映射" class="headerlink" title="上下文映射"></a>上下文映射</h3><p>确定各个上下文的交互关系</p>
-<p>separate way：完全没关系</p>
-<p>customer-supplier：c-s，常见于大的项目组内不同小项目之间的依赖关系</p>
-<p>publish-subscribe：p-s，有一方发布一个事件，另外一方监听事件以及处理这个事件。对于一个有界上下文，如果有和别的有界上下文进行交互，可以选择发布一个事件出去（别人接收或者自己接收处理这个事件）</p>
-<p><strong>额外</strong></p>
-<p>anti corruption layer：acl，防腐层，不是一个孤立、单独使用的映射关系，一般是跟其它映射关系，一起进行使用，CS关系、PS关系中，以CS关系为例，supplier给我接口返回的字段发生了改变（名称或者类型或者值）,对于我来说，可以不直接修改我的代码，而是增加一个防腐层，对返回的东西，做一个适配和转化，将它转化成一个固定的对象，保持名称、类型、值都是不变的。后面只要维护防腐层就行了</p>
-<h3 id="通用语言"><a href="#通用语言" class="headerlink" title="通用语言"></a>通用语言</h3><p>每个有界上下文里面，对所有的名词和动词，业务操作、业务事件、业务语义，都用统一的一套规则和规范去做</p>
-<p>例如：</p>
-<p>ReceiveOrder、OrderFullfillEvent、PreAllocateWarehouse、RiskIntercept、RiskAudit、AllocateWarehouseAgain、AllocateTrasportCompany、IssurToWarehouse -&gt;修改里面的命名规则，必须有通用语言制定的过程，写一套文档。</p>
-<h2 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a>战术设计</h2><p>牵扯到类层面的设计，设计自己的上下文里有哪些类，这些类如何配合，可以实现上下文里要解决的各种各样的问题</p>
-<p>聚合（实体、值对象）+仓储（基于具体的技术实现聚合数据得到持久化和读取、领域服务、业务组件、领域事件（DomainEvent）、命令（Command）和查询（Query）、接口层（controller、api、listener）、应用服务层（application service layer）</p>
-<p>当执行完一个业务动作以后，你要调用其他的上下文，此时你可以给其他上下文，发起命令，让他执行一些动作，也可以发起查询，从他里面执行一些查询，也可以发布一个事件，驱动别的上下文监听事件，继续执行他的业务流程。</p>
-<h3 id="实体"><a href="#实体" class="headerlink" title="实体"></a>实体</h3><p>项目代码里的domain类，Order（有唯一的标识，OrderId它里面有很多的数据可以变化），我们的上下文里，对一些核心的数据，一般来说都会设计一些类出来，如果它有唯一标识，而且数据是允许变化的，此时，在ddd战术设计里，它被称为Entity,这样一个概念。</p>
-<h3 id="值对象"><a href="#值对象" class="headerlink" title="值对象"></a>值对象</h3><p>valueObject，ObjectId(建模成一个独立的类)，对于一个订单，它的唯一标识，OrderId而言，里面可能包含和封装了订单在<code>数据库里唯一的主键</code>以及<code>我们分配给它的一个订单编号</code>，这些东西，是绝对不会变化的，而且OrderId自己就没有必要再有一个自己的唯一标识，OrderId自己就没有必要再有一个自己的唯一标识，它代表的就是一份不会变化的数据，ddd里面战术设计里称之为值对象。</p>
-<h3 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h3><p>Aggregate，面向数据库的设计，一个表队友domain&#x2F;entity包里面的一个class</p>
-<p>Order、OrderItem、OrderFulfill，每个class里面就对应了表里的各个字段，一般来说不会说在建模的时候，Order包含了OrderItem，OrderItem里有一个OrderId这个字段，表示它们之间的一个关系。</p>
-<p>ddd里要求将有强关系的class进行聚合，例如：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long orderId;</span><br><span class="line">    <span class="comment">//有几十个order自己的字段</span></span><br><span class="line">    List&lt;OrderItem&gt; orderItems;</span><br><span class="line">    DeliveryAddress deliveryAddress;</span><br><span class="line">    PayType payType;</span><br><span class="line">    PaymentDetail paymentDetail;</span><br><span class="line">    OrderSnapshot orderSnapshot;</span><br><span class="line">    OrderStatus orderStatus;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//收获地址，就是属于典型的一个class，它也是一个东西</span></span><br></pre></td></tr></table></figure>
-
-<p>一个聚合代表了多个class绑定在一起，放在一块，一个聚合里，聚合根，aggregate root，一组聚合在一起的class，放在最外面的，最上层的，就是一个聚合根</p>
-<p>收获地址，就是属于典型的一个class，它就是一个东西</p>
-<p>聚合是有一个边界概念，聚合里面的classes生命周期，是一致的，创建的时候，就一起创建了，更新得到时候一起更新了，删除的时候一起删除了。一个聚合里面的这些东西的更新，必须放在一个事务里，确保一起成功，或者一起失败。</p>
-<p><code>一个聚合里可以包含一些实体，也可以包含一些值对象，聚合可以是多个层次的</code></p>
-<h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>贫血模型：仅仅包含数据，仅有getter、setter</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="comment">//几十个字段</span></span><br><span class="line">    <span class="comment">//几十个getter和setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>业务逻辑主要封装在Service里，Service主要依赖多个DAO，进行一系列增删改查来实现业务逻辑</p>
-<p>充血模型：要把聚合（实体、值对象），根据业务语义，放进一些核心的业务逻辑行为（不是面向数据库设计的一些行为）</p>
-<h3 id="领域服务和聚合设计"><a href="#领域服务和聚合设计" class="headerlink" title="领域服务和聚合设计"></a>领域服务和聚合设计</h3><p>聚合（实体、值对象）+ 业务行为（充血模型）</p>
-<p>有一些业务行为，是没有办法放在聚合里面的，Order举个例子：对多个Order进行运算，业务逻辑不可能放在Order里面去设计这个语义，这时就需要领域服务（一般针对多个聚合执行的业务行为）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XXService</span>&#123;</span><br><span class="line">    <span class="comment">//包含一些没法直接放在聚合里的业务行为</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>业务组件：包含贴合业务语义的组件，在业务场景里，有一个概念<code>业务状态机</code>，不属于聚合、领域服务，它其实是一个业务组件</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderStatusMachine</span>&#123;<span class="comment">//符合业务语义的业务组件</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>聚合（数据+行为）+ 领域服务 + 业务组件</p>
-<p>验证DDD是否成功，在于用代码还原一套完整的业务语义、业务流程、业务模型，这套代码，主流程，找产品经理走读代码，通过英文单词+一些注释，是否能够理解业务语义和流程。</p>
-<h3 id="串联业务流程（命令、领域事件）"><a href="#串联业务流程（命令、领域事件）" class="headerlink" title="串联业务流程（命令、领域事件）"></a>串联业务流程（命令、领域事件）</h3><p><strong>人驱动发起的命令：</strong>核心业务动作和行为，人驱动的（web、APP），Command一般是更新数据一类的动作，Query一般是进行查询类的动作。用来驱动领域服务的核心业务逻辑和方法的执行。</p>
-<p>AuditOrderCommand（订单审核，是人发起的一个动作和命令）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>领域事件：</strong>Event、OrderPayedEvent（订单已支付的事件），就要驱动和发起履约流程，所以我们的订单上下文，可以发布出来订单已支付的事件，履约上下文，可以去订阅这个订单已支付的事件，一旦订单被支付了，就可以开始进行履约</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> OrderFullfill <span class="title function_">receivePayedOrder</span><span class="params">(OrderPayedEvent orderPayedEvent)</span>&#123;</span><br><span class="line">        <span class="comment">//第一个业务语义和动作，就是要接收订单，存储数据道自己履约上下文里面</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">preAllocateWarehouse</span><span class="params">(OrderFullfill orderFullfill)</span>&#123;</span><br><span class="line"> 		<span class="comment">//结合多个聚合体、业务组件，完成预分仓的业余语义和动作       </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="仓储-Repository"><a href="#仓储-Repository" class="headerlink" title="仓储(Repository)"></a>仓储(Repository)</h3><p>repository：用来把聚合数据、实体，把我们的数据跟具体的持久层进行一个交互，如果说要从持久层查询一个聚合出来，此时就用那个聚合对应的仓储来查询</p>
-<p>Order -&gt; OrderRepository</p>
-<p>Order order &#x3D; orderRepository.getById(orderId);&#x2F;&#x2F;如果说底层上用缓存、es、nosql、mq以及其他持久层技术，都是封装道仓储的底层，对我们领域模型层来说，是不关系技术细节，具体技术细节，封装在仓储里的，crud、缓存、es、建立es索引、写mq、消费mq</p>
-<h3 id="履约上下文各个业务流程"><a href="#履约上下文各个业务流程" class="headerlink" title="履约上下文各个业务流程"></a>履约上下文各个业务流程</h3><ol>
-<li>订单履约：保存订单、预分仓、风控拦截、通知人工进行审核（可选）、分物流、下库房</li>
-<li>人工审核：审核订单、取消订单、重分仓（可选）、分物流、下库房</li>
-</ol>
-<p>接收订单 -&gt; 监听订单已支付领域事件</p>
-<p>保存订单 -&gt; 将订单相关的数据保存在履约上下文的仓储里面</p>
-<p>预分仓 -&gt; 获取所有仓库、从所有仓库里选择距离订单收获地址最近的仓库、检查仓库的库存是否充足、锁定仓库库存、把订单分配给仓库</p>
-<p>风控拦截 -&gt; 调用风控上下文的风控拦截的动作，去看是否能够通过风控拦截</p>
-<p>分物流 -&gt; 调用物流上下文的获取所有物流公司、从所有物流公司里选择距离分配仓库最合适的物流公司、对这个物流公司申请电子面单（物流单）、把订单分配给物流公司</p>
-<p>下库房 -&gt; 调用仓储上下文的下发订单履约给指定的仓库</p>
-<p>通知人工审核 -&gt; 发布出去一个事件和通知</p>
-<p>人工审核 -&gt; 重分仓（可选）、分物流、下库房</p>
-<p>取消订单 -&gt; 发布一个订单取消事件，让订单上下文来处理</p>
-<p>重分仓 -&gt; 指定一个仓库，把订单分配给指定仓库</p>
-<h3 id="接口层和应用服务层"><a href="#接口层和应用服务层" class="headerlink" title="接口层和应用服务层"></a>接口层和应用服务层</h3><p>对外提供服务的系统，接口层（最外层跟用户界面、其他上下文进行交互的一层，表现层），DDD里最外面一层对接用户的，对接用户界面发送的一些命令，command或者query，controller（ssm框架里得到spring mvc对外提供的controller，接口层），对用户界面提供对应的http接口的</p>
-<p>如果我们的有界上下文，是对其他的有界上下文提供映射和交互的，提供一个内部调用得到接口，一般来说，内部的接口，我们一般命名为XxxApi</p>
-<p>DDD最外侧的接口层</p>
-<ul>
-<li>通过spring cloud netflix（openfeign）或者是spring cloud alibaba（dubbo）rpc框架，对外去提供一套api接口，供其他上下文来进行调用和交互</li>
-<li>如果说，别的有界上下文会发布一个领域事件出来，发布到MQ、RocketMQ、RabbitMQ、Kafka这样子，我们就需要去进行领域事件监听，这个负责领域事件监听的监听器，listener，rocketmq&#x2F;kafka&#x2F;rabbitmq里的consumer消费者，也算是对外的接口层，不是给别人来调用的，是基于MQ的事件消费的接口</li>
+<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p>有名字</p>
+</li>
+<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
+</li>
+<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
+</li>
+<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
+</li>
+<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
+</li>
 </ul>
-<p>当接口层受到一个controlller的http请求，XxxApi受到一个rpc调用，listener受到了event事件之后，此时每个请求（command或者query）、rpc调用、event事件，都对应了业务流程去执行，业务链路去执行</p>
-<p>业务流程&#x2F;业务链路，一般都对应了很多步骤，每个步骤可能是通过仓储对聚合做了一些查询或者更新，也有可能是基于聚合的业务行为做了一个动作，也有可能是找领域服务执行了比较复杂的业务逻辑，可能是不同的动作串联起来，完成一个比较复杂的业务流程，或者说是链路</p>
-<p>接口层收到了东西（http请求、rpc调用请求、event事件），做了一些转化（防腐层，把外部传递进来的东西，转化为内部的一些东西，ACL防腐层，比如说把http request转化为一个内部的command或者是query命令，rpc调用请求也是同理，需要把请求-响应的模型，转化为内部的command或者是query） -&gt; 应用服务层（application service layer）</p>
-<p>应用服务层，就是用于进行业务流程编排，订单履约流程，由applicationService来进行流程编排，他来负责基于仓储、聚合、领域服务，执行各种各样的动作，把这个业务链路&#x2F;链路里的各个环节和动作都完成</p>
-<p>domain层：聚合、领域服务、业务组件、仓储</p>
-<h3 id="订单支付事件入口建模"><a href="#订单支付事件入口建模" class="headerlink" title="订单支付事件入口建模"></a>订单支付事件入口建模</h3><p>DDD落地，战略建模、战术建模、代码落地（业内比较好的一些最佳实践以及DDD开源框架、阿里开源的cola东西）、加入技术框架（rpc层选用什么框架，持久层选用什么框架、存储选用什么，MQ选用什么）</p>
-<img src='https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png' height="300px" width="100%"/>
-
-<h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3>]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<p><img src="https://s2.loli.net/2023/01/07/nWxJTuyPalLEHmM.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-12-24-今天换域名"><a href="#2022-12-24-今天换域名" class="headerlink" title="2022-12-24:今天换域名"></a>2022-12-24:今天换域名</h2><p>绝望了，域名被审核了，有几项不合规</p>
-<ol>
-<li>网站title与备案的不一致（这个可以改）</li>
-<li>域名解析到境外（用的vercel托管，感觉还是比腾讯托管稳定方便，速度也还行，这个也可以换回到国内服务商托管）</li>
-<li>域名备案信息过期（其实就是身份证过期了，这个重新提交也可以改）</li>
-</ol>
-<p>但是有一个很重要的问题，就是域名备案信息更新，需要购买服务商（腾讯云、阿里云、华为云）他们的云服务器，玛德，一个个卖的死贵，非首年轻量级都是400起步。</p>
-<p><strong>算了，这种被刀割韭菜的行为，我实在难以忍受，买个Namesilo的域名，从此进入不备案海外的时代吧，可惜了我买的10年.cn域名</strong></p>
-<p>从 <del>ajungle.cn</del> 换成 <a href="https://runlevel.top/">runlevel.top</a></p>
-<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
-<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
-<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
-<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
-<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
-<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
-<p>我觉得实在是奇观，也觉得很荒唐。</p>
-<p>更觉得可悲。</p>
-<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
-<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
-<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
-<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
-<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
-<p>周天，天朗气清、惠风和畅，出门玩耍</p>
-<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
-<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
-<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
-<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
-<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
-<p>后面怎么办呢？</p>
-<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
-<p>编程</p>
-<ul>
-<li>算法与数据结构，继续刷牛客网（优先级1）</li>
-<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
-<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
-<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>没有public或者protected构造方法的类不能被子类化</p>
+</li>
+<li><p>API文档中很难找到</p>
+</li>
 </ul>
-<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
-<blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>解决参数过多问题</li>
+<li>可以对参数间依赖关系进行校验</li>
+<li>去掉创建对象时的中间状态</li>
+<li>可以不暴露类中的set方法，使其变成不可变对象</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>创建对象前必须先创建它的builder</li>
+<li>代码比较复杂，4个以上参数才适用</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
+<p>简单情况下可以直接使用@Builder</p>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
+<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
+<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
+<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由JVM保证线程安全，同时实现了懒加载</p>
+<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
 ]]></content>
       <categories>
-        <category>日记</category>
+        <category>书籍</category>
       </categories>
       <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设计原则</title>
-    <url>/post/a151c9f2.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
-<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><blockquote>
-<p>Keep It Simple Stupid（保持简单直白）</p>
-</blockquote>
-<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>更少的代码节省更多的时间，减少更多的Bug，以及更容易修改</li>
-<li>简单是复杂的更高水平</li>
-<li>完美并不是没有东西可以被添加进来，而是没有东西可以被带走</li>
-</ul>
-<h3 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>不要使用大部分人难以理解的代码，让其晦涩难懂</li>
-<li>不要过度优化，不是封装的越多越深越好，也不是底层函数或者高级语法用的越多越好</li>
-</ul>
-<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><blockquote>
-<p>you aren’t gonna need it（你不会需要它-不要实现非必要的东西）</p>
-</blockquote>
-<h3 id="为什么-1"><a href="#为什么-1" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>你的时间非常宝贵，任何为将来可能需要的功能做的工作，不但会导致你从当前必须实现的功能分心，而且还浪费了阅读者的时间</li>
-<li>这将导致代码臃肿、软件变得庞大且复杂</li>
-</ul>
-<h3 id="怎么做-1"><a href="#怎么做-1" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>在日常开发中，需要尽可能评估好设计的复杂度，不要过度设计。发现自己设计有不足的地方，，要有<code>持续重构</code>的精神，不断完善自己的设计，不要等到事情累计到不得不重构的时候，那时可能影响范围已经很大，事情往往已经到了积重难返的阶段</li>
-</ul>
-<h3 id="KISS和YAGNI的异同"><a href="#KISS和YAGNI的异同" class="headerlink" title="KISS和YAGNI的异同"></a>KISS和YAGNI的异同</h3><p>KISS和YAGNI都是在阐述<code>简单</code>这个事情，只是看待的角度不同，KISS是从<code>如何做</code>(保持简单)的角度，YAGNI是从<code>要不要做</code>(不要过度设计)的角度</p>
-<h2 id="DTSTTCPW"><a href="#DTSTTCPW" class="headerlink" title="DTSTTCPW"></a>DTSTTCPW</h2><blockquote>
-<p>Do The Simplest Thing That Could Possibly Work（做最简单的事情，如果它可能工作）</p>
-</blockquote>
-<h3 id="为什么-2"><a href="#为什么-2" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>如果我们致力于解决真正的问题，就能最大限度地解决真正的问题</li>
-<li>专业程序员就是能写出白痴程序员都能读懂的代码，白痴程序员就是写出即使专业程序员都无法读懂的代码</li>
-</ul>
-<h3 id="怎么做-2"><a href="#怎么做-2" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>询问自己：完成这件事最简单的方式是什么</li>
-</ul>
-<h2 id="Separation-of-Concerns"><a href="#Separation-of-Concerns" class="headerlink" title="Separation of Concerns"></a>Separation of Concerns</h2><blockquote>
-<p>关注点分离是将计算机程序分离成不同部分的设计原则，这样每个部分都单独处理自己的关注点。例如，业务逻辑与非业务逻辑是不同的关注点，更改业务逻辑不应该影响到非业务逻辑</p>
-</blockquote>
-<h3 id="为什么-3"><a href="#为什么-3" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>简化软件的开发和维护</li>
-<li>当每个关注点分离足够好时，代码的可复用性更高且开发及迭代更加具备独立性</li>
-</ul>
-<h3 id="怎么做-3"><a href="#怎么做-3" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将程序尽可能分离成各自独立的单一模块中</li>
-</ul>
-<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><blockquote>
-<p>Dont’t Repeat Yourself（不要写重复的代码）</p>
-<p>系统中的每一个部分都应该单一、清晰、且具备权威性。项目中每一个重要的功能应该仅在一份源代码中，如果相似的功能出现在两个不同的地方，通过抽象出不同部分将其结合起来往往是有益的</p>
-</blockquote>
-<h3 id="为什么-4"><a href="#为什么-4" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>重复可能导致维护困难、因果颠倒、逻辑互斥</li>
-<li>修改系统中任何一个单一的部分，不会改变到其他没有关联的地方</li>
-<li>逻辑上相关联的部分修改时，可以保持可预测及同步性</li>
-</ul>
-<h3 id="怎么做-4"><a href="#怎么做-4" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将业务规则、长的表达式、if语句、数学公式、元数据等等，放在一个地方</li>
-<li>在代码中使用单一、明确的来源</li>
-<li>当相似功能的代码出现在不同位置3次时，就应该重构这段代码（为什么不是两次，因为过早的重构可能会导致错误的抽象，而3次时，维护的成本已经超过了重构的成本，以及可能潜在的糟糕设计）</li>
-</ul>
-<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><p>我最怕那些copy别人一大段代码的！！！简直噩梦！！！关键我还碰到了！！！苍天呐！！！</p>
-<h2 id="Code-For-The-Maintainer"><a href="#Code-For-The-Maintainer" class="headerlink" title="Code For The Maintainer"></a>Code For The Maintainer</h2><blockquote>
-<p>为维护者而编写</p>
-</blockquote>
-<h3 id="为什么-5"><a href="#为什么-5" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>目前为止，维护是任何一个项目最昂贵的阶段</li>
-</ul>
-<h3 id="怎么做-5"><a href="#怎么做-5" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>做一个维护者</li>
-<li>编写代码时，要将维护你代码的人，当成知道你居住地址且有暴力倾向的精神病患者</li>
-<li>编写代码和注释时，要关照级别较低的人，让他们也能够愉快的阅读并能从中学习</li>
-<li>不要让他人思考</li>
-<li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
-</ul>
-<h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
-<p>避免过早优化（理解过早和非过早至关重要）</p>
-</blockquote>
-<h3 id="为什么-6"><a href="#为什么-6" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>目前还不清楚瓶颈在哪里</li>
-<li>优化后，可能变得更加难以阅读及维护</li>
-</ul>
-<h3 id="怎么做-6"><a href="#怎么做-6" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>让它更加正确、更加快速</li>
-<li>不要在不需要时优化，而是在分析及发现瓶颈后再优化</li>
-</ul>
-<h2 id="Minimise-Coupling"><a href="#Minimise-Coupling" class="headerlink" title="Minimise Coupling"></a>Minimise Coupling</h2><blockquote>
-<p>最小化耦合（耦合是模块&#x2F;组件间项目依赖的程度）</p>
-</blockquote>
-<h3 id="为什么-7"><a href="#为什么-7" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li><p>一个模块的改变经常会对其他模块造成影响</p>
-</li>
-<li><p>由于模块间的相互依赖，使用及组装可能花费更多的时间</p>
-</li>
-<li><p>模块间相互依赖程度高容易导致复用性及可测试降低</p>
-</li>
-</ul>
-<h3 id="怎么做-7"><a href="#怎么做-7" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>消除或者减少不必要的联系</li>
-<li>通过隐藏实现细节来减少耦合</li>
-<li>遵循<code>迪米特法则</code></li>
-</ul>
-<h2 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h2><blockquote>
-<p>迪米特法则（不要和陌生人说话。如果两个类无需直接通信，那么就不应该发生直接的相互调用，而应该通过第三方转发调用）</p>
-</blockquote>
-<h3 id="为什么-8"><a href="#为什么-8" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>直接通常导致增强耦合</li>
-<li>直接通常显示了过多的实现细节</li>
-</ul>
-<h3 id="怎么做-8"><a href="#怎么做-8" class="headerlink" title="怎么做"></a>怎么做</h3><p>一个对象的方法只能通过一下方式调用：</p>
-<ul>
-<li>对象本身</li>
-<li>方法中的一个参数</li>
-<li>方法中被创建的对象</li>
-<li>对象中的直接属性或字段</li>
-</ul>
-<h2 id="Composition-Over-Inheritance"><a href="#Composition-Over-Inheritance" class="headerlink" title="Composition Over Inheritance"></a>Composition Over Inheritance</h2><blockquote>
-<p>组合优于继承</p>
-</blockquote>
-<h3 id="为什么-9"><a href="#为什么-9" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>类之间的耦合更低</li>
-<li>继承打破封装</li>
-</ul>
-<h3 id="怎么做-9"><a href="#怎么做-9" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>继承前考虑父类是否有缺陷，而你是否愿意将缺陷传播到你的类中</li>
-<li>[has a]或者[use a]的类关系用组合；[is a]的情况，才能使用继承</li>
-</ul>
-<h2 id="Orthogonality"><a href="#Orthogonality" class="headerlink" title="Orthogonality"></a>Orthogonality</h2><blockquote>
-<p>正交性，系统中概念上不相干的事情不应该联系在一起</p>
-</blockquote>
-<h3 id="为什么-10"><a href="#为什么-10" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>设计越正交，异常越少，使得学习、阅读、编写代码更加容易</li>
-</ul>
-<h2 id="Robustness-Principle"><a href="#Robustness-Principle" class="headerlink" title="Robustness Principle"></a>Robustness Principle</h2><blockquote>
-<p>伯斯塔尔定律，对你想要做的要求严格，对你从其他人那里接收的保持宽松</p>
-</blockquote>
-<h3 id="为什么-11"><a href="#为什么-11" class="headerlink" title="为什么"></a>为什么</h3><p>为了在服务迭代过程中，提供者能够做出新的需求，同时对现有客户造成最小的影响</p>
-<h3 id="怎么做-10"><a href="#怎么做-10" class="headerlink" title="怎么做"></a>怎么做</h3><p>发送给其他机器的代码或者是命令，应该确保完全符合规范。但是接收的输入应该接受不符合规范的，只要含义清楚。</p>
-<h2 id="Inversion-of-Control"><a href="#Inversion-of-Control" class="headerlink" title="Inversion of Control"></a>Inversion of Control</h2><blockquote>
-<p>控制反转原则，也叫好莱坞原则（不要打电话给我，我们会打电话给你），使可重用的代码和解决具体问题的代码，即使他们在一个应用里</p>
-</blockquote>
-<h3 id="为什么-12"><a href="#为什么-12" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>控制反转被用来增加程序的模块化以及可扩展性</li>
-<li>将任务的执行与实现解耦</li>
-<li>将模块专注于他们所涉及的任务</li>
-<li>防止模块被替换带来的副作用</li>
-</ul>
-<h3 id="怎么做-11"><a href="#怎么做-11" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>使用工厂模式</li>
-<li>使用服务定位模式</li>
-<li>使用依赖注入</li>
-<li>使用上下文查找</li>
-<li>使用模板方法模式</li>
-<li>使用策略模式</li>
-</ul>
-<h2 id="Maximise-Cohesion？"><a href="#Maximise-Cohesion？" class="headerlink" title="Maximise Cohesion？"></a>Maximise Cohesion？</h2><blockquote>
-<p>最大化内聚，</p>
-</blockquote>
-<h2 id="Liskov-Substitution-Principle"><a href="#Liskov-Substitution-Principle" class="headerlink" title="Liskov Substitution Principle"></a>Liskov Substitution Principle</h2><blockquote>
-<p>里氏替换原则，程序中的对象可以被其子类替换，而不改变程序的正确性</p>
-</blockquote>
-<h2 id="Open-x2F-Closed-Principle"><a href="#Open-x2F-Closed-Principle" class="headerlink" title="Open&#x2F;Closed Principle"></a>Open&#x2F;Closed Principle</h2><blockquote>
-<p>开闭原则，软件实体应该对扩展开放，对修改关闭</p>
-</blockquote>
-<h3 id="为什么-13"><a href="#为什么-13" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>通过对现有代码最小化的改动来改善代码的可维护性和稳定性</li>
-</ul>
-<h3 id="怎么做-12"><a href="#怎么做-12" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li><p>编写可以扩展的类（而不是可以修改的类）</p>
-</li>
-<li><p>仅暴露可移动可修改的部分，隐藏其他部分</p>
-</li>
-</ul>
-<h2 id="Single-Responsibility-Principle"><a href="#Single-Responsibility-Principle" class="headerlink" title="Single Responsibility Principle"></a>Single Responsibility Principle</h2><blockquote>
-<p>单一责任原则，一个类不应该有超过一个需要改变的理由</p>
-</blockquote>
-<h3 id="为什么-14"><a href="#为什么-14" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>可维护性：改变应该仅在一个模块或者类中进行</li>
-</ul>
-<h3 id="怎么做-13"><a href="#怎么做-13" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>参考Curly’s Law</li>
-</ul>
-<h3 id="Hide-Implementation-Details"><a href="#Hide-Implementation-Details" class="headerlink" title="Hide Implementation Details"></a>Hide Implementation Details</h3><blockquote>
-<p>隐藏实现细节，一个软件模块通过提供一个接口来隐藏信息，同时不泄露任何不必要的信息</p>
-</blockquote>
-<h3 id="为什么-15"><a href="#为什么-15" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>当一个实现改变，使用接口的客户端不用进行更改</li>
-</ul>
-<h3 id="怎么做-14"><a href="#怎么做-14" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>最小化类和变量的可访问性</li>
-<li>不要将变量数据设置为public</li>
-<li>避免放置私有的实现细节放到类的接口上</li>
-<li>减少耦合以隐藏更多的实现细节</li>
-</ul>
-<h2 id="Curly’s-Law"><a href="#Curly’s-Law" class="headerlink" title="Curly’s Law"></a>Curly’s Law</h2><blockquote>
-<p>科里定律，为任何特定代码选择一件单一、明确的目标，做一件事情</p>
-</blockquote>
-<h2 id="Encapsulate-What-Changes"><a href="#Encapsulate-What-Changes" class="headerlink" title="Encapsulate What Changes"></a>Encapsulate What Changes</h2><blockquote>
-<p>封装经常修改的代码</p>
-</blockquote>
-<h3 id="为什么-16"><a href="#为什么-16" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>当改变发生时，减少需要修改的地方</li>
-</ul>
-<h3 id="怎么做-15"><a href="#怎么做-15" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>封装API背后不同的概念</li>
-<li>尽可能将不同概念分离到它自己的模块</li>
-</ul>
-<h2 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h2><blockquote>
-<p>接口隔离原则。将臃肿的接口减少为多个更小、更具体的客户端特定接口。接口应该更依赖于调用它的代码，而不是实现它的代码。</p>
-</blockquote>
-<h2 id="Command-Query-Separation"><a href="#Command-Query-Separation" class="headerlink" title="Command Query Separation"></a>Command Query Separation</h2><blockquote>
-<p>命令查询分离，每个方法要么是执行操作的命令，要么是向调用者返回数据的查询，但不能两个同时存在。这样就能使得使用者更加方向的调用。</p>
-</blockquote>
-<h3 id="为什么-17"><a href="#为什么-17" class="headerlink" title="为什么"></a>为什么</h3><ul>
-<li>通过清除的将发放划分为查询和命令，程序员可以在不知道方法实现细节的情况下，更加有信心进行编码</li>
-</ul>
-<h3 id="怎么做-16"><a href="#怎么做-16" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
-<li>将一个方法作为查询或命令实现</li>
-<li>明确方法的名称，通过约定名称的方式告知是查询还是命令</li>
-</ul>
-<h2 id="Murphy’s-Law"><a href="#Murphy’s-Law" class="headerlink" title="Murphy’s Law"></a>Murphy’s Law</h2><blockquote>
-<p>墨菲定律，任何可能出错的都会出错</p>
-</blockquote>
-<h2 id="Brooks’s-Law"><a href="#Brooks’s-Law" class="headerlink" title="Brooks’s Law"></a>Brooks’s Law</h2><blockquote>
-<p> 布鲁克斯法则，向已经延误的项目添加人力，只会使其更晚</p>
-</blockquote>
-<h2 id="Linus’s-Law"><a href="#Linus’s-Law" class="headerlink" title="Linus’s Law"></a>Linus’s Law</h2><blockquote>
-<p>林纳斯定律，给予足够的眼睛关注，所有的bug都会显现，代码检视很重要</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>设计原则</tag>
+        <tag>编程,书籍</tag>
       </tags>
   </entry>
   <entry>
@@ -690,6 +330,153 @@
       </tags>
   </entry>
   <entry>
+    <title>MySQL排序后分页错乱问题分析</title>
+    <url>/post/5c684e4d.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+</blockquote>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于DDD领域驱动电商履约案例实战</title>
+    <url>/post/7e0416c.html</url>
+    <content><![CDATA[<h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a>战略设计</h2><p>有界上下文的划分、映射、子域类型（核心子域、支持子域、通用子域）的确定、通用语言的确定</p>
+<p><strong>有界上下文</strong></p>
+<p>每个有界上下文，都有自己的一套问题要解决，有界上下文 -&gt; 子域 -&gt; 通用语言 -&gt; 一个小团队&#x2F;个人 -&gt; 子系统&#x2F;微服务</p>
+<p>领域包含多个子域（多个有界上下文），一般来说子域和有界上下文一一对应（无强制）</p>
+<p><strong>通用语言</strong></p>
+<p>限定于当前有界上下文的边界范围之内，专门描述你的有界上下文里各种各</p>
+<p>事情，如：动作、操作、行为、名词、事务、字段、数据、状态、命令、事件</p>
+<p>等，全部要有一套统一的命名规范&#x2F;规定 -&gt; 通用语言</p>
+<h3 id="用事件风暴会议寻找履约有界上下文"><a href="#用事件风暴会议寻找履约有界上下文" class="headerlink" title="用事件风暴会议寻找履约有界上下文"></a>用事件风暴会议寻找履约有界上下文</h3><ul>
+<li>开启会议，召集程序员、用户、产品经理、管理者、其它人，开始一块梳理，**相关的所有事件（动词、动作），有多少事件就说多少时间，但凡是跟**相关的事件，都可以说出来</li>
+<li>把所有梳理出来的**相关的时间，按照时间线进行排列，按照时间发生的先后顺序，做一个梳理</li>
+<li>梳理出来**相关的所有的用户界面和命令，针对所有上面的所有事件的发生，是否有系统用户界面，有用户参与进来发出一个指令、命令（在系统界面里，点击按钮、提交表单、发起操作），驱动了履约各个事件的执行</li>
+<li>把用户界面、命令、事件，安装时间线，先后顺序，交互逻辑，全部串联起来，一环一环的</li>
+<li>在上面的那个大串联的逻辑里，找出来履约有界上下文，哪些事情应该是要属于履约要解决的问题，哪些事情明显是属于别的有界上下文，是属于别人要去做的事情</li>
+</ul>
+<blockquote>
+<p>​	根据对业务的理解，把技术的东西剥离掉，把数据库表的设计全部剥离掉，纯粹站在业务的角度，去进行风暴会议，梳理出所有业务相关的流程和东西</p>
+</blockquote>
+<h3 id="不同子域类型分析"><a href="#不同子域类型分析" class="headerlink" title="不同子域类型分析"></a>不同子域类型分析</h3><p>核心子域：对于**领域而言，用于完成用户**这个核心需求，所需要具备的一些核心子域(例如淘宝：商品子域、订单子域、支付子域、履约子域、会员子域、营销子域)</p>
+<p>支持子域：负责支持核心子域（例如淘宝：仓储子域、物流子域 -&gt; 履约子域；财务子域；报表子域）</p>
+<p>通用子域：不用自己公司开发，都是外购的软件，或者是第三方的通用的平台和系统(例如：第三方支付平台、第三方物流平台)</p>
+<h3 id="上下文映射"><a href="#上下文映射" class="headerlink" title="上下文映射"></a>上下文映射</h3><p>确定各个上下文的交互关系</p>
+<p>separate way：完全没关系</p>
+<p>customer-supplier：c-s，常见于大的项目组内不同小项目之间的依赖关系</p>
+<p>publish-subscribe：p-s，有一方发布一个事件，另外一方监听事件以及处理这个事件。对于一个有界上下文，如果有和别的有界上下文进行交互，可以选择发布一个事件出去（别人接收或者自己接收处理这个事件）</p>
+<p><strong>额外</strong></p>
+<p>anti corruption layer：acl，防腐层，不是一个孤立、单独使用的映射关系，一般是跟其它映射关系，一起进行使用，CS关系、PS关系中，以CS关系为例，supplier给我接口返回的字段发生了改变（名称或者类型或者值）,对于我来说，可以不直接修改我的代码，而是增加一个防腐层，对返回的东西，做一个适配和转化，将它转化成一个固定的对象，保持名称、类型、值都是不变的。后面只要维护防腐层就行了</p>
+<h3 id="通用语言"><a href="#通用语言" class="headerlink" title="通用语言"></a>通用语言</h3><p>每个有界上下文里面，对所有的名词和动词，业务操作、业务事件、业务语义，都用统一的一套规则和规范去做</p>
+<p>例如：</p>
+<p>ReceiveOrder、OrderFullfillEvent、PreAllocateWarehouse、RiskIntercept、RiskAudit、AllocateWarehouseAgain、AllocateTrasportCompany、IssurToWarehouse -&gt;修改里面的命名规则，必须有通用语言制定的过程，写一套文档。</p>
+<h2 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a>战术设计</h2><p>牵扯到类层面的设计，设计自己的上下文里有哪些类，这些类如何配合，可以实现上下文里要解决的各种各样的问题</p>
+<p>聚合（实体、值对象）+仓储（基于具体的技术实现聚合数据得到持久化和读取、领域服务、业务组件、领域事件（DomainEvent）、命令（Command）和查询（Query）、接口层（controller、api、listener）、应用服务层（application service layer）</p>
+<p>当执行完一个业务动作以后，你要调用其他的上下文，此时你可以给其他上下文，发起命令，让他执行一些动作，也可以发起查询，从他里面执行一些查询，也可以发布一个事件，驱动别的上下文监听事件，继续执行他的业务流程。</p>
+<h3 id="实体"><a href="#实体" class="headerlink" title="实体"></a>实体</h3><p>项目代码里的domain类，Order（有唯一的标识，OrderId它里面有很多的数据可以变化），我们的上下文里，对一些核心的数据，一般来说都会设计一些类出来，如果它有唯一标识，而且数据是允许变化的，此时，在ddd战术设计里，它被称为Entity,这样一个概念。</p>
+<h3 id="值对象"><a href="#值对象" class="headerlink" title="值对象"></a>值对象</h3><p>valueObject，ObjectId(建模成一个独立的类)，对于一个订单，它的唯一标识，OrderId而言，里面可能包含和封装了订单在<code>数据库里唯一的主键</code>以及<code>我们分配给它的一个订单编号</code>，这些东西，是绝对不会变化的，而且OrderId自己就没有必要再有一个自己的唯一标识，OrderId自己就没有必要再有一个自己的唯一标识，它代表的就是一份不会变化的数据，ddd里面战术设计里称之为值对象。</p>
+<h3 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h3><p>Aggregate，面向数据库的设计，一个表队友domain&#x2F;entity包里面的一个class</p>
+<p>Order、OrderItem、OrderFulfill，每个class里面就对应了表里的各个字段，一般来说不会说在建模的时候，Order包含了OrderItem，OrderItem里有一个OrderId这个字段，表示它们之间的一个关系。</p>
+<p>ddd里要求将有强关系的class进行聚合，例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long orderId;</span><br><span class="line">    <span class="comment">//有几十个order自己的字段</span></span><br><span class="line">    List&lt;OrderItem&gt; orderItems;</span><br><span class="line">    DeliveryAddress deliveryAddress;</span><br><span class="line">    PayType payType;</span><br><span class="line">    PaymentDetail paymentDetail;</span><br><span class="line">    OrderSnapshot orderSnapshot;</span><br><span class="line">    OrderStatus orderStatus;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//收获地址，就是属于典型的一个class，它也是一个东西</span></span><br></pre></td></tr></table></figure>
+
+<p>一个聚合代表了多个class绑定在一起，放在一块，一个聚合里，聚合根，aggregate root，一组聚合在一起的class，放在最外面的，最上层的，就是一个聚合根</p>
+<p>收获地址，就是属于典型的一个class，它就是一个东西</p>
+<p>聚合是有一个边界概念，聚合里面的classes生命周期，是一致的，创建的时候，就一起创建了，更新得到时候一起更新了，删除的时候一起删除了。一个聚合里面的这些东西的更新，必须放在一个事务里，确保一起成功，或者一起失败。</p>
+<p><code>一个聚合里可以包含一些实体，也可以包含一些值对象，聚合可以是多个层次的</code></p>
+<h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>贫血模型：仅仅包含数据，仅有getter、setter</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="comment">//几十个字段</span></span><br><span class="line">    <span class="comment">//几十个getter和setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>业务逻辑主要封装在Service里，Service主要依赖多个DAO，进行一系列增删改查来实现业务逻辑</p>
+<p>充血模型：要把聚合（实体、值对象），根据业务语义，放进一些核心的业务逻辑行为（不是面向数据库设计的一些行为）</p>
+<h3 id="领域服务和聚合设计"><a href="#领域服务和聚合设计" class="headerlink" title="领域服务和聚合设计"></a>领域服务和聚合设计</h3><p>聚合（实体、值对象）+ 业务行为（充血模型）</p>
+<p>有一些业务行为，是没有办法放在聚合里面的，Order举个例子：对多个Order进行运算，业务逻辑不可能放在Order里面去设计这个语义，这时就需要领域服务（一般针对多个聚合执行的业务行为）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XXService</span>&#123;</span><br><span class="line">    <span class="comment">//包含一些没法直接放在聚合里的业务行为</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>业务组件：包含贴合业务语义的组件，在业务场景里，有一个概念<code>业务状态机</code>，不属于聚合、领域服务，它其实是一个业务组件</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderStatusMachine</span>&#123;<span class="comment">//符合业务语义的业务组件</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>聚合（数据+行为）+ 领域服务 + 业务组件</p>
+<p>验证DDD是否成功，在于用代码还原一套完整的业务语义、业务流程、业务模型，这套代码，主流程，找产品经理走读代码，通过英文单词+一些注释，是否能够理解业务语义和流程。</p>
+<h3 id="串联业务流程（命令、领域事件）"><a href="#串联业务流程（命令、领域事件）" class="headerlink" title="串联业务流程（命令、领域事件）"></a>串联业务流程（命令、领域事件）</h3><p><strong>人驱动发起的命令：</strong>核心业务动作和行为，人驱动的（web、APP），Command一般是更新数据一类的动作，Query一般是进行查询类的动作。用来驱动领域服务的核心业务逻辑和方法的执行。</p>
+<p>AuditOrderCommand（订单审核，是人发起的一个动作和命令）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>领域事件：</strong>Event、OrderPayedEvent（订单已支付的事件），就要驱动和发起履约流程，所以我们的订单上下文，可以发布出来订单已支付的事件，履约上下文，可以去订阅这个订单已支付的事件，一旦订单被支付了，就可以开始进行履约</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> OrderFullfill <span class="title function_">receivePayedOrder</span><span class="params">(OrderPayedEvent orderPayedEvent)</span>&#123;</span><br><span class="line">        <span class="comment">//第一个业务语义和动作，就是要接收订单，存储数据道自己履约上下文里面</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">preAllocateWarehouse</span><span class="params">(OrderFullfill orderFullfill)</span>&#123;</span><br><span class="line"> 		<span class="comment">//结合多个聚合体、业务组件，完成预分仓的业余语义和动作       </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="仓储-Repository"><a href="#仓储-Repository" class="headerlink" title="仓储(Repository)"></a>仓储(Repository)</h3><p>repository：用来把聚合数据、实体，把我们的数据跟具体的持久层进行一个交互，如果说要从持久层查询一个聚合出来，此时就用那个聚合对应的仓储来查询</p>
+<p>Order -&gt; OrderRepository</p>
+<p>Order order &#x3D; orderRepository.getById(orderId);&#x2F;&#x2F;如果说底层上用缓存、es、nosql、mq以及其他持久层技术，都是封装道仓储的底层，对我们领域模型层来说，是不关系技术细节，具体技术细节，封装在仓储里的，crud、缓存、es、建立es索引、写mq、消费mq</p>
+<h3 id="履约上下文各个业务流程"><a href="#履约上下文各个业务流程" class="headerlink" title="履约上下文各个业务流程"></a>履约上下文各个业务流程</h3><ol>
+<li>订单履约：保存订单、预分仓、风控拦截、通知人工进行审核（可选）、分物流、下库房</li>
+<li>人工审核：审核订单、取消订单、重分仓（可选）、分物流、下库房</li>
+</ol>
+<p>接收订单 -&gt; 监听订单已支付领域事件</p>
+<p>保存订单 -&gt; 将订单相关的数据保存在履约上下文的仓储里面</p>
+<p>预分仓 -&gt; 获取所有仓库、从所有仓库里选择距离订单收获地址最近的仓库、检查仓库的库存是否充足、锁定仓库库存、把订单分配给仓库</p>
+<p>风控拦截 -&gt; 调用风控上下文的风控拦截的动作，去看是否能够通过风控拦截</p>
+<p>分物流 -&gt; 调用物流上下文的获取所有物流公司、从所有物流公司里选择距离分配仓库最合适的物流公司、对这个物流公司申请电子面单（物流单）、把订单分配给物流公司</p>
+<p>下库房 -&gt; 调用仓储上下文的下发订单履约给指定的仓库</p>
+<p>通知人工审核 -&gt; 发布出去一个事件和通知</p>
+<p>人工审核 -&gt; 重分仓（可选）、分物流、下库房</p>
+<p>取消订单 -&gt; 发布一个订单取消事件，让订单上下文来处理</p>
+<p>重分仓 -&gt; 指定一个仓库，把订单分配给指定仓库</p>
+<h3 id="接口层和应用服务层"><a href="#接口层和应用服务层" class="headerlink" title="接口层和应用服务层"></a>接口层和应用服务层</h3><p>对外提供服务的系统，接口层（最外层跟用户界面、其他上下文进行交互的一层，表现层），DDD里最外面一层对接用户的，对接用户界面发送的一些命令，command或者query，controller（ssm框架里得到spring mvc对外提供的controller，接口层），对用户界面提供对应的http接口的</p>
+<p>如果我们的有界上下文，是对其他的有界上下文提供映射和交互的，提供一个内部调用得到接口，一般来说，内部的接口，我们一般命名为XxxApi</p>
+<p>DDD最外侧的接口层</p>
+<ul>
+<li>通过spring cloud netflix（openfeign）或者是spring cloud alibaba（dubbo）rpc框架，对外去提供一套api接口，供其他上下文来进行调用和交互</li>
+<li>如果说，别的有界上下文会发布一个领域事件出来，发布到MQ、RocketMQ、RabbitMQ、Kafka这样子，我们就需要去进行领域事件监听，这个负责领域事件监听的监听器，listener，rocketmq&#x2F;kafka&#x2F;rabbitmq里的consumer消费者，也算是对外的接口层，不是给别人来调用的，是基于MQ的事件消费的接口</li>
+</ul>
+<p>当接口层受到一个controlller的http请求，XxxApi受到一个rpc调用，listener受到了event事件之后，此时每个请求（command或者query）、rpc调用、event事件，都对应了业务流程去执行，业务链路去执行</p>
+<p>业务流程&#x2F;业务链路，一般都对应了很多步骤，每个步骤可能是通过仓储对聚合做了一些查询或者更新，也有可能是基于聚合的业务行为做了一个动作，也有可能是找领域服务执行了比较复杂的业务逻辑，可能是不同的动作串联起来，完成一个比较复杂的业务流程，或者说是链路</p>
+<p>接口层收到了东西（http请求、rpc调用请求、event事件），做了一些转化（防腐层，把外部传递进来的东西，转化为内部的一些东西，ACL防腐层，比如说把http request转化为一个内部的command或者是query命令，rpc调用请求也是同理，需要把请求-响应的模型，转化为内部的command或者是query） -&gt; 应用服务层（application service layer）</p>
+<p>应用服务层，就是用于进行业务流程编排，订单履约流程，由applicationService来进行流程编排，他来负责基于仓储、聚合、领域服务，执行各种各样的动作，把这个业务链路&#x2F;链路里的各个环节和动作都完成</p>
+<p>domain层：聚合、领域服务、业务组件、仓储</p>
+<h3 id="订单支付事件入口建模"><a href="#订单支付事件入口建模" class="headerlink" title="订单支付事件入口建模"></a>订单支付事件入口建模</h3><p>DDD落地，战略建模、战术建模、代码落地（业内比较好的一些最佳实践以及DDD开源框架、阿里开源的cola东西）、加入技术框架（rpc层选用什么框架，持久层选用什么框架、存储选用什么，MQ选用什么）</p>
+<img src='https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png' height="300px" width="100%"/>
+
+<h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3>]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>DDD</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JDK8之List转Map实现解析</title>
     <url>/post/9a372c09.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
@@ -762,6 +549,275 @@
       <tags>
         <tag>JDK8</tag>
         <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JDK动态代理实现Redis降级</title>
+    <url>/post/a4854be7.html</url>
+    <content><![CDATA[<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>防止<code>Redis</code>服务不可用导致服务不可用，保证业务正常流程，在<code>Redis</code>服务崩掉后，走数据库进行加锁解锁操作，需要尽量不修改原有<code>Redis</code>代码</p>
+<p>原有redis示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><h3 id="增加A接口"><a href="#增加A接口" class="headerlink" title="增加A接口"></a>增加A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line">   Boolean <span class="title function_">set</span><span class="params">(String key,<span class="type">long</span> expireTime)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="原有redis类实现A"><a href="#原有redis类实现A" class="headerlink" title="原有redis类实现A"></a>原有redis类实现A</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加MySQL加锁类实现A接口"><a href="#增加MySQL加锁类实现A接口" class="headerlink" title="增加MySQL加锁类实现A接口"></a>增加MySQL加锁类实现A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TCacheInfoMapper tCacheInfoMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入database内部&quot;</span>);</span><br><span class="line">        <span class="type">TCacheInfo</span> <span class="variable">tCacheInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TCacheInfo</span>();</span><br><span class="line">        tCacheInfo.setId(<span class="number">1515155L</span>);</span><br><span class="line">        tCacheInfo.setCreateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setUpdateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setCacheKey(key);</span><br><span class="line">        tCacheInfo.setCacheValue(key);</span><br><span class="line">        tCacheInfo.setExpireTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setVersion(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> tCacheInfoMapper.insert(tCacheInfo) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="对原有类进行代理"><a href="#对原有类进行代理" class="headerlink" title="对原有类进行代理"></a>对原有类进行代理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalConfiguration</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> RedisServiceI &amp;&amp; <span class="string">&quot;oldRedisService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">            bean = getProxyBean(bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getProxyBean</span><span class="params">(Object bean)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  Proxy</span><br><span class="line">                .newProxyInstance(</span><br><span class="line">                        <span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                        bean.getClass().getInterfaces(),</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">DynamicProxyHandler</span>(bean)</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    Object redisBean;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DynamicProxyHandler</span><span class="params">(Object redisBean)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.redisBean = redisBean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        log.info(<span class="string">&quot;代理开始执行:&quot;</span>+method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//调用原有方法</span></span><br><span class="line">            obj = method.invoke(redisBean, args);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InvocationTargetException e)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.getTargetException() <span class="keyword">instanceof</span> BussinessException)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BussinessException</span>(ErrorCode.CA000001,<span class="string">&quot;自定义的异常,需要抛出让全局异常处理&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//执行数据库加锁类的方法</span></span><br><span class="line">            <span class="type">RedisServiceI</span> <span class="variable">bean</span> <span class="operator">=</span> (RedisServiceI) SpringContextUtil.getContext().getBean(<span class="string">&quot;databaseService&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(bean, args);</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(<span class="string">&quot;代理结束执行&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RedisServiceI redisServiceI;</span><br></pre></td></tr></table></figure>
+
+<p>因为上面<code>OldRedisService</code>类使用了<code>@Primary</code>注解，所以会优先被注入到接口中</p>
+<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
+<li>上面的方式有个缺点，这样修改后，原来的<code>OldRedisService</code>类就不能被注入了，因为已经被代理了。可以优化一下，不代理原有的<code>OldRedisService</code>类，而是新写一个类，也实现<code>RedisServiceI</code>,新类所有方法全部调用<code>OldRedisService</code>，且使用<code>@Primary</code>保证被优先注入接口，最后代理这个新写的类即可。</li>
+<li>其实还有一个锁的数据一致性问题，在Redis加锁后，Redis崩了，是无法同步到数据库中的，这个处理比较麻烦，如果对业务要求比较高需要注意一下</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计原则</title>
+    <url>/post/a151c9f2.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计原则只是供开发人员参考的，并不是一定要遵守的规则，但需要了解并尽可能的去满足设计原则。</p>
+<h2 id="KISS"><a href="#KISS" class="headerlink" title="KISS"></a>KISS</h2><blockquote>
+<p>Keep It Simple Stupid（保持简单直白）</p>
+</blockquote>
+<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>更少的代码节省更多的时间，减少更多的Bug，以及更容易修改</li>
+<li>简单是复杂的更高水平</li>
+<li>完美并不是没有东西可以被添加进来，而是没有东西可以被带走</li>
+</ul>
+<h3 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>不要使用大部分人难以理解的代码，让其晦涩难懂</li>
+<li>不要过度优化，不是封装的越多越深越好，也不是底层函数或者高级语法用的越多越好</li>
+</ul>
+<h2 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h2><blockquote>
+<p>you aren’t gonna need it（你不会需要它-不要实现非必要的东西）</p>
+</blockquote>
+<h3 id="为什么-1"><a href="#为什么-1" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>你的时间非常宝贵，任何为将来可能需要的功能做的工作，不但会导致你从当前必须实现的功能分心，而且还浪费了阅读者的时间</li>
+<li>这将导致代码臃肿、软件变得庞大且复杂</li>
+</ul>
+<h3 id="怎么做-1"><a href="#怎么做-1" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>在日常开发中，需要尽可能评估好设计的复杂度，不要过度设计。发现自己设计有不足的地方，，要有<code>持续重构</code>的精神，不断完善自己的设计，不要等到事情累计到不得不重构的时候，那时可能影响范围已经很大，事情往往已经到了积重难返的阶段</li>
+</ul>
+<h3 id="KISS和YAGNI的异同"><a href="#KISS和YAGNI的异同" class="headerlink" title="KISS和YAGNI的异同"></a>KISS和YAGNI的异同</h3><p>KISS和YAGNI都是在阐述<code>简单</code>这个事情，只是看待的角度不同，KISS是从<code>如何做</code>(保持简单)的角度，YAGNI是从<code>要不要做</code>(不要过度设计)的角度</p>
+<h2 id="DTSTTCPW"><a href="#DTSTTCPW" class="headerlink" title="DTSTTCPW"></a>DTSTTCPW</h2><blockquote>
+<p>Do The Simplest Thing That Could Possibly Work（做最简单的事情，如果它可能工作）</p>
+</blockquote>
+<h3 id="为什么-2"><a href="#为什么-2" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>如果我们致力于解决真正的问题，就能最大限度地解决真正的问题</li>
+<li>专业程序员就是能写出白痴程序员都能读懂的代码，白痴程序员就是写出即使专业程序员都无法读懂的代码</li>
+</ul>
+<h3 id="怎么做-2"><a href="#怎么做-2" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>询问自己：完成这件事最简单的方式是什么</li>
+</ul>
+<h2 id="Separation-of-Concerns"><a href="#Separation-of-Concerns" class="headerlink" title="Separation of Concerns"></a>Separation of Concerns</h2><blockquote>
+<p>关注点分离是将计算机程序分离成不同部分的设计原则，这样每个部分都单独处理自己的关注点。例如，业务逻辑与非业务逻辑是不同的关注点，更改业务逻辑不应该影响到非业务逻辑</p>
+</blockquote>
+<h3 id="为什么-3"><a href="#为什么-3" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>简化软件的开发和维护</li>
+<li>当每个关注点分离足够好时，代码的可复用性更高且开发及迭代更加具备独立性</li>
+</ul>
+<h3 id="怎么做-3"><a href="#怎么做-3" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将程序尽可能分离成各自独立的单一模块中</li>
+</ul>
+<h2 id="DRY"><a href="#DRY" class="headerlink" title="DRY"></a>DRY</h2><blockquote>
+<p>Dont’t Repeat Yourself（不要写重复的代码）</p>
+<p>系统中的每一个部分都应该单一、清晰、且具备权威性。项目中每一个重要的功能应该仅在一份源代码中，如果相似的功能出现在两个不同的地方，通过抽象出不同部分将其结合起来往往是有益的</p>
+</blockquote>
+<h3 id="为什么-4"><a href="#为什么-4" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>重复可能导致维护困难、因果颠倒、逻辑互斥</li>
+<li>修改系统中任何一个单一的部分，不会改变到其他没有关联的地方</li>
+<li>逻辑上相关联的部分修改时，可以保持可预测及同步性</li>
+</ul>
+<h3 id="怎么做-4"><a href="#怎么做-4" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将业务规则、长的表达式、if语句、数学公式、元数据等等，放在一个地方</li>
+<li>在代码中使用单一、明确的来源</li>
+<li>当相似功能的代码出现在不同位置3次时，就应该重构这段代码（为什么不是两次，因为过早的重构可能会导致错误的抽象，而3次时，维护的成本已经超过了重构的成本，以及可能潜在的糟糕设计）</li>
+</ul>
+<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><p>我最怕那些copy别人一大段代码的！！！简直噩梦！！！关键我还碰到了！！！苍天呐！！！</p>
+<h2 id="Code-For-The-Maintainer"><a href="#Code-For-The-Maintainer" class="headerlink" title="Code For The Maintainer"></a>Code For The Maintainer</h2><blockquote>
+<p>为维护者而编写</p>
+</blockquote>
+<h3 id="为什么-5"><a href="#为什么-5" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前为止，维护是任何一个项目最昂贵的阶段</li>
+</ul>
+<h3 id="怎么做-5"><a href="#怎么做-5" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>做一个维护者</li>
+<li>编写代码时，要将维护你代码的人，当成知道你居住地址且有暴力倾向的精神病患者</li>
+<li>编写代码和注释时，要关照级别较低的人，让他们也能够愉快的阅读并能从中学习</li>
+<li>不要让他人思考</li>
+<li>遵循最小惊讶原则（设计应该按照大多人期望的形式运行，而不是让其感到惊讶或者诧异）</li>
+</ul>
+<h2 id="Avoid-Premature-Optimization"><a href="#Avoid-Premature-Optimization" class="headerlink" title="Avoid Premature Optimization"></a>Avoid Premature Optimization</h2><blockquote>
+<p>避免过早优化（理解过早和非过早至关重要）</p>
+</blockquote>
+<h3 id="为什么-6"><a href="#为什么-6" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>目前还不清楚瓶颈在哪里</li>
+<li>优化后，可能变得更加难以阅读及维护</li>
+</ul>
+<h3 id="怎么做-6"><a href="#怎么做-6" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>让它更加正确、更加快速</li>
+<li>不要在不需要时优化，而是在分析及发现瓶颈后再优化</li>
+</ul>
+<h2 id="Minimise-Coupling"><a href="#Minimise-Coupling" class="headerlink" title="Minimise Coupling"></a>Minimise Coupling</h2><blockquote>
+<p>最小化耦合（耦合是模块&#x2F;组件间项目依赖的程度）</p>
+</blockquote>
+<h3 id="为什么-7"><a href="#为什么-7" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li><p>一个模块的改变经常会对其他模块造成影响</p>
+</li>
+<li><p>由于模块间的相互依赖，使用及组装可能花费更多的时间</p>
+</li>
+<li><p>模块间相互依赖程度高容易导致复用性及可测试降低</p>
+</li>
+</ul>
+<h3 id="怎么做-7"><a href="#怎么做-7" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>消除或者减少不必要的联系</li>
+<li>通过隐藏实现细节来减少耦合</li>
+<li>遵循<code>迪米特法则</code></li>
+</ul>
+<h2 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h2><blockquote>
+<p>迪米特法则（不要和陌生人说话。如果两个类无需直接通信，那么就不应该发生直接的相互调用，而应该通过第三方转发调用）</p>
+</blockquote>
+<h3 id="为什么-8"><a href="#为什么-8" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>直接通常导致增强耦合</li>
+<li>直接通常显示了过多的实现细节</li>
+</ul>
+<h3 id="怎么做-8"><a href="#怎么做-8" class="headerlink" title="怎么做"></a>怎么做</h3><p>一个对象的方法只能通过一下方式调用：</p>
+<ul>
+<li>对象本身</li>
+<li>方法中的一个参数</li>
+<li>方法中被创建的对象</li>
+<li>对象中的直接属性或字段</li>
+</ul>
+<h2 id="Composition-Over-Inheritance"><a href="#Composition-Over-Inheritance" class="headerlink" title="Composition Over Inheritance"></a>Composition Over Inheritance</h2><blockquote>
+<p>组合优于继承</p>
+</blockquote>
+<h3 id="为什么-9"><a href="#为什么-9" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>类之间的耦合更低</li>
+<li>继承打破封装</li>
+</ul>
+<h3 id="怎么做-9"><a href="#怎么做-9" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>继承前考虑父类是否有缺陷，而你是否愿意将缺陷传播到你的类中</li>
+<li>[has a]或者[use a]的类关系用组合；[is a]的情况，才能使用继承</li>
+</ul>
+<h2 id="Orthogonality"><a href="#Orthogonality" class="headerlink" title="Orthogonality"></a>Orthogonality</h2><blockquote>
+<p>正交性，系统中概念上不相干的事情不应该联系在一起</p>
+</blockquote>
+<h3 id="为什么-10"><a href="#为什么-10" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>设计越正交，异常越少，使得学习、阅读、编写代码更加容易</li>
+</ul>
+<h2 id="Robustness-Principle"><a href="#Robustness-Principle" class="headerlink" title="Robustness Principle"></a>Robustness Principle</h2><blockquote>
+<p>伯斯塔尔定律，对你想要做的要求严格，对你从其他人那里接收的保持宽松</p>
+</blockquote>
+<h3 id="为什么-11"><a href="#为什么-11" class="headerlink" title="为什么"></a>为什么</h3><p>为了在服务迭代过程中，提供者能够做出新的需求，同时对现有客户造成最小的影响</p>
+<h3 id="怎么做-10"><a href="#怎么做-10" class="headerlink" title="怎么做"></a>怎么做</h3><p>发送给其他机器的代码或者是命令，应该确保完全符合规范。但是接收的输入应该接受不符合规范的，只要含义清楚。</p>
+<h2 id="Inversion-of-Control"><a href="#Inversion-of-Control" class="headerlink" title="Inversion of Control"></a>Inversion of Control</h2><blockquote>
+<p>控制反转原则，也叫好莱坞原则（不要打电话给我，我们会打电话给你），使可重用的代码和解决具体问题的代码，即使他们在一个应用里</p>
+</blockquote>
+<h3 id="为什么-12"><a href="#为什么-12" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>控制反转被用来增加程序的模块化以及可扩展性</li>
+<li>将任务的执行与实现解耦</li>
+<li>将模块专注于他们所涉及的任务</li>
+<li>防止模块被替换带来的副作用</li>
+</ul>
+<h3 id="怎么做-11"><a href="#怎么做-11" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>使用工厂模式</li>
+<li>使用服务定位模式</li>
+<li>使用依赖注入</li>
+<li>使用上下文查找</li>
+<li>使用模板方法模式</li>
+<li>使用策略模式</li>
+</ul>
+<h2 id="Maximise-Cohesion？"><a href="#Maximise-Cohesion？" class="headerlink" title="Maximise Cohesion？"></a>Maximise Cohesion？</h2><blockquote>
+<p>最大化内聚，</p>
+</blockquote>
+<h2 id="Liskov-Substitution-Principle"><a href="#Liskov-Substitution-Principle" class="headerlink" title="Liskov Substitution Principle"></a>Liskov Substitution Principle</h2><blockquote>
+<p>里氏替换原则，程序中的对象可以被其子类替换，而不改变程序的正确性</p>
+</blockquote>
+<h2 id="Open-x2F-Closed-Principle"><a href="#Open-x2F-Closed-Principle" class="headerlink" title="Open&#x2F;Closed Principle"></a>Open&#x2F;Closed Principle</h2><blockquote>
+<p>开闭原则，软件实体应该对扩展开放，对修改关闭</p>
+</blockquote>
+<h3 id="为什么-13"><a href="#为什么-13" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过对现有代码最小化的改动来改善代码的可维护性和稳定性</li>
+</ul>
+<h3 id="怎么做-12"><a href="#怎么做-12" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li><p>编写可以扩展的类（而不是可以修改的类）</p>
+</li>
+<li><p>仅暴露可移动可修改的部分，隐藏其他部分</p>
+</li>
+</ul>
+<h2 id="Single-Responsibility-Principle"><a href="#Single-Responsibility-Principle" class="headerlink" title="Single Responsibility Principle"></a>Single Responsibility Principle</h2><blockquote>
+<p>单一责任原则，一个类不应该有超过一个需要改变的理由</p>
+</blockquote>
+<h3 id="为什么-14"><a href="#为什么-14" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>可维护性：改变应该仅在一个模块或者类中进行</li>
+</ul>
+<h3 id="怎么做-13"><a href="#怎么做-13" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>参考Curly’s Law</li>
+</ul>
+<h3 id="Hide-Implementation-Details"><a href="#Hide-Implementation-Details" class="headerlink" title="Hide Implementation Details"></a>Hide Implementation Details</h3><blockquote>
+<p>隐藏实现细节，一个软件模块通过提供一个接口来隐藏信息，同时不泄露任何不必要的信息</p>
+</blockquote>
+<h3 id="为什么-15"><a href="#为什么-15" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当一个实现改变，使用接口的客户端不用进行更改</li>
+</ul>
+<h3 id="怎么做-14"><a href="#怎么做-14" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>最小化类和变量的可访问性</li>
+<li>不要将变量数据设置为public</li>
+<li>避免放置私有的实现细节放到类的接口上</li>
+<li>减少耦合以隐藏更多的实现细节</li>
+</ul>
+<h2 id="Curly’s-Law"><a href="#Curly’s-Law" class="headerlink" title="Curly’s Law"></a>Curly’s Law</h2><blockquote>
+<p>科里定律，为任何特定代码选择一件单一、明确的目标，做一件事情</p>
+</blockquote>
+<h2 id="Encapsulate-What-Changes"><a href="#Encapsulate-What-Changes" class="headerlink" title="Encapsulate What Changes"></a>Encapsulate What Changes</h2><blockquote>
+<p>封装经常修改的代码</p>
+</blockquote>
+<h3 id="为什么-16"><a href="#为什么-16" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>当改变发生时，减少需要修改的地方</li>
+</ul>
+<h3 id="怎么做-15"><a href="#怎么做-15" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>封装API背后不同的概念</li>
+<li>尽可能将不同概念分离到它自己的模块</li>
+</ul>
+<h2 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h2><blockquote>
+<p>接口隔离原则。将臃肿的接口减少为多个更小、更具体的客户端特定接口。接口应该更依赖于调用它的代码，而不是实现它的代码。</p>
+</blockquote>
+<h2 id="Command-Query-Separation"><a href="#Command-Query-Separation" class="headerlink" title="Command Query Separation"></a>Command Query Separation</h2><blockquote>
+<p>命令查询分离，每个方法要么是执行操作的命令，要么是向调用者返回数据的查询，但不能两个同时存在。这样就能使得使用者更加方向的调用。</p>
+</blockquote>
+<h3 id="为什么-17"><a href="#为什么-17" class="headerlink" title="为什么"></a>为什么</h3><ul>
+<li>通过清除的将发放划分为查询和命令，程序员可以在不知道方法实现细节的情况下，更加有信心进行编码</li>
+</ul>
+<h3 id="怎么做-16"><a href="#怎么做-16" class="headerlink" title="怎么做"></a>怎么做</h3><ul>
+<li>将一个方法作为查询或命令实现</li>
+<li>明确方法的名称，通过约定名称的方式告知是查询还是命令</li>
+</ul>
+<h2 id="Murphy’s-Law"><a href="#Murphy’s-Law" class="headerlink" title="Murphy’s Law"></a>Murphy’s Law</h2><blockquote>
+<p>墨菲定律，任何可能出错的都会出错</p>
+</blockquote>
+<h2 id="Brooks’s-Law"><a href="#Brooks’s-Law" class="headerlink" title="Brooks’s Law"></a>Brooks’s Law</h2><blockquote>
+<p> 布鲁克斯法则，向已经延误的项目添加人力，只会使其更晚</p>
+</blockquote>
+<h2 id="Linus’s-Law"><a href="#Linus’s-Law" class="headerlink" title="Linus’s Law"></a>Linus’s Law</h2><blockquote>
+<p>林纳斯定律，给予足够的眼睛关注，所有的bug都会显现，代码检视很重要</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>设计原则</tag>
       </tags>
   </entry>
   <entry>
@@ -1023,100 +1079,76 @@
       </tags>
   </entry>
   <entry>
-    <title>《Effective Java》学习笔记</title>
-    <url>/post/e1b9f839.html</url>
-    <content><![CDATA[<blockquote>
-<p>​	仅记录自己学习过，且有一定自我理解和思考的</p>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<p><img src="https://s2.loli.net/2023/01/07/nWxJTuyPalLEHmM.jpg" height="300px" width="100%"></img></p>
+<h2 id="2022-12-24-今天换域名"><a href="#2022-12-24-今天换域名" class="headerlink" title="2022-12-24:今天换域名"></a>2022-12-24:今天换域名</h2><p>绝望了，域名被审核了，有几项不合规</p>
+<ol>
+<li>网站title与备案的不一致（这个可以改）</li>
+<li>域名解析到境外（用的vercel托管，感觉还是比腾讯托管稳定方便，速度也还行，这个也可以换回到国内服务商托管）</li>
+<li>域名备案信息过期（其实就是身份证过期了，这个重新提交也可以改）</li>
+</ol>
+<p>但是有一个很重要的问题，就是域名备案信息更新，需要购买服务商（腾讯云、阿里云、华为云）他们的云服务器，玛德，一个个卖的死贵，非首年轻量级都是400起步。</p>
+<p><strong>算了，这种被刀割韭菜的行为，我实在难以忍受，买个Namesilo的域名，从此进入不备案海外的时代吧，可惜了我买的10年.cn域名</strong></p>
+<p>从 <del>ajungle.cn</del> 换成 <a href="https://runlevel.top/">runlevel.top</a></p>
+<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
+<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
+<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
+<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
+<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
+<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
+<p>我觉得实在是奇观，也觉得很荒唐。</p>
+<p>更觉得可悲。</p>
+<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
+<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
+<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
+<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
+<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
+<p>周天，天朗气清、惠风和畅，出门玩耍</p>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
+<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
+<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
+<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
+<p>后面怎么办呢？</p>
+<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
+<p>编程</p>
+<ul>
+<li>算法与数据结构，继续刷牛客网（优先级1）</li>
+<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
+<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
+<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+</ul>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
 </blockquote>
-<h2 id="考虑使用静态工厂方法替代构造方法"><a href="#考虑使用静态工厂方法替代构造方法" class="headerlink" title="考虑使用静态工厂方法替代构造方法"></a>考虑使用静态工厂方法替代构造方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li><p>有名字</p>
-</li>
-<li><p>不需要每次调用时创建对象，例：<code>Boolean.valueOf(?)</code></p>
-</li>
-<li><p>可以返回其返回类型的任何子类型的对象，例：<code>Collections.unmodifiableCollection(?)</code></p>
-</li>
-<li><p>返回对象的类，可以根据输入参数的不同而不同，例：<code>EnumSet.noneOf(?)</code></p>
-</li>
-<li><p>编写包含该方法的类时，返回的对象的类不需要存在，例：<code>ServiceLoader.load(?)</code></p>
-</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><p>没有public或者protected构造方法的类不能被子类化</p>
-</li>
-<li><p>API文档中很难找到</p>
-</li>
-</ul>
-<h2 id="当构造方法参数过多时使用builder模式"><a href="#当构造方法参数过多时使用builder模式" class="headerlink" title="当构造方法参数过多时使用builder模式"></a>当构造方法参数过多时使用builder模式</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>解决参数过多问题</li>
-<li>可以对参数间依赖关系进行校验</li>
-<li>去掉创建对象时的中间状态</li>
-<li>可以不暴露类中的set方法，使其变成不可变对象</li>
-</ul>
-<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>创建对象前必须先创建它的builder</li>
-<li>代码比较复杂，4个以上参数才适用</li>
-</ul>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><blockquote>
-<p>简单情况下可以直接使用@Builder</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Student</span><span class="params">(StudentBuilder studentBuilder)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.id  = studentBuilder.id;</span><br><span class="line">        <span class="built_in">this</span>.name = studentBuilder.name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Student.StudentBuilder <span class="title function_">builder</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>.StudentBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Accessors(fluent = true,chain = true)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StudentBuilder</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> String id;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">StudentBuilder</span><span class="params">()</span> &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Student <span class="title function_">build</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!StringUtils.hasText(name))&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;name not support empty&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="built_in">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> Student.builder()</span><br><span class="line">    .id(<span class="string">&quot;001&quot;</span>)</span><br><span class="line">    .name(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
-
-<h2 id="实现-Singleton-属性"><a href="#实现-Singleton-属性" class="headerlink" title="实现 Singleton 属性"></a>实现 Singleton 属性</h2><h3 id="私有构造方法"><a href="#私有构造方法" class="headerlink" title="私有构造方法"></a>私有构造方法</h3><h4 id="饿汉式（类加载时创建）"><a href="#饿汉式（类加载时创建）" class="headerlink" title="饿汉式（类加载时创建）"></a>饿汉式（类加载时创建）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类加载的时候创建，如果类的初始化时间较长，可以将其初始化过程暴露在程序启动时。</p>
-<h4 id="懒汉式-第一次使用时创建"><a href="#懒汉式-第一次使用时创建" class="headerlink" title="懒汉式(第一次使用时创建)"></a>懒汉式(第一次使用时创建)</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LogGenerator LOG_GENERATOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LogGenerator.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(LOG_GENERATOR == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>null判断后加锁再判断：</strong>只判断一次，线程并发会出现问题</p>
-<p><strong>volatile：</strong>防止指令重排序，初始化对象分为三步：1.分配内存 2.调用构造函数初始化对象 3.将初始化对象的地址放在分配内存里。其中第3步可能被重排序在第2步前，此时分配内存已不为null，但是还未初始化对象，使用对象会出现问题。</p>
-<h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogGenerator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LogGenerator</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LogGenerator <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> LogGeneratorHolder.LOG_GENERATOR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LogGeneratorHolder</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">LogGenerator</span> <span class="variable">LOG_GENERATOR</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LogGenerator</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由JVM保证线程安全，同时实现了懒加载</p>
-<h4 id="枚类"><a href="#枚类" class="headerlink" title="枚类"></a>枚类</h4><p>天然线程安全</p>
 ]]></content>
       <categories>
-        <category>书籍</category>
+        <category>日记</category>
       </categories>
       <tags>
-        <tag>编程,书籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL排序后分页错乱问题分析</title>
-    <url>/post/5c684e4d.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
-<p><strong>1.建个表</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.插入一些数据</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.执行查询语句得到结果</strong></p>
-<p><code>select * from student order by create_time;</code></p>
-<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
-</blockquote>
-<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
-<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
-<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
-<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
-<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
-<p><code>select * from student order by create_time,id limit 4,2;</code></p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
-<p>修改字符编码：</p>
-<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
-
-<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
-<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
+        <tag>日记</tag>
       </tags>
   </entry>
   <entry>
@@ -1205,38 +1237,6 @@
       </categories>
       <tags>
         <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JDK动态代理实现Redis降级</title>
-    <url>/post/a4854be7.html</url>
-    <content><![CDATA[<h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><p>防止<code>Redis</code>服务不可用导致服务不可用，保证业务正常流程，在<code>Redis</code>服务崩掉后，走数据库进行加锁解锁操作，需要尽量不修改原有<code>Redis</code>代码</p>
-<p>原有redis示例如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><h3 id="增加A接口"><a href="#增加A接口" class="headerlink" title="增加A接口"></a>增加A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line">   Boolean <span class="title function_">set</span><span class="params">(String key,<span class="type">long</span> expireTime)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="原有redis类实现A"><a href="#原有redis类实现A" class="headerlink" title="原有redis类实现A"></a>原有redis类实现A</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldRedisService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入redis方法内部&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> redisTemplate.opsForValue().setIfAbsent(key,<span class="number">1</span>,expireTime, TimeUnit.SECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="增加MySQL加锁类实现A接口"><a href="#增加MySQL加锁类实现A接口" class="headerlink" title="增加MySQL加锁类实现A接口"></a>增加MySQL加锁类实现A接口</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseService</span> <span class="keyword">implements</span> <span class="title class_">RedisServiceI</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TCacheInfoMapper tCacheInfoMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">set</span><span class="params">(String key, <span class="type">long</span> expireTime)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;进入database内部&quot;</span>);</span><br><span class="line">        <span class="type">TCacheInfo</span> <span class="variable">tCacheInfo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TCacheInfo</span>();</span><br><span class="line">        tCacheInfo.setId(<span class="number">1515155L</span>);</span><br><span class="line">        tCacheInfo.setCreateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setUpdateTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setCacheKey(key);</span><br><span class="line">        tCacheInfo.setCacheValue(key);</span><br><span class="line">        tCacheInfo.setExpireTime(LocalDateTime.now());</span><br><span class="line">        tCacheInfo.setVersion(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> tCacheInfoMapper.insert(tCacheInfo) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="对原有类进行代理"><a href="#对原有类进行代理" class="headerlink" title="对原有类进行代理"></a>对原有类进行代理</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalConfiguration</span> <span class="keyword">implements</span> <span class="title class_">BeanPostProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        <span class="keyword">if</span> (bean <span class="keyword">instanceof</span> RedisServiceI &amp;&amp; <span class="string">&quot;oldRedisService&quot;</span>.equals(beanName)) &#123;</span><br><span class="line">            bean = getProxyBean(bean);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object <span class="title function_">getProxyBean</span><span class="params">(Object bean)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  Proxy</span><br><span class="line">                .newProxyInstance(</span><br><span class="line">                        <span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                        bean.getClass().getInterfaces(),</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">DynamicProxyHandler</span>(bean)</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    Object redisBean;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DynamicProxyHandler</span><span class="params">(Object redisBean)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.redisBean = redisBean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        log.info(<span class="string">&quot;代理开始执行:&quot;</span>+method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//调用原有方法</span></span><br><span class="line">            obj = method.invoke(redisBean, args);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InvocationTargetException e)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.getTargetException() <span class="keyword">instanceof</span> BussinessException)&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BussinessException</span>(ErrorCode.CA000001,<span class="string">&quot;自定义的异常,需要抛出让全局异常处理&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//执行数据库加锁类的方法</span></span><br><span class="line">            <span class="type">RedisServiceI</span> <span class="variable">bean</span> <span class="operator">=</span> (RedisServiceI) SpringContextUtil.getContext().getBean(<span class="string">&quot;databaseService&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(bean, args);</span><br><span class="line">        &#125;</span><br><span class="line">        log.info(<span class="string">&quot;代理结束执行&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RedisServiceI redisServiceI;</span><br></pre></td></tr></table></figure>
-
-<p>因为上面<code>OldRedisService</code>类使用了<code>@Primary</code>注解，所以会优先被注入到接口中</p>
-<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
-<li>上面的方式有个缺点，这样修改后，原来的<code>OldRedisService</code>类就不能被注入了，因为已经被代理了。可以优化一下，不代理原有的<code>OldRedisService</code>类，而是新写一个类，也实现<code>RedisServiceI</code>,新类所有方法全部调用<code>OldRedisService</code>，且使用<code>@Primary</code>保证被优先注入接口，最后代理这个新写的类即可。</li>
-<li>其实还有一个锁的数据一致性问题，在Redis加锁后，Redis崩了，是无法同步到数据库中的，这个处理比较麻烦，如果对业务要求比较高需要注意一下</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
       </tags>
   </entry>
 </search>
