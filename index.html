@@ -12,7 +12,6 @@
   <link rel="mask-icon" href="/images/logo.svg" color="#42b983">
   <meta name="google-site-verification" content="dY_rFr98otdb9wl0niDlE1mdz-B7Bf6VRgbsEo3d6B0">
   <meta name="msvalidate.01" content="a2daef7a2e6a47df853ee73663c93f81">
-  <meta name="baidu-site-verification" content="v7FqxgiWbghRBUeX">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -45,8 +44,6 @@
 <title>夜雨灯</title>
   
 
-  <script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.12.2/source/js/third-party/analytics/baidu-analytics.min.js"></script>
-  <script async src="https://hm.baidu.com/hm.js?5a8600a318e794fba79ed29793c2f917"></script>
 
 
 
@@ -173,7 +170,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -240,7 +237,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.ajungle.cn/post/0.html">
+    <link itemprop="mainEntityOfPage" href="https://www.ajungle.cn/post/7e0416c.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/myimages/avatar.png">
@@ -258,25 +255,35 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/post/0.html" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/post/7e0416c.html" class="post-title-link" itemprop="url">基于DDD领域驱动电商履约案例实战</a>
         </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-12-31 20:51:21" itemprop="dateCreated datePublished" datetime="2022-12-31T20:51:21+08:00">2022-12-31</time>
+      <time title="创建时间：2023-01-01 15:01:15" itemprop="dateCreated datePublished" datetime="2023-01-01T15:01:15+08:00">2023-01-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-01-07 16:08:42" itemprop="dateModified" datetime="2023-01-07T16:08:42+08:00">2023-01-07</time>
+      <time title="修改时间：2023-01-07 16:57:55" itemprop="dateModified" datetime="2023-01-07T16:57:55+08:00">2023-01-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
     </span>
 
   
@@ -291,104 +298,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a>战略设计</h2><p>有界上下文的划分、映射、子域类型（核心子域、支持子域、通用子域）的确定、通用语言的确定</p>
-<p><strong>有界上下文</strong></p>
-<p>每个有界上下文，都有自己的一套问题要解决，有界上下文 -&gt; 子域 -&gt; 通用语言 -&gt; 一个小团队&#x2F;个人 -&gt; 子系统&#x2F;微服务</p>
-<p>领域包含多个子域（多个有界上下文），一般来说子域和有界上下文一一对应（无强制）</p>
-<p><strong>通用语言</strong></p>
-<p>限定于当前有界上下文的边界范围之内，专门描述你的有界上下文里各种各</p>
-<p>事情，如：动作、操作、行为、名词、事务、字段、数据、状态、命令、事件</p>
-<p>等，全部要有一套统一的命名规范&#x2F;规定 -&gt; 通用语言</p>
-<h3 id="用事件风暴会议寻找履约有界上下文"><a href="#用事件风暴会议寻找履约有界上下文" class="headerlink" title="用事件风暴会议寻找履约有界上下文"></a>用事件风暴会议寻找履约有界上下文</h3><ul>
-<li>开启会议，召集程序员、用户、产品经理、管理者、其它人，开始一块梳理，**相关的所有事件（动词、动作），有多少事件就说多少时间，但凡是跟**相关的事件，都可以说出来</li>
-<li>把所有梳理出来的**相关的时间，按照时间线进行排列，按照时间发生的先后顺序，做一个梳理</li>
-<li>梳理出来**相关的所有的用户界面和命令，针对所有上面的所有事件的发生，是否有系统用户界面，有用户参与进来发出一个指令、命令（在系统界面里，点击按钮、提交表单、发起操作），驱动了履约各个事件的执行</li>
-<li>把用户界面、命令、事件，安装时间线，先后顺序，交互逻辑，全部串联起来，一环一环的</li>
-<li>在上面的那个大串联的逻辑里，找出来履约有界上下文，哪些事情应该是要属于履约要解决的问题，哪些事情明显是属于别的有界上下文，是属于别人要去做的事情</li>
-</ul>
-<blockquote>
-<p>​	根据对业务的理解，把技术的东西剥离掉，把数据库表的设计全部剥离掉，纯粹站在业务的角度，去进行风暴会议，梳理出所有业务相关的流程和东西</p>
-</blockquote>
-<h3 id="不同子域类型分析"><a href="#不同子域类型分析" class="headerlink" title="不同子域类型分析"></a>不同子域类型分析</h3><p>核心子域：对于**领域而言，用于完成用户**这个核心需求，所需要具备的一些核心子域(例如淘宝：商品子域、订单子域、支付子域、履约子域、会员子域、营销子域)</p>
-<p>支持子域：负责支持核心子域（例如淘宝：仓储子域、物流子域 -&gt; 履约子域；财务子域；报表子域）</p>
-<p>通用子域：不用自己公司开发，都是外购的软件，或者是第三方的通用的平台和系统(例如：第三方支付平台、第三方物流平台)</p>
-<h3 id="上下文映射"><a href="#上下文映射" class="headerlink" title="上下文映射"></a>上下文映射</h3><p>确定各个上下文的交互关系</p>
-<p>separate way：完全没关系</p>
-<p>customer-supplier：c-s，常见于大的项目组内不同小项目之间的依赖关系</p>
-<p>publish-subscribe：p-s，有一方发布一个事件，另外一方监听事件以及处理这个事件。对于一个有界上下文，如果有和别的有界上下文进行交互，可以选择发布一个事件出去（别人接收或者自己接收处理这个事件）</p>
-<p><strong>额外</strong></p>
-<p>anti corruption layer：acl，防腐层，不是一个孤立、单独使用的映射关系，一般是跟其它映射关系，一起进行使用，CS关系、PS关系中，以CS关系为例，supplier给我接口返回的字段发生了改变（名称或者类型或者值）,对于我来说，可以不直接修改我的代码，而是增加一个防腐层，对返回的东西，做一个适配和转化，将它转化成一个固定的对象，保持名称、类型、值都是不变的。后面只要维护防腐层就行了</p>
-<h3 id="通用语言"><a href="#通用语言" class="headerlink" title="通用语言"></a>通用语言</h3><p>每个有界上下文里面，对所有的名词和动词，业务操作、业务事件、业务语义，都用统一的一套规则和规范去做</p>
-<p>例如：</p>
-<p>ReceiveOrder、OrderFullfillEvent、PreAllocateWarehouse、RiskIntercept、RiskAudit、AllocateWarehouseAgain、AllocateTrasportCompany、IssurToWarehouse -&gt;修改里面的命名规则，必须有通用语言制定的过程，写一套文档。</p>
-<h2 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a>战术设计</h2><p>牵扯到类层面的设计，设计自己的上下文里有哪些类，这些类如何配合，可以实现上下文里要解决的各种各样的问题</p>
-<p>聚合（实体、值对象）+仓储（基于具体的技术实现聚合数据得到持久化和读取、领域服务、业务组件、领域事件（DomainEvent）、命令（Command）和查询（Query）、接口层（controller、api、listener）、应用服务层（application service layer）</p>
-<p>当执行完一个业务动作以后，你要调用其他的上下文，此时你可以给其他上下文，发起命令，让他执行一些动作，也可以发起查询，从他里面执行一些查询，也可以发布一个事件，驱动别的上下文监听事件，继续执行他的业务流程。</p>
-<h3 id="实体"><a href="#实体" class="headerlink" title="实体"></a>实体</h3><p>项目代码里的domain类，Order（有唯一的标识，OrderId它里面有很多的数据可以变化），我们的上下文里，对一些核心的数据，一般来说都会设计一些类出来，如果它有唯一标识，而且数据是允许变化的，此时，在ddd战术设计里，它被称为Entity,这样一个概念。</p>
-<h3 id="值对象"><a href="#值对象" class="headerlink" title="值对象"></a>值对象</h3><p>valueObject，ObjectId(建模成一个独立的类)，对于一个订单，它的唯一标识，OrderId而言，里面可能包含和封装了订单在<code>数据库里唯一的主键</code>以及<code>我们分配给它的一个订单编号</code>，这些东西，是绝对不会变化的，而且OrderId自己就没有必要再有一个自己的唯一标识，OrderId自己就没有必要再有一个自己的唯一标识，它代表的就是一份不会变化的数据，ddd里面战术设计里称之为值对象。</p>
-<h3 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h3><p>Aggregate，面向数据库的设计，一个表队友domain&#x2F;entity包里面的一个class</p>
-<p>Order、OrderItem、OrderFulfill，每个class里面就对应了表里的各个字段，一般来说不会说在建模的时候，Order包含了OrderItem，OrderItem里有一个OrderId这个字段，表示它们之间的一个关系。</p>
-<p>ddd里要求将有强关系的class进行聚合，例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Long orderId;</span><br><span class="line">    <span class="comment">//有几十个order自己的字段</span></span><br><span class="line">    List&lt;OrderItem&gt; orderItems;</span><br><span class="line">    DeliveryAddress deliveryAddress;</span><br><span class="line">    PayType payType;</span><br><span class="line">    PaymentDetail paymentDetail;</span><br><span class="line">    OrderSnapshot orderSnapshot;</span><br><span class="line">    OrderStatus orderStatus;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//收获地址，就是属于典型的一个class，它也是一个东西</span></span><br></pre></td></tr></table></figure>
-
-<p>一个聚合代表了多个class绑定在一起，放在一块，一个聚合里，聚合根，aggregate root，一组聚合在一起的class，放在最外面的，最上层的，就是一个聚合根</p>
-<p>收获地址，就是属于典型的一个class，它就是一个东西</p>
-<p>聚合是有一个边界概念，聚合里面的classes生命周期，是一致的，创建的时候，就一起创建了，更新得到时候一起更新了，删除的时候一起删除了。一个聚合里面的这些东西的更新，必须放在一个事务里，确保一起成功，或者一起失败。</p>
-<p><code>一个聚合里可以包含一些实体，也可以包含一些值对象，聚合可以是多个层次的</code></p>
-<h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>贫血模型：仅仅包含数据，仅有getter、setter</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span>&#123;</span><br><span class="line">    <span class="comment">//几十个字段</span></span><br><span class="line">    <span class="comment">//几十个getter和setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>业务逻辑主要封装在Service里，Service主要依赖多个DAO，进行一系列增删改查来实现业务逻辑</p>
-<p>充血模型：要把聚合（实体、值对象），根据业务语义，放进一些核心的业务逻辑行为（不是面向数据库设计的一些行为）</p>
-<h3 id="领域服务和聚合设计"><a href="#领域服务和聚合设计" class="headerlink" title="领域服务和聚合设计"></a>领域服务和聚合设计</h3><p>聚合（实体、值对象）+ 业务行为（充血模型）</p>
-<p>有一些业务行为，是没有办法放在聚合里面的，Order举个例子：对多个Order进行运算，业务逻辑不可能放在Order里面去设计这个语义，这时就需要领域服务（一般针对多个聚合执行的业务行为）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XXService</span>&#123;</span><br><span class="line">    <span class="comment">//包含一些没法直接放在聚合里的业务行为</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>业务组件：包含贴合业务语义的组件，在业务场景里，有一个概念<code>业务状态机</code>，不属于聚合、领域服务，它其实是一个业务组件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderStatusMachine</span>&#123;<span class="comment">//符合业务语义的业务组件</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>聚合（数据+行为）+ 领域服务 + 业务组件</p>
-<p>验证DDD是否成功，在于用代码还原一套完整的业务语义、业务流程、业务模型，这套代码，主流程，找产品经理走读代码，通过英文单词+一些注释，是否能够理解业务语义和流程。</p>
-<h3 id="串联业务流程（命令、领域事件）"><a href="#串联业务流程（命令、领域事件）" class="headerlink" title="串联业务流程（命令、领域事件）"></a>串联业务流程（命令、领域事件）</h3><p><strong>人驱动发起的命令：</strong>核心业务动作和行为，人驱动的（web、APP），Command一般是更新数据一类的动作，Query一般是进行查询类的动作。用来驱动领域服务的核心业务逻辑和方法的执行。</p>
-<p>AuditOrderCommand（订单审核，是人发起的一个动作和命令）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>领域事件：</strong>Event、OrderPayedEvent（订单已支付的事件），就要驱动和发起履约流程，所以我们的订单上下文，可以发布出来订单已支付的事件，履约上下文，可以去订阅这个订单已支付的事件，一旦订单被支付了，就可以开始进行履约</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FullfillService</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">auditOrder</span><span class="params">(AuditOrderCommand command)</span>&#123;</span><br><span class="line">        <span class="comment">//审核订单，业务动作</span></span><br><span class="line">        <span class="comment">//结合聚合、业务组件、其他领域服务，将要审核的动作进行完成</span></span><br><span class="line">        <span class="comment">//流程逻辑必须符合pm、用户、运营对审核动作业务语义和流程的定义</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> OrderFullfill <span class="title function_">receivePayedOrder</span><span class="params">(OrderPayedEvent orderPayedEvent)</span>&#123;</span><br><span class="line">        <span class="comment">//第一个业务语义和动作，就是要接收订单，存储数据道自己履约上下文里面</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">preAllocateWarehouse</span><span class="params">(OrderFullfill orderFullfill)</span>&#123;</span><br><span class="line"> 		<span class="comment">//结合多个聚合体、业务组件，完成预分仓的业余语义和动作       </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="仓储-Repository"><a href="#仓储-Repository" class="headerlink" title="仓储(Repository)"></a>仓储(Repository)</h3><p>repository：用来把聚合数据、实体，把我们的数据跟具体的持久层进行一个交互，如果说要从持久层查询一个聚合出来，此时就用那个聚合对应的仓储来查询</p>
-<p>Order -&gt; OrderRepository</p>
-<p>Order order &#x3D; orderRepository.getById(orderId);&#x2F;&#x2F;如果说底层上用缓存、es、nosql、mq以及其他持久层技术，都是封装道仓储的底层，对我们领域模型层来说，是不关系技术细节，具体技术细节，封装在仓储里的，crud、缓存、es、建立es索引、写mq、消费mq</p>
-<h3 id="履约上下文各个业务流程"><a href="#履约上下文各个业务流程" class="headerlink" title="履约上下文各个业务流程"></a>履约上下文各个业务流程</h3><ol>
-<li>订单履约：保存订单、预分仓、风控拦截、通知人工进行审核（可选）、分物流、下库房</li>
-<li>人工审核：审核订单、取消订单、重分仓（可选）、分物流、下库房</li>
-</ol>
-<p>接收订单 -&gt; 监听订单已支付领域事件</p>
-<p>保存订单 -&gt; 将订单相关的数据保存在履约上下文的仓储里面</p>
-<p>预分仓 -&gt; 获取所有仓库、从所有仓库里选择距离订单收获地址最近的仓库、检查仓库的库存是否充足、锁定仓库库存、把订单分配给仓库</p>
-<p>风控拦截 -&gt; 调用风控上下文的风控拦截的动作，去看是否能够通过风控拦截</p>
-<p>分物流 -&gt; 调用物流上下文的获取所有物流公司、从所有物流公司里选择距离分配仓库最合适的物流公司、对这个物流公司申请电子面单（物流单）、把订单分配给物流公司</p>
-<p>下库房 -&gt; 调用仓储上下文的下发订单履约给指定的仓库</p>
-<p>通知人工审核 -&gt; 发布出去一个事件和通知</p>
-<p>人工审核 -&gt; 重分仓（可选）、分物流、下库房</p>
-<p>取消订单 -&gt; 发布一个订单取消事件，让订单上下文来处理</p>
-<p>重分仓 -&gt; 指定一个仓库，把订单分配给指定仓库</p>
-<h3 id="接口层和应用服务层"><a href="#接口层和应用服务层" class="headerlink" title="接口层和应用服务层"></a>接口层和应用服务层</h3><p>对外提供服务的系统，接口层（最外层跟用户界面、其他上下文进行交互的一层，表现层），DDD里最外面一层对接用户的，对接用户界面发送的一些命令，command或者query，controller（ssm框架里得到spring mvc对外提供的controller，接口层），对用户界面提供对应的http接口的</p>
-<p>如果我们的有界上下文，是对其他的有界上下文提供映射和交互的，提供一个内部调用得到接口，一般来说，内部的接口，我们一般命名为XxxApi</p>
-<p>DDD最外侧的接口层</p>
-<ul>
-<li>通过spring cloud netflix（openfeign）或者是spring cloud alibaba（dubbo）rpc框架，对外去提供一套api接口，供其他上下文来进行调用和交互</li>
-<li>如果说，别的有界上下文会发布一个领域事件出来，发布到MQ、RocketMQ、RabbitMQ、Kafka这样子，我们就需要去进行领域事件监听，这个负责领域事件监听的监听器，listener，rocketmq&#x2F;kafka&#x2F;rabbitmq里的consumer消费者，也算是对外的接口层，不是给别人来调用的，是基于MQ的事件消费的接口</li>
-</ul>
-<p>当接口层受到一个controlller的http请求，XxxApi受到一个rpc调用，listener受到了event事件之后，此时每个请求（command或者query）、rpc调用、event事件，都对应了业务流程去执行，业务链路去执行</p>
-<p>业务流程&#x2F;业务链路，一般都对应了很多步骤，每个步骤可能是通过仓储对聚合做了一些查询或者更新，也有可能是基于聚合的业务行为做了一个动作，也有可能是找领域服务执行了比较复杂的业务逻辑，可能是不同的动作串联起来，完成一个比较复杂的业务流程，或者说是链路</p>
-<p>接口层收到了东西（http请求、rpc调用请求、event事件），做了一些转化（防腐层，把外部传递进来的东西，转化为内部的一些东西，ACL防腐层，比如说把http request转化为一个内部的command或者是query命令，rpc调用请求也是同理，需要把请求-响应的模型，转化为内部的command或者是query） -&gt; 应用服务层（application service layer）</p>
-<p>应用服务层，就是用于进行业务流程编排，订单履约流程，由applicationService来进行流程编排，他来负责基于仓储、聚合、领域服务，执行各种各样的动作，把这个业务链路&#x2F;链路里的各个环节和动作都完成</p>
-<p>domain层：聚合、领域服务、业务组件、仓储</p>
-<h3 id="订单支付事件入口建模"><a href="#订单支付事件入口建模" class="headerlink" title="订单支付事件入口建模"></a>订单支付事件入口建模</h3><p>DDD落地，战略建模、战术建模、代码落地（业内比较好的一些最佳实践以及DDD开源框架、阿里开源的cola东西）、加入技术框架（rpc层选用什么框架，持久层选用什么框架、存储选用什么，MQ选用什么）</p>
-<img src='https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png' height="300px" width="100%"/>
-
-<h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3>
+          <p>基于DDD领域驱动电商履约案例实战-总结归纳</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/7e0416c.html">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -437,6 +355,12 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
+      <span class="post-meta-item-icon">
+        <i class="fa fa-thumb-tack"></i>
+      </span>
+      <font color=7D26CD>置顶</font>
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -450,7 +374,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-12-24 22:39:37" itemprop="dateModified" datetime="2022-12-24T22:39:37+08:00">2022-12-24</time>
+      <time title="修改时间：2023-01-07 17:07:02" itemprop="dateModified" datetime="2023-01-07T17:07:02+08:00">2023-01-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -483,7 +407,7 @@
 <li>设计思想：<a href="/post/a151c9f2.html">设计原则-翻译</a> ┃ <a href="/post/907a70d0.html">设计模式之代理模式</a></li>
 <li>数据库：<a href="/post/23ffdd3c.html">MySQL从MVCC到ReadView</a> ┃ <a href="/post/5c684e4d.html">MySQL排序后分页错乱问题分析</a></li>
 <li>Java：<a href="/post/9a372c09.html">JDK之List转Map实现解析</a> ┃ <a href="/post/a4854be7.html">JDK动态代理实现Redis降级</a></li>
-<li>书籍学习：<a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a> ┃ <a href="/post/ba23f4e8.html">《设计模式之美》-学习笔记</a></li>
+<li>学习笔记：<a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a> ┃ <a href="/post/ba23f4e8.html">《设计模式之美》-学习笔记</a> ┃ <a href="/post/7e0416c.html">基于DDD领域驱动的电商履约案例-学习笔记</a></li>
 <li>小技巧：<a href="/post/901f844.html">国内访问Github提速教程</a></li>
 </ul>
 
@@ -535,6 +459,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -629,6 +554,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -723,6 +649,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -817,6 +744,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -911,6 +839,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -1005,6 +934,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -1099,6 +1029,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -1193,6 +1124,7 @@
 
         <div class="post-meta-container">
           <div class="post-meta">
+  
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
@@ -1278,9 +1210,9 @@
   </div>
 
   <div class="powered-by">
-    <img src="https://file.ajungle.cn/img/Hosted_Tencnet.svg" alt=""  style="display:inline-block">
-    <img src="https://file.ajungle.cn/img/OSS_qiniuyun.svg" alt=""  style="display:inline-block">
-    <img src="https://file.ajungle.cn/img/Hexo_NexT.svg" alt=""  style="display:inline-block">
+    <img src="https://s2.loli.net/2023/01/07/pH8n7GChyfKlDjs.png" alt=""  style="display:inline-block">
+    <img src="https://s2.loli.net/2023/01/07/C9Sslo3dakLGtqW.png" alt=""  style="display:inline-block">
+    <img src="https://s2.loli.net/2023/01/07/ObdpK4x5BC38ULF.png" alt=""  style="display:inline-block">
   </div>
 
   <div class="beian">

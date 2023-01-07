@@ -12,7 +12,7 @@
 <li>设计思想：<a href="/post/a151c9f2.html">设计原则-翻译</a> ┃ <a href="/post/907a70d0.html">设计模式之代理模式</a></li>
 <li>数据库：<a href="/post/23ffdd3c.html">MySQL从MVCC到ReadView</a> ┃ <a href="/post/5c684e4d.html">MySQL排序后分页错乱问题分析</a></li>
 <li>Java：<a href="/post/9a372c09.html">JDK之List转Map实现解析</a> ┃ <a href="/post/a4854be7.html">JDK动态代理实现Redis降级</a></li>
-<li>书籍学习：<a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a> ┃ <a href="/post/ba23f4e8.html">《设计模式之美》-学习笔记</a></li>
+<li>学习笔记：<a href="/post/e1b9f839.html">《Effective Java》-学习笔记</a> ┃ <a href="/post/ba23f4e8.html">《设计模式之美》-学习笔记</a> ┃ <a href="/post/7e0416c.html">基于DDD领域驱动的电商履约案例-学习笔记</a></li>
 <li>小技巧：<a href="/post/901f844.html">国内访问Github提速教程</a></li>
 </ul>
 ]]></content>
@@ -105,167 +105,6 @@
       </categories>
       <tags>
         <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>杂谈</title>
-    <url>/post/bf4ee09f.html</url>
-    <content><![CDATA[<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
-<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
-<p>记录自己的琐屑，记录自己的平凡。</p>
-<p><img src="https://raw.githubusercontent.com/Griffonage/Figurebed/master/img/sohucs.jpg" height="300px" width="100%"></img></p>
-<h2 id="2022-12-24-今天换域名"><a href="#2022-12-24-今天换域名" class="headerlink" title="2022-12-24:今天换域名"></a>2022-12-24:今天换域名</h2><p>绝望了，域名被审核了，有几项不合规</p>
-<ol>
-<li>网站title与备案的不一致（这个可以改）</li>
-<li>域名解析到境外（用的vercel托管，感觉还是比腾讯托管稳定方便，速度也还行，这个也可以换回到国内服务商托管）</li>
-<li>域名备案信息过期（其实就是身份证过期了，这个重新提交也可以改）</li>
-</ol>
-<p>但是有一个很重要的问题，就是域名备案信息更新，需要购买服务商（腾讯云、阿里云、华为云）他们的云服务器，玛德，一个个卖的死贵，非首年轻量级都是400起步。</p>
-<p><strong>算了，这种被刀割韭菜的行为，我实在难以忍受，买个Namesilo的域名，从此进入不备案海外的时代吧，可惜了我买的10年.cn域名</strong></p>
-<p>从 <del>ajungle.cn</del> 换成 <a href="https://runlevel.top/">runlevel.top</a></p>
-<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
-<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
-<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
-<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
-<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
-<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
-<p>我觉得实在是奇观，也觉得很荒唐。</p>
-<p>更觉得可悲。</p>
-<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
-<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
-<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
-<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
-<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
-<p>周天，天朗气清、惠风和畅，出门玩耍</p>
-<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
-<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
-<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
-<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
-<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
-<p>后面怎么办呢？</p>
-<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
-<p>编程</p>
-<ul>
-<li>算法与数据结构，继续刷牛客网（优先级1）</li>
-<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
-<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
-<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
-</ul>
-<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
-<ol>
-<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
-<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
-<li>国庆第四天：睡觉、打王者</li>
-<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
-<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
-</ol>
-<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
-<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
-<blockquote>
-<p>Curly: Do you know what the secret of life is?</p>
-<p>Curly: This.  [holds up one finger]</p>
-<p>Mitch: Your finger?</p>
-<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
-<p>Mitch: But what is the “one thing?”</p>
-<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次成都学车经历</title>
-    <url>/post/ca641055.html</url>
-    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
-<p>结束时间:<code>2020年12月14日</code></p>
-<p>总用时:<code>两个月</code></p>
-<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
-<p>科目一</p>
-<ul>
-<li>考试时间:<code>10月20日</code></li>
-<li>考试费用:<code>100</code>元</li>
-<li>备考时间:<code>1</code>天</li>
-</ul>
-<p>科目二</p>
-<ul>
-<li>考试时间:<code>12月04日</code></li>
-<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
-<li>总次数:<code>14</code>次</li>
-</ul>
-</li>
-</ul>
-<p>科目三</p>
-<ul>
-<li>考试时间:<code>12月14日</code></li>
-<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
-<li>备考时间:<ul>
-<li>每次练习<code>1</code>个小时</li>
-<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
-<li>总次数:<code>4</code>次</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
-</blockquote>
-<p>总费用:</p>
-<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
-<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
-<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
-<blockquote>
-<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
-</blockquote>
-<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
-<p>按照以下步骤:</p>
-<ul>
-<li><p>做精题</p>
-<ul>
-<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
-</ul>
-</li>
-<li><p>做总结归纳</p>
-<ul>
-<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
-</ul>
-</li>
-<li><p>刷错题(不多说)</p>
-</li>
-<li><p>多余时间刷本地区特有题目</p>
-<ul>
-<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
-</ul>
-</li>
-</ul>
-<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
-<p>结果:考试<code>98</code>分</p>
-<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
-<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
-<p><strong>科目二应该是练习时间花费最长的。</strong></p>
-<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
-<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
-<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
-<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>必做”精简题”,再做一般题(狂刷完事)</li>
-<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
-<li>必须要参加”模拟考试”,虽然要多加钱</li>
-</ul>
-]]></content>
-      <categories>
-        <category>日记</category>
-      </categories>
-      <tags>
-        <tag>日记</tag>
       </tags>
   </entry>
   <entry>
@@ -491,8 +330,208 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/post/0.html</url>
+    <title>MySQL排序后分页错乱问题分析</title>
+    <url>/post/5c684e4d.html</url>
+    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
+<p><strong>1.建个表</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.执行查询语句得到结果</strong></p>
+<p><code>select * from student order by create_time;</code></p>
+<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
+</blockquote>
+<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
+<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
+<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
+<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
+<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
+<p><code>select * from student order by create_time,id limit 4,2;</code></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
+<p>修改字符编码：</p>
+<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
+
+<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
+<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>杂谈</title>
+    <url>/post/bf4ee09f.html</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在很多时候，自己都有一种强烈的冲动，一种将当时心境记录下来的冲动，然而每到动手之际，却是难以憋出多少文字。</p>
+<p>鉴于此情况，单独开一篇文章，用以记录平时生活感悟。</p>
+<p>记录自己的琐屑，记录自己的平凡。</p>
+<p><img src="https://raw.githubusercontent.com/Griffonage/Figurebed/master/img/sohucs.jpg" height="300px" width="100%"></img></p>
+<h2 id="2022-12-24-今天换域名"><a href="#2022-12-24-今天换域名" class="headerlink" title="2022-12-24:今天换域名"></a>2022-12-24:今天换域名</h2><p>绝望了，域名被审核了，有几项不合规</p>
+<ol>
+<li>网站title与备案的不一致（这个可以改）</li>
+<li>域名解析到境外（用的vercel托管，感觉还是比腾讯托管稳定方便，速度也还行，这个也可以换回到国内服务商托管）</li>
+<li>域名备案信息过期（其实就是身份证过期了，这个重新提交也可以改）</li>
+</ol>
+<p>但是有一个很重要的问题，就是域名备案信息更新，需要购买服务商（腾讯云、阿里云、华为云）他们的云服务器，玛德，一个个卖的死贵，非首年轻量级都是400起步。</p>
+<p><strong>算了，这种被刀割韭菜的行为，我实在难以忍受，买个Namesilo的域名，从此进入不备案海外的时代吧，可惜了我买的10年.cn域名</strong></p>
+<p>从 <del>ajungle.cn</del> 换成 <a href="https://runlevel.top/">runlevel.top</a></p>
+<h2 id="2022-12-22-周四深夜"><a href="#2022-12-22-周四深夜" class="headerlink" title="2022-12-22:周四深夜"></a>2022-12-22:周四深夜</h2><p>最近的事情，可能就是我中招了吧，周围的同事，以及朋友，都中招了。</p>
+<p>前两天发烧，特别难受，感觉是二十多年来最痛苦的两天（发烧、呕吐、头疼）</p>
+<p>熬过两天后，症状主要就是咳嗽，也是比较严重，毕竟我一个不抽烟的人，基本没怎么咳嗽，但是中了后，会咳痰出来，感觉也是后遗症吧。</p>
+<p>在家里居家办公了一个星期后，就上班了，上班的同事都在咳嗽，感觉大家都没有好，但是为了生活，还是有很多人来上班了。</p>
+<p>感觉自己现在这个时间呀，可能刚好就是给上一代炒房的人接盘，上一代透支了我们这一代至少50年的潜力，鹅城的税，都收到100年后了。</p>
+<h2 id="2022-11-30-周三"><a href="#2022-11-30-周三" class="headerlink" title="2022-11-30:周三"></a>2022-11-30:周三</h2><p>下午下班打了个车，想做个每天都必须去做的事（原谅我不敢打出来，因为身体上的石头太重），排队的人实在是太多了。</p>
+<p>我觉得实在是奇观，也觉得很荒唐。</p>
+<p>更觉得可悲。</p>
+<p>为别人可悲，也为自己可悲，为过去可悲，也为将来可悲。</p>
+<p>所有人用着几乎相同的应用，接收着相同的讯息，犹如工厂的模具造出的产品，几乎一模一样。</p>
+<p>一个泥潭，所有人都在里面，互相抓着、挣扎。</p>
+<p>我当老师时，对学生总是十分宽容，我知道自己并不是一个合格的老师，因为每当我想要发火时，总会想起曾经的自己，那个犯错的，仿佛就是曾经的自己，而我，除了风轻云淡的报以微笑，又该释以何种严厉。</p>
+<h2 id="2022-10-16-周末"><a href="#2022-10-16-周末" class="headerlink" title="2022-10-16:周末"></a>2022-10-16:周末</h2><p>周六去自习室做了<code>Rust</code>的<code>复合类型</code>、<code>流程控制</code>题。</p>
+<p>周天，天朗气清、惠风和畅，出门玩耍</p>
+<h2 id="2022-10-07-国庆第七天"><a href="#2022-10-07-国庆第七天" class="headerlink" title="2022-10-07:国庆第七天"></a>2022-10-07:国庆第七天</h2><p>明天上班，今天又去了<code>知了布知自习室</code>。</p>
+<p>上午做了<strong>所有权和借用</strong>、<strong>复合类型下字符串与切片</strong>的习题，速度明显变慢</p>
+<p>下午仔细的看了<strong>泛型和特征</strong>，有点难，因为要上班了，给后面的<strong>集合类型、类型转换、返回值和错误处理、包和模块、注释和文档、格式化输出</strong>都粗略的看了一下。</p>
+<p>经过这几天的学习，我觉得，Rust真是一门优秀的语言，通过一系列复杂的规则，规避与解决了开发过程中经常碰到的问题。</p>
+<p>但是，学习这些规则与思路，开始真是比较不容易…即使我具备一定的开发及经验。</p>
+<p>后面怎么办呢？</p>
+<p>英语，这个不能停止学习，工作和出国都需要（优先级1）</p>
+<p>编程</p>
+<ul>
+<li>算法与数据结构，继续刷牛客网（优先级1）</li>
+<li>Java，暂时靠这吃饭，再出一篇设计模式的博客吧（优先级1）</li>
+<li>Rust，我来青春赌未来，相信区块链分布式是大趋势大潮流（优先级2）</li>
+<li>MySQL闲无事时，继续看视频学习（优先级2）</li>
+</ul>
+<h2 id="2022-10-06-国庆第六天"><a href="#2022-10-06-国庆第六天" class="headerlink" title="2022-10-06:国庆第六天"></a>2022-10-06:国庆第六天</h2><p>今天是国庆假期的倒数第二天。</p>
+<ol>
+<li>国庆第一天：睡觉、打王者、做核酸、骑单车到动物园</li>
+<li>国庆第二天：去了<code>碳酸自习室</code>，地方倒是挺大，分为上下两层，人较少（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第三天：去了<code>碳酸自习室</code>，冲了几天会员（PS：做了啥？？？<strong>翻译、学习设计原则</strong>）</li>
+<li>国庆第四天：睡觉、打王者</li>
+<li>国庆第五天：因为核酸到期（需要72小时内阴性）不能做地铁，所以在家附近找了家<code>知了布知自习室</code>，本来以为自己不会喜欢这种小自习室，没想到旁边有个好看的小姐姐，呃呃呃呃呃。。。还不错，再冲个几天会员-.-（PS：做了啥？？？<strong>配置Rust开发环境、学习Rust变量绑定与结构、基本类型</strong>）</li>
+<li>国庆第五天：继续去<code>知了布知自习室</code>，下午垃圾桶满了，有强烈的酸味，看到里面的人都能忍，我也就忍了-.-（PS：做了啥？？？<strong>做Rust练习题、学习Rust的所有权和借用、复合类型、流程控制、模式匹配、方法Method</strong>）</li>
+</ol>
+<p>明天也去自习室吧，想转<strong>区块链工程师</strong>，不知道将来有没有机会</p>
+<p>设计原则里面有一个<code>Curly&#39;s Law</code>，是从电影里面得来的，虽然没看过，但是感觉还是很有意境，以下是对话</p>
+<blockquote>
+<p>Curly: Do you know what the secret of life is?</p>
+<p>Curly: This.  [holds up one finger]</p>
+<p>Mitch: Your finger?</p>
+<p>Curly: One thing. Just one thing. You stick to that and the rest don’t mean shit.</p>
+<p>Mitch: But what is the “one thing?”</p>
+<p>Curly: [smiles] That’s what <em>you</em> have to find out.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次成都学车经历</title>
+    <url>/post/ca641055.html</url>
+    <content><![CDATA[<h1 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h1><p>开始时间:<code>2020年10月15日</code></p>
+<p>结束时间:<code>2020年12月14日</code></p>
+<p>总用时:<code>两个月</code></p>
+<h1 id="费用"><a href="#费用" class="headerlink" title="费用"></a>费用</h1><p>报名费:<code>2240</code></p>
+<p>科目一</p>
+<ul>
+<li>考试时间:<code>10月20日</code></li>
+<li>考试费用:<code>100</code>元</li>
+<li>备考时间:<code>1</code>天</li>
+</ul>
+<p>科目二</p>
+<ul>
+<li>考试时间:<code>12月04日</code></li>
+<li>考试费用:<code>260</code>元+<code>360</code>元(考试模拟费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>10-31 16:00</code>、<code>11-03 10:00</code>、<code>11-05 11:00</code>、<code>11-07 13:00</code>、<code>11-10 18:00</code>、<code>11-12 15:00</code>、<code>11-14 15:00</code>、<code>11-17 11:00</code>、<code>11-19 16:00</code>、<code>11-24 10:00</code>、<code>11-28 10:00</code>、<code>11-30 9:00</code>、<code>11-03 10:00</code>、<code>12-01 12:00</code></li>
+<li>总次数:<code>14</code>次</li>
+</ul>
+</li>
+</ul>
+<p>科目三</p>
+<ul>
+<li>考试时间:<code>12月14日</code></li>
+<li>考试费用:<code>200</code>元+<code>360</code>元(考试模拟费)+<code>10</code>元(驾驶证工本费)</li>
+<li>备考时间:<ul>
+<li>每次练习<code>1</code>个小时</li>
+<li>具体时间如下:<code>12-07 16:00</code>、<code>12-09 18:40</code>、<code>12-11 11:00</code>、<code>12-12 19:00</code></li>
+<li>总次数:<code>4</code>次</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>科目三分为路考和文考,科目三的文考就是类似科目一的上机考试,知识题目较少且多为多选题</p>
+</blockquote>
+<p>总费用:</p>
+<p>2240   +   100   +   260   +   360   +   200   +   360   +   10 &#x3D; <code>3530</code>元</p>
+<h1 id="通关秘诀"><a href="#通关秘诀" class="headerlink" title="通关秘诀"></a>通关秘诀</h1><p><em>方法仅供参考</em></p>
+<h2 id="科目一"><a href="#科目一" class="headerlink" title="科目一"></a>科目一</h2><p>科目一考前一天开始刷题,一度十分焦虑</p>
+<blockquote>
+<p>直到下午1点25分,刚做了300多道题目,还错了177道题,错的比对的都多</p>
+</blockquote>
+<p>在19日这一天,也就是考前这一天,我彻夜难眠,因为我别说做模拟试卷了,连题目都还没有刷完,后面我改变策略.</p>
+<p>按照以下步骤:</p>
+<ul>
+<li><p>做精题</p>
+<ul>
+<li>这里我是通过下载了<code>驾考宝典</code>APP(垃圾广告多,但是挺好用),里面的题目虽然很多,但是不适用于我这个临时突击的,发现里面有个”精选500道”这样的栏目,于是我选择先给这个先突突了.</li>
+</ul>
+</li>
+<li><p>做总结归纳</p>
+<ul>
+<li>在刷题时,我会对做错的题目,去看分析和网友的总结回答,将自己认为重要的记录在纸上(后面科三文考也用上了)</li>
+</ul>
+</li>
+<li><p>刷错题(不多说)</p>
+</li>
+<li><p>多余时间刷本地区特有题目</p>
+<ul>
+<li>当然是尽量多刷题,给分类类别题目少的先刷了</li>
+</ul>
+</li>
+</ul>
+<p>最后,我那天凌晨三点睡,总共刷了900多道题目,做了两次模拟考试,一次95,一次80多,仓皇上阵</p>
+<p>结果:考试<code>98</code>分</p>
+<h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>科目二我的考场是<code>新都正益</code>,驾校早上开车送过去的,没有送回来</p>
+<p>考试的顺序是:<code>坡道定点停车</code>&gt;<code>直角转弯</code>&gt;<code>侧方位停车</code>&gt;<code>倒车入库</code>&gt;<code>S弯</code>(大概吧,记忆模糊了<del>看卫星地图</del>)</p>
+<p><strong>科目二应该是练习时间花费最长的。</strong></p>
+<p>科目二在考试时,第一次先是坡道定点停车扣分,未打转向灯扣分,停车压实线GG.第二次满分通过,有惊无险</p>
+<h2 id="科目三"><a href="#科目三" class="headerlink" title="科目三"></a>科目三</h2><h3 id="路考"><a href="#路考" class="headerlink" title="路考"></a>路考</h3><p>练习时间最少,就练习了3到4次,很多东西都是模拟考时那个教练交给我的,模拟教练叫我们尽量记住线路,路程那么远,谁能记住？</p>
+<p>考试时,同车4个考生,我排第三个,前两个都没有通过,我运气好一次通过了</p>
+<h3 id="文考"><a href="#文考" class="headerlink" title="文考"></a>文考</h3><p>貌似只刷了400多道题,上机考试前还比较慌,一看题目,都是些常识题,so easy</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>必做”精简题”,再做一般题(狂刷完事)</li>
+<li>心态要稳,不要被第一次失误,而影响到第二次考试</li>
+<li>必须要参加”模拟考试”,虽然要多加钱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>日记</category>
+      </categories>
+      <tags>
+        <tag>日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于DDD领域驱动电商履约案例实战</title>
+    <url>/post/7e0416c.html</url>
     <content><![CDATA[<h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a>战略设计</h2><p>有界上下文的划分、映射、子域类型（核心子域、支持子域、通用子域）的确定、通用语言的确定</p>
 <p><strong>有界上下文</strong></p>
 <p>每个有界上下文，都有自己的一套问题要解决，有界上下文 -&gt; 子域 -&gt; 通用语言 -&gt; 一个小团队&#x2F;个人 -&gt; 子系统&#x2F;微服务</p>
@@ -591,6 +630,12 @@
 <img src='https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png' height="300px" width="100%"/>
 
 <h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3>]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>DDD</tag>
+      </tags>
   </entry>
   <entry>
     <title>JDK8之List转Map实现解析</title>
@@ -1192,45 +1237,6 @@
       </categories>
       <tags>
         <tag>书籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL排序后分页错乱问题分析</title>
-    <url>/post/5c684e4d.html</url>
-    <content><![CDATA[<h2 id="从问题出发"><a href="#从问题出发" class="headerlink" title="从问题出发"></a>从问题出发</h2><p>一位老开发每次说到<code>order by</code>的时候，都要提到一个事，那就是要带上一个有<code>唯一键</code>的列，否则会出现问题。具体是啥问题，似乎也遗忘在了时间的流逝里。</p>
-<p><strong>1.建个表</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (</span><br><span class="line">  `id` <span class="type">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生ID&#x27;</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;学生姓名&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `modify_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `student_id_IDX` (`id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">)  COMMENT<span class="operator">=</span><span class="string">&#x27;学生表&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.插入一些数据</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span></span><br><span class="line">	student</span><br><span class="line"><span class="keyword">values</span></span><br><span class="line">	(&quot;STU000001&quot;,&quot;001&quot;,&quot;2012-12-01 12:12:12&quot;,&quot;2012-12-01 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000002&quot;,&quot;002和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000003&quot;,&quot;003和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000004&quot;,&quot;004和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000005&quot;,&quot;005和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000006&quot;,&quot;006&quot;,&quot;2012-12-06 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000007&quot;,&quot;007和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;),</span><br><span class="line">	(&quot;STU000008&quot;,&quot;008和002时间一致&quot;,&quot;2012-12-02 12:12:12&quot;,&quot;2012-12-02 12:12:12&quot;);</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.执行查询语句得到结果</strong></p>
-<p><code>select * from student order by create_time;</code></p>
-<p><img src="https://file.ajungle.cn/img/20221125235150.png"></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">0</span>,<span class="number">2</span>; </span><br><span class="line">预期：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line">结果：          </span><br><span class="line">	STU000001</span><br><span class="line">	STU000002</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">2</span>,<span class="number">2</span>;</span><br><span class="line">预期：          </span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line">结果：</span><br><span class="line">	STU000003</span><br><span class="line">	STU000004</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">4</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000005</span><br><span class="line">	STU000007</span><br><span class="line">结果：			不符合预期</span><br><span class="line">	STU000005</span><br><span class="line">	STU000008</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">order</span> <span class="keyword">by</span> create_time limit <span class="number">6</span>,<span class="number">2</span>;</span><br><span class="line">预期：</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br><span class="line">结果：			</span><br><span class="line">	STU000008</span><br><span class="line">	STU000006</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>​	可以看到在执行limit 4，2这条语句时，查询的结果不符合预期</p>
-</blockquote>
-<h2 id="产生问题的原因"><a href="#产生问题的原因" class="headerlink" title="产生问题的原因"></a>产生问题的原因</h2><p><a href="https://dev.mysql.com/doc/refman/5.7/en/limit-optimization.html">《MySQL5.7官方文档-8.2.1.17 LIMIT Query Optimization》</a>：If an index is not used for <code>ORDER BY</code> but a <code>LIMIT</code> clause is also present, the optimizer may be able to avoid using a merge file and sort the rows in memory using an in-memory <code>filesort</code> operation. </p>
-<p>当<code>order by</code>对一个非索引列使用时，还使用了limit语句，优化器会使用内存对行排序</p>
-<p><a href="https://www.quora.com/In-MySQL-does-the-Order-By-clause-force-the-sorting-of-rows-on-a-disk-or-in-the-memory">《Quota-Sachin Khanna》</a>：MySQL has multiple <code>filesort</code> algorithms for sorting and retrieving results.  The original algorithm uses only the ORDER BY columns. The modified  algorithm uses not just the ORDER BY columns, but all columns referenced by the query. There is also an algorithm for small result sets that  sorts in memory using the sort buffer as a <code>priority queue</code> without a  merge file.</p>
-<p><code>filesort</code>的<code>priority queue</code>主要使用了堆排序，而堆排序属于不稳定的排序算法，造成了结果的不确定性</p>
-<h2 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h2><p>解决<code>order by</code>的二义性，增加一个唯一字段，如下：</p>
-<p><code>select * from student order by create_time,id limit 4,2;</code></p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="MySQL5-7字符编码修改"><a href="#MySQL5-7字符编码修改" class="headerlink" title="MySQL5.7字符编码修改"></a>MySQL5.7字符编码修改</h3><p>Windows的MYSQL5.7环境</p>
-<p>修改字符编码：</p>
-<p>在目录<code>C:\ProgramData\MySQL\MySQL Server 5.7\my.ini</code>最后增加:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysql]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br></pre></td></tr></table></figure>
-
-<p>重启本地MYSQL（Windows10可以通过任务管理器，最右边服务下面有MYSQL57可以鼠标控制重启）</p>
-<p>查询字符环境(<code>SHOW VARIABLES LIKE &#39;character%&#39;;</code>)：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">character_set_client	utf8mb4</span><br><span class="line">character_set_connection	utf8mb4</span><br><span class="line">character_set_database	latin1</span><br><span class="line">character_set_filesystem	binary</span><br><span class="line">character_set_results	</span><br><span class="line">character_set_server	utf8</span><br><span class="line">character_set_system	utf8</span><br><span class="line">character_sets_dir	C:\Program Files\MySQL\MySQL Server 5.7\share\charsets\</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
       </tags>
   </entry>
 </search>
