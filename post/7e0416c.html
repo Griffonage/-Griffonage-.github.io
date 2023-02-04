@@ -30,13 +30,17 @@
 <meta property="og:site_name" content="夜雨灯">
 <meta property="og:description" content="基于DDD领域驱动电商履约案例实战-总结归纳">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/28/jXwiuVhL1gnavKI.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/28/dkfFw5JR23xNmc7.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/28/wqaKIZ2yRv8Wpcl.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/28/DhZB59fz4Ik7XOV.png">
+<meta property="og:image" content="https://s2.loli.net/2023/01/28/5Q1wR8UX2WzOPpg.png">
 <meta property="article:published_time" content="2023-01-25T05:04:44.781Z">
-<meta property="article:modified_time" content="2023-01-07T13:53:49.352Z">
+<meta property="article:modified_time" content="2023-01-28T14:33:38.005Z">
 <meta property="article:author" content="Aug Jungle">
 <meta property="article:tag" content="DDD">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/01/28/jXwiuVhL1gnavKI.png">
 
 
 <link rel="canonical" href="https://www.ajungle.cn/post/7e0416c.html">
@@ -150,7 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%98%E7%95%A5%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">战略设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BA%8B%E4%BB%B6%E9%A3%8E%E6%9A%B4%E4%BC%9A%E8%AE%AE%E5%AF%BB%E6%89%BE%E5%B1%A5%E7%BA%A6%E6%9C%89%E7%95%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.1.</span> <span class="nav-text">用事件风暴会议寻找履约有界上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E5%AD%90%E5%9F%9F%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">不同子域类型分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%98%A0%E5%B0%84"><span class="nav-number">1.3.</span> <span class="nav-text">上下文映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80"><span class="nav-number">1.4.</span> <span class="nav-text">通用语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%98%E6%9C%AF%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">战术设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93"><span class="nav-number">2.1.</span> <span class="nav-text">实体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.2.</span> <span class="nav-text">值对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88"><span class="nav-number">2.3.</span> <span class="nav-text">聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E8%A1%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">充血模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%92%8C%E8%81%9A%E5%90%88%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.5.</span> <span class="nav-text">领域服务和聚合设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B2%E8%81%94%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%EF%BC%88%E5%91%BD%E4%BB%A4%E3%80%81%E9%A2%86%E5%9F%9F%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">串联业务流程（命令、领域事件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%93%E5%82%A8-Repository"><span class="nav-number">2.7.</span> <span class="nav-text">仓储(Repository)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%A5%E7%BA%A6%E4%B8%8A%E4%B8%8B%E6%96%87%E5%90%84%E4%B8%AA%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-number">2.8.</span> <span class="nav-text">履约上下文各个业务流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%B1%82%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%B1%82"><span class="nav-number">2.9.</span> <span class="nav-text">接口层和应用服务层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E4%BA%8B%E4%BB%B6%E5%85%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.10.</span> <span class="nav-text">订单支付事件入口建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%A5%E7%BA%A6%E8%AE%A2%E5%8D%95%E8%81%9A%E5%90%88%E4%B8%8E%E4%BB%93%E5%82%A8%E7%9A%84%E5%BB%BA%E6%A8%A1%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.11.</span> <span class="nav-text">履约订单聚合与仓储的建模设计</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%98%E7%95%A5%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">战略设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BA%8B%E4%BB%B6%E9%A3%8E%E6%9A%B4%E4%BC%9A%E8%AE%AE%E5%AF%BB%E6%89%BE%E5%B1%A5%E7%BA%A6%E6%9C%89%E7%95%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.1.</span> <span class="nav-text">用事件风暴会议寻找履约有界上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E5%AD%90%E5%9F%9F%E7%B1%BB%E5%9E%8B%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">不同子域类型分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%98%A0%E5%B0%84"><span class="nav-number">1.3.</span> <span class="nav-text">上下文映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80"><span class="nav-number">1.4.</span> <span class="nav-text">通用语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%98%E6%9C%AF%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">战术设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93"><span class="nav-number">2.1.</span> <span class="nav-text">实体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.2.</span> <span class="nav-text">值对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88"><span class="nav-number">2.3.</span> <span class="nav-text">聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E8%A1%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">充血模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%92%8C%E8%81%9A%E5%90%88%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.5.</span> <span class="nav-text">领域服务和聚合设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B2%E8%81%94%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%EF%BC%88%E5%91%BD%E4%BB%A4%E3%80%81%E9%A2%86%E5%9F%9F%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">串联业务流程（命令、领域事件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%93%E5%82%A8-Repository"><span class="nav-number">2.7.</span> <span class="nav-text">仓储(Repository)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%A5%E7%BA%A6%E4%B8%8A%E4%B8%8B%E6%96%87%E5%90%84%E4%B8%AA%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-number">2.8.</span> <span class="nav-text">履约上下文各个业务流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%B1%82%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%B1%82"><span class="nav-number">2.9.</span> <span class="nav-text">接口层和应用服务层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E4%BA%8B%E4%BB%B6%E5%85%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.10.</span> <span class="nav-text">订单支付事件入口建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%A5%E7%BA%A6%E8%AE%A2%E5%8D%95%E8%81%9A%E5%90%88%E4%B8%8E%E4%BB%93%E5%82%A8%E7%9A%84%E5%BB%BA%E6%A8%A1%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.11.</span> <span class="nav-text">履约订单聚合与仓储的建模设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%A5%E7%BA%A6%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E9%A2%84%E5%88%86%E4%BB%93%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.12.</span> <span class="nav-text">履约上下文的预分仓流程建模设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E5%B1%A5%E7%BA%A6%E6%B5%81%E7%A8%8B%E5%90%8E%E7%BB%AD%E7%8E%AF%E8%8A%82%E5%BB%BA%E6%A8%A1%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.13.</span> <span class="nav-text">订单履约流程后续环节建模设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A3%8E%E6%8E%A7%E6%8B%A6%E6%88%AA%E8%AE%A2%E5%8D%95%E4%BA%BA%E5%B7%A5%E5%AE%A1%E6%A0%B8%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.14.</span> <span class="nav-text">风控拦截订单人工审核流程建模</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -278,7 +282,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-01-07 21:53:49" itemprop="dateModified" datetime="2023-01-07T21:53:49+08:00">2023-01-07</time>
+      <time title="修改时间：2023-01-28 22:33:38" itemprop="dateModified" datetime="2023-01-28T22:33:38+08:00">2023-01-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -391,7 +395,7 @@
 <p>保存订单 -&gt; 将订单相关的数据保存在履约上下文的仓储里面</p>
 <p>预分仓 -&gt; 获取所有仓库、从所有仓库里选择距离订单收获地址最近的仓库、检查仓库的库存是否充足、锁定仓库库存、把订单分配给仓库</p>
 <p>风控拦截 -&gt; 调用风控上下文的风控拦截的动作，去看是否能够通过风控拦截</p>
-<p>分物流 -&gt; 调用物流上下文的获取所有物流公司、从所有物流公司里选择距离分配仓库最合适的物流公司、对这个物流公司申请电子面单（物流单）、把订单分配给物流公司</p>
+<p>分物流 -&gt; 调用物流上下文的获取所有物流公司、从所有物流公司里选择距离分配仓库最合适的物流公司、对这个物流公司申请电子面单（物流单）、保存物流单（值对象）、把订单分配给物流公司</p>
 <p>下库房 -&gt; 调用仓储上下文的下发订单履约给指定的仓库</p>
 <p>通知人工审核 -&gt; 发布出去一个事件和通知</p>
 <p>人工审核 -&gt; 重分仓（可选）、分物流、下库房</p>
@@ -410,9 +414,12 @@
 <p>应用服务层，就是用于进行业务流程编排，订单履约流程，由applicationService来进行流程编排，他来负责基于仓储、聚合、领域服务，执行各种各样的动作，把这个业务链路&#x2F;链路里的各个环节和动作都完成</p>
 <p>domain层：聚合、领域服务、业务组件、仓储</p>
 <h3 id="订单支付事件入口建模"><a href="#订单支付事件入口建模" class="headerlink" title="订单支付事件入口建模"></a>订单支付事件入口建模</h3><p>DDD落地，战略建模、战术建模、代码落地（业内比较好的一些最佳实践以及DDD开源框架、阿里开源的cola东西）、加入技术框架（rpc层选用什么框架，持久层选用什么框架、存储选用什么，MQ选用什么）</p>
-<img data-src='https://s2.loli.net/2023/01/07/bMnNCYFAZOSfV2I.png' height="300px" width="100%"/>
+<p><img data-src="https://s2.loli.net/2023/01/28/jXwiuVhL1gnavKI.png"></p>
+<h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3><p><img data-src="https://s2.loli.net/2023/01/28/dkfFw5JR23xNmc7.png"></p>
+<h3 id="履约上下文的预分仓流程建模设计"><a href="#履约上下文的预分仓流程建模设计" class="headerlink" title="履约上下文的预分仓流程建模设计"></a>履约上下文的预分仓流程建模设计</h3><p><img data-src="https://s2.loli.net/2023/01/28/wqaKIZ2yRv8Wpcl.png"></p>
+<h3 id="订单履约流程后续环节建模设计"><a href="#订单履约流程后续环节建模设计" class="headerlink" title="订单履约流程后续环节建模设计"></a>订单履约流程后续环节建模设计</h3><p><img data-src="https://s2.loli.net/2023/01/28/DhZB59fz4Ik7XOV.png"></p>
+<h3 id="风控拦截订单人工审核流程建模"><a href="#风控拦截订单人工审核流程建模" class="headerlink" title="风控拦截订单人工审核流程建模"></a>风控拦截订单人工审核流程建模</h3><p><img data-src="https://s2.loli.net/2023/01/28/5Q1wR8UX2WzOPpg.png"></p>
 
-<h3 id="履约订单聚合与仓储的建模设计"><a href="#履约订单聚合与仓储的建模设计" class="headerlink" title="履约订单聚合与仓储的建模设计"></a>履约订单聚合与仓储的建模设计</h3>
     </div>
 
     
@@ -534,5 +541,6 @@ document.addEventListener('page:loaded', () => {
 });
 </script>
 
+  <script id="xplayer" src="https://player.xfyun.club/Static/player/player.js" key="63ddde41007ca" m = "1"></script>
 </body>
 </html>
